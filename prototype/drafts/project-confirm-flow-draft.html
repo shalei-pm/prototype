@@ -1976,7 +1976,7 @@
       align-items: center;
       justify-content: center;
       padding: 0 20px;
-      border-radius: 8px;
+      border-radius: 0;
       text-align: center;
       font-size: 16px;
       line-height: 1.18;
@@ -2297,85 +2297,99 @@
 
     .flow-grid {
       height: 100%;
-      display: grid;
-      grid-template-columns: 1fr 248px;
-      gap: 20px;
+      display: block;
       min-height: 0;
     }
 
     .flow-main {
       display: grid;
-      gap: 16px;
+      gap: 0;
       align-content: start;
+      border-top: 1px solid var(--line);
     }
 
     .setting-row {
-      min-height: 92px;
+      min-height: 112px;
       display: grid;
-      grid-template-columns: 1fr 64px;
+      grid-template-columns: 34px 1fr 156px;
       align-items: center;
-      gap: 16px;
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
+      gap: 18px;
+      padding: 20px 18px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      border-radius: 0;
       background: #fff;
     }
 
-    .setting-row h3 {
-      margin: 0 0 4px;
+    .setting-check {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      background: var(--green);
       color: #111;
       font-size: 17px;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .setting-row h3 {
+      margin: 0;
+      color: #111;
+      font-size: 18px;
       line-height: 1.16;
       font-weight: 700;
     }
 
-    .setting-row p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.35;
-      font-weight: 400;
+    .time-cost {
+      text-align: right;
     }
 
-    .switch {
-      width: 64px;
-      height: 36px;
-      padding: 4px;
-      border-radius: 999px;
-      background: var(--green);
-    }
-
-    .switch::after {
-      content: "";
+    .time-cost span {
       display: block;
-      width: 28px;
-      height: 28px;
-      margin-left: 28px;
-      border-radius: 50%;
-      background: #111;
+      margin-bottom: 3px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 500;
     }
 
-    .snack-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .snack {
-      min-height: 56px;
-      display: grid;
-      place-items: center;
-      border: 1px solid #dfe3e8;
-      border-radius: 8px;
-      background: #fff;
+    .time-cost b {
+      display: block;
       color: #111;
-      font-size: 15px;
+      font-size: 20px;
+      line-height: 1.15;
       font-weight: 700;
     }
 
+    .time-cost.no-extra b {
+      color: #3f6212;
+      font-size: 16px;
+    }
+
+    .snack-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .snack {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 14px;
+      border: 1px solid #dfe3e8;
+      border-radius: 0;
+      background: #fff;
+      color: #111;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
     .snack.active {
-      border-color: #111;
-      background: rgba(156,255,0,.18);
+      border-color: var(--green);
+      background: rgba(156,255,0,.22);
     }
 
     .spec-panel {
@@ -2920,7 +2934,7 @@
         </div>
 
         <div>
-          <p class="variant-label">流程确认页：三块配置区 + 右侧摘要</p>
+          <p class="variant-label">流程确认页：附加服务与耗时确认</p>
           <div class="pad-shell" aria-label="流程确认页 Pad 原型">
             <div class="pad-screen">
               <article class="task-page">
@@ -2934,50 +2948,43 @@
                 </header>
                 <section class="context-strip">
                   <div>
-                    <b>直接治疗 · 2 个项目</b>
-                    <span>确认后进入服务人员确认页</span>
+                    <b>已选择 3 项附加服务</b>
+                    <span>本次治疗项目预计 100 分钟</span>
                   </div>
-                  <div class="status-pill">预计 100 分钟</div>
+                  <div class="status-pill">附加流程约 +15 分钟</div>
                 </section>
 
                 <section class="task-content">
                   <div class="flow-grid">
                     <section class="flow-main">
                       <div class="setting-row">
+                        <div class="setting-check">✓</div>
                         <div>
                           <h3>皮肤检测</h3>
-                          <p>记录当前肤况，辅助医生或治疗师确认方案。</p>
                         </div>
-                        <div class="switch"></div>
+                        <div class="time-cost"><span>预计额外</span><b>+10 分钟</b></div>
                       </div>
                       <div class="setting-row">
+                        <div class="setting-check">✓</div>
                         <div>
                           <h3>术前术后对比照</h3>
-                          <p>用于服务记录和后续效果跟进。</p>
                         </div>
-                        <div class="switch"></div>
+                        <div class="time-cost"><span>预计额外</span><b>+5 分钟</b></div>
                       </div>
                       <div class="setting-row">
+                        <div class="setting-check">✓</div>
                         <div>
                           <h3>饮品零食</h3>
-                          <p>按门店库存展示，客户可选择或不需要。</p>
+                          <div class="snack-grid">
+                            <div class="snack active">温水</div>
+                            <div class="snack">无糖茶</div>
+                            <div class="snack active">坚果</div>
+                            <div class="snack">不需要</div>
+                          </div>
                         </div>
-                        <div class="switch"></div>
-                      </div>
-                      <div class="snack-grid">
-                        <div class="snack active">温水</div>
-                        <div class="snack">无糖茶</div>
-                        <div class="snack active">坚果</div>
-                        <div class="snack">不需要</div>
+                        <div class="time-cost no-extra"><span>预计额外</span><b>不增加时间</b></div>
                       </div>
                     </section>
-
-                    <aside class="flow-side">
-                      <p class="panel-title">流程摘要</p>
-                      <div class="mini-summary"><b>3 项</b><span>检测、拍照、饮品零食</span></div>
-                      <div class="summary-chip">下一步：服务人员确认</div>
-                      <div class="note-box">不可履约配置后续应隐藏或置灰。</div>
-                    </aside>
                   </div>
                 </section>
 
@@ -3010,7 +3017,7 @@
           <ul>
             <li>项目菜单改为顶栏轻切换、左侧分类 / 筛选、右侧项目 / 资产列表；已选摘要下沉到底部操作区。</li>
             <li>治疗项目确认页改为左侧已选项目卡片、右侧 AI羊点评，服务意图通过底部按钮推进。</li>
-            <li>流程确认页改为左侧三块配置区、右侧流程摘要。</li>
+            <li>流程确认页平铺展示附加服务，重点标明每项预计额外耗时。</li>
             <li>底部主操作区固定，避免客户找不到下一步。</li>
           </ul>
         </div>

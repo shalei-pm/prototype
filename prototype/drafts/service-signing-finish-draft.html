@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>服务人员确认 + 治疗签署 + 结束闭环草案</title>
+  <title>面诊医生确认 + 治疗签署 + 结束闭环草案</title>
   <style>
     :root {
       --green: #9cff00;
@@ -256,226 +256,295 @@
       background: var(--soft);
     }
 
-    .service-page .content {
-      display: grid;
+    .service-page {
       grid-template-rows: auto 1fr auto;
-      gap: 16px;
     }
 
-    .route-strip {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+    .service-topbar {
+      min-height: 96px;
+      display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 12px 16px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
+      gap: 20px;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--line);
       background: #fff;
-      color: #3f4652;
-      font-size: 14px;
+    }
+
+    .service-back,
+    .service-logout {
+      flex: 0 0 auto;
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #d9dde3;
+      border-radius: 999px;
+      background: #fff;
+      color: #111;
+    }
+
+    .service-back {
+      font-size: 24px;
       font-weight: 600;
     }
 
-    .route-arrow {
-      color: #111;
-      font-weight: 700;
+    .service-title {
+      min-width: 0;
+      flex: 1;
     }
 
-    .person-columns {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      min-height: 0;
-    }
-
-    .person-panel {
-      min-height: 0;
-      display: grid;
-      grid-template-rows: auto auto 1fr;
-      gap: 12px;
-      padding: 16px;
-      border-radius: 16px;
-      background: #fff;
-      border: 1px solid var(--line);
-    }
-
-    .panel-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: flex-start;
-    }
-
-    .panel-head h2 {
+    .service-title h1 {
       margin: 0;
-      font-size: 18px;
-      line-height: 1.2;
-      font-weight: 700;
       color: #111;
+      font-size: 26px;
+      line-height: 1.12;
+      font-weight: 700;
     }
 
-    .wait-pill,
-    .tag {
-      flex: 0 0 auto;
-      min-height: 32px;
+    .service-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.25;
+      font-weight: 400;
+    }
+
+    .service-logout-icon {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    .service-logout-icon::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 13px;
+      height: 17px;
+      border: 2px solid #111;
+      border-right: 0;
+      border-radius: 2px 0 0 2px;
+    }
+
+    .service-logout-icon::after {
+      content: "";
+      position: absolute;
+      right: 1px;
+      top: 11px;
+      width: 13px;
+      height: 2px;
+      border-radius: 999px;
+      background: #111;
+      box-shadow: 4px -4px 0 -1px #111, 4px 4px 0 -1px #111;
+    }
+
+    .service-page .content {
+      min-height: 0;
+      overflow: hidden;
+      padding: 18px 24px;
+      background: var(--soft);
+    }
+
+    .doctor-list {
+      height: 100%;
+      display: grid;
+      grid-template-rows: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .doctor-card {
+      position: relative;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 104px minmax(0, 1fr) 150px;
+      gap: 14px;
+      align-items: stretch;
+      padding: 10px 12px;
+      border: 1px solid #e0e3e7;
+      background: #fff;
+    }
+
+    .doctor-card.selected {
+      border-color: #111;
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+
+    .doctor-photo {
+      position: relative;
+      width: 104px;
+      height: 100%;
+      min-height: 130px;
+      overflow: hidden;
+      background: #e9ecef;
+    }
+
+    .portrait-head {
+      position: absolute;
+      left: 34px;
+      top: 22px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #b8bec5;
+    }
+
+    .portrait-body {
+      position: absolute;
+      left: 19px;
+      top: 60px;
+      width: 66px;
+      height: 78px;
+      border-radius: 34px 34px 8px 8px;
+      background: #c8cdd2;
+    }
+
+    .portrait-body::after {
+      content: "+";
+      position: absolute;
+      right: 11px;
+      top: 30px;
+      color: #7c838b;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 500;
+    }
+
+    .doctor-photo small {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 7px;
+      color: #707780;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .doctor-info {
+      min-width: 0;
+      align-self: center;
+    }
+
+    .doctor-name-line {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 6px;
+    }
+
+    .doctor-name-line h2 {
+      margin: 0;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .doctor-tag {
+      min-height: 24px;
       display: inline-flex;
       align-items: center;
-      border-radius: 999px;
-      padding: 0 10px;
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
+      padding: 0 7px;
+      border: 1px solid #dfe3e7;
+      background: #f6f7f8;
+      color: #4f5864;
+      font-size: 11px;
+      font-weight: 600;
     }
 
-    .wait-pill {
-      background: rgba(156,255,0,.42);
-      color: #111;
-      border: 1px solid rgba(17,17,17,.12);
-    }
-
-    .tag {
-      background: #f1f2f4;
-      color: #505761;
-    }
-
-    .assign-card {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 8px;
-      align-items: center;
-      padding: 12px;
-      min-height: 72px;
-      border: 1px solid rgba(17,17,17,.12);
-      border-radius: 12px;
-      background: rgba(156,255,0,.24);
-      color: #111;
-    }
-
-    .assign-dot {
-      width: 32px;
-      height: 32px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: var(--green);
-      color: #111;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .assign-card b {
-      display: block;
-      font-size: 15px;
-      line-height: 1.15;
-    }
-
-    .assign-card span {
-      display: block;
-      margin-top: 3px;
-      color: #4b5563;
-      font-size: 13px;
-      line-height: 1.25;
-    }
-
-    .assign-choice {
-      color: #111;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .person-list {
-      display: grid;
-      align-content: start;
-      gap: 12px;
-      min-height: 0;
-    }
-
-    .person-card {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 12px;
-      align-items: center;
-      padding: 12px;
-      min-height: 76px;
-      border-radius: 14px;
-      background: #fff;
-      border: 1px solid var(--line);
-    }
-
-    .person-card.selected {
-      border-color: #111;
-      box-shadow: inset 0 0 0 1px #111;
-    }
-
-    .avatar {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: #e8ebee;
-      color: #111;
-      font-weight: 700;
-      font-size: 15px;
-    }
-
-    .selected .avatar {
-      background: var(--green);
-    }
-
-    .person-card h3 {
-      margin: 0 0 2px;
-      color: #111;
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .person-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.32;
-      font-weight: 500;
-    }
-
-    .person-meta {
+    .doctor-facts {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 4px;
-    }
-
-    .person-meta span {
-      border-radius: 999px;
-      background: #f1f2f4;
-      color: #4f5864;
-      padding: 2px 6px;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .skip-panel {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: 1fr auto;
       gap: 10px;
-      align-items: center;
-      padding: 12px 16px;
-      min-height: 56px;
-      border-radius: 12px;
-      background: #fff;
-      border: 1px dashed #bfc5cc;
-      color: #4b5563;
-      font-size: 14px;
-      line-height: 1.4;
-      font-weight: 500;
+      margin-bottom: 7px;
+      color: #111;
+      font-size: 12px;
+      font-weight: 600;
     }
 
-    .skip-panel b {
-      display: block;
+    .doctor-facts span + span::before {
+      content: "";
+      display: inline-block;
+      width: 1px;
+      height: 12px;
+      margin-right: 10px;
+      background: #d9dde2;
+      vertical-align: -1px;
+    }
+
+    .doctor-summary {
+      margin: 0;
+      color: #5f6874;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .doctor-specialty {
+      margin-top: 6px;
+      color: #4f5864;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .doctor-specialty b {
       color: #111;
-      margin-bottom: 2px;
+      font-size: 12px;
+    }
+
+    .doctor-wait {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 12px 14px;
+      border-left: 1px solid #e6e8eb;
+      background: #fafbfb;
+    }
+
+    .doctor-wait span {
+      color: #69707c;
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .doctor-wait strong {
+      display: block;
+      margin: 5px 0 10px;
+      color: #111;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .doctor-queue {
+      width: 100%;
+      padding-top: 8px;
+      border-top: 1px solid #e2e5e8;
+    }
+
+    .doctor-queue b {
+      display: inline;
+      margin-left: 5px;
+      color: #111;
       font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .selected-mark {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: #111;
+      font-size: 13px;
+      font-weight: 800;
     }
 
     .page-actions {
@@ -496,7 +565,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 14px;
+      border-radius: 0;
       border: 1px solid #cfd4da;
       background: #fff;
       color: #111;
@@ -1124,7 +1193,7 @@
       <p class="nav-title">本草案范围</p>
       <ul class="nav-list">
         <li class="nav-item">流程确认页之后</li>
-        <li class="nav-item active">服务人员确认页</li>
+        <li class="nav-item active">面诊医生确认</li>
         <li class="nav-item active">治疗签署文书流程</li>
         <li class="nav-item active">服务流程指引 + 倒计时登出</li>
         <li class="nav-item">返回起始默认签到页</li>
@@ -1134,107 +1203,123 @@
     <section class="stage">
       <div class="pad-grid">
         <div>
-          <p class="variant-label">状态 A：服务人员确认页</p>
-          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：服务人员确认页">
+          <p class="variant-label">状态 A：面诊医生确认</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：面诊医生确认">
             <div class="pad-screen">
               <article class="kiosk-page service-page">
-                <header class="page-header">
-                  <div class="topbar">
-                    <span class="store">新氧青春北京保利店</span>
-                    <span class="logout">登出</span>
+                <header class="service-topbar">
+                  <div class="service-back">‹</div>
+                  <div class="service-title">
+                    <h1>面诊医生确认</h1>
+                    <p>请选择本次为您面诊的医生</p>
                   </div>
-                  <span class="eyebrow">服务人员确认</span>
-                  <h1>沙大爷，请确认本次服务人员</h1>
-                  <p class="lead">系统已按您的流程安排推荐人员，也可以指定当前在店人员。</p>
+                  <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
                 </header>
 
                 <section class="content">
-                  <div class="route-strip">
-                    <span>需要面诊 → 统一结束页</span>
-                    <span class="route-arrow">→</span>
-                    <span>直接治疗 → 签署文书</span>
-                  </div>
+                  <div class="doctor-list">
+                    <article class="doctor-card selected">
+                      <div class="doctor-photo" aria-label="李婧医生照片示意"><span class="portrait-head"></span><span class="portrait-body"></span><small>照片示意</small></div>
+                      <div class="doctor-info">
+                        <div class="doctor-name-line">
+                          <h2>李婧 医生</h2>
+                          <span class="doctor-tag">主治医师</span>
+                          <span class="doctor-tag">医疗美容主诊医师</span>
+                        </div>
+                        <div class="doctor-facts">
+                          <span>从业 12 年</span>
+                          <span>皮肤科</span>
+                          <span>今日面诊中</span>
+                        </div>
+                        <p class="doctor-summary">长期从事皮肤年轻化与敏感肌诊疗，重视治疗经历和恢复周期。</p>
+                        <div class="doctor-specialty"><b>擅长：</b>敏感肌评估、光电方案、肤色暗沉与毛孔问题</div>
+                      </div>
+                      <div class="doctor-wait">
+                        <span>预计等待</span>
+                        <strong>约 6 分钟</strong>
+                        <div class="doctor-queue">
+                          <span>前方排队</span>
+                          <b>1 人</b>
+                        </div>
+                      </div>
+                      <span class="selected-mark">✓</span>
+                    </article>
 
-                  <div class="person-columns">
-                    <section class="person-panel">
-                      <div class="panel-head">
-                        <h2>面诊咨询师 / 医生</h2>
-                        <span class="wait-pill">预计等 6 分钟</span>
-                      </div>
-                      <div class="assign-card">
-                        <div class="assign-dot">荐</div>
-                        <div>
-                          <b>系统分配：李医生</b>
-                          <span>面诊空闲中，擅长敏感肌评估</span>
+                    <article class="doctor-card">
+                      <div class="doctor-photo" aria-label="陈屿医生照片示意"><span class="portrait-head"></span><span class="portrait-body"></span><small>照片示意</small></div>
+                      <div class="doctor-info">
+                        <div class="doctor-name-line">
+                          <h2>陈屿 医生</h2>
+                          <span class="doctor-tag">副主任医师</span>
+                          <span class="doctor-tag">医疗美容主诊医师</span>
                         </div>
-                        <span class="assign-choice">已选</span>
-                      </div>
-                      <div class="person-list">
-                        <div class="person-card selected">
-                          <div class="avatar">李</div>
-                          <div>
-                            <h3>李医生</h3>
-                            <p>皮肤科医生，今日可面诊 3 人</p>
-                            <div class="person-meta"><span>空闲</span><span>约 6 分钟</span></div>
-                          </div>
+                        <div class="doctor-facts">
+                          <span>从业 18 年</span>
+                          <span>美容皮肤科</span>
+                          <span>今日面诊中</span>
                         </div>
-                        <div class="person-card">
-                          <div class="avatar">周</div>
-                          <div>
-                            <h3>周咨询师</h3>
-                            <p>项目方案沟通，正在接待客户</p>
-                            <div class="person-meta"><span>服务中</span><span>约 18 分钟</span></div>
-                          </div>
+                        <p class="doctor-summary">专注综合抗衰与问题肌联合治疗，关注疼痛耐受度和恢复时间。</p>
+                        <div class="doctor-specialty"><b>擅长：</b>面部抗衰、色素问题、联合光电与同日项目评估</div>
+                      </div>
+                      <div class="doctor-wait">
+                        <span>预计等待</span>
+                        <strong>约 18 分钟</strong>
+                        <div class="doctor-queue">
+                          <span>前方排队</span>
+                          <b>3 人</b>
                         </div>
                       </div>
-                    </section>
+                    </article>
 
-                    <section class="person-panel">
-                      <div class="panel-head">
-                        <h2>治疗师</h2>
-                        <span class="wait-pill">预计等 12 分钟</span>
+                    <article class="doctor-card">
+                      <div class="doctor-photo" aria-label="周宁医生照片示意"><span class="portrait-head"></span><span class="portrait-body"></span><small>照片示意</small></div>
+                      <div class="doctor-info">
+                        <div class="doctor-name-line"><h2>周宁 医生</h2><span class="doctor-tag">主治医师</span><span class="doctor-tag">皮肤科</span></div>
+                        <div class="doctor-facts"><span>从业 9 年</span><span>问题肌</span><span>今日面诊中</span></div>
+                        <p class="doctor-summary">侧重痤疮、泛红和屏障受损等问题肌的分型评估。</p>
+                        <div class="doctor-specialty"><b>擅长：</b>痤疮管理、敏感泛红、屏障修护与护理方案</div>
                       </div>
-                      <div class="assign-card">
-                        <div class="assign-dot">荐</div>
-                        <div>
-                          <b>系统分配：陈治疗师</b>
-                          <span>设备即将空出，匹配本次项目</span>
-                        </div>
-                        <span class="assign-choice">可改</span>
-                      </div>
-                      <div class="person-list">
-                        <div class="person-card selected">
-                          <div class="avatar">陈</div>
-                          <div>
-                            <h3>陈治疗师</h3>
-                            <p>光电项目治疗师，设备 B 排队中</p>
-                            <div class="person-meta"><span>排队中</span><span>约 12 分钟</span></div>
-                          </div>
-                        </div>
-                        <div class="person-card">
-                          <div class="avatar">赵</div>
-                          <div>
-                            <h3>赵治疗师</h3>
-                            <p>清洁补水与舒缓护理</p>
-                            <div class="person-meta"><span>空闲</span><span>约 3 分钟</span></div>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                      <div class="doctor-wait"><span>预计等待</span><strong>约 3 分钟</strong><div class="doctor-queue"><span>前方排队</span><b>0 人</b></div></div>
+                    </article>
 
-                    <div class="skip-panel">
-                      <div>
-                        <b>纯生美场景</b>
-                        若本次项目不需要治疗师，右栏可自动标记为无需确认。
+                    <article class="doctor-card">
+                      <div class="doctor-photo" aria-label="王祺医生照片示意"><span class="portrait-head"></span><span class="portrait-body"></span><small>照片示意</small></div>
+                      <div class="doctor-info">
+                        <div class="doctor-name-line"><h2>王祺 医生</h2><span class="doctor-tag">副主任医师</span><span class="doctor-tag">美容皮肤科</span></div>
+                        <div class="doctor-facts"><span>从业 15 年</span><span>抗衰</span><span>今日面诊中</span></div>
+                        <p class="doctor-summary">擅长从轮廓、肤质和恢复周期综合评估年轻化需求。</p>
+                        <div class="doctor-specialty"><b>擅长：</b>面部年轻化、紧致提升、光电联合与恢复管理</div>
                       </div>
-                      <span class="tag">跳过治疗师选择</span>
-                    </div>
+                      <div class="doctor-wait"><span>预计等待</span><strong>约 12 分钟</strong><div class="doctor-queue"><span>前方排队</span><b>2 人</b></div></div>
+                    </article>
+
+                    <article class="doctor-card">
+                      <div class="doctor-photo" aria-label="赵欣医生照片示意"><span class="portrait-head"></span><span class="portrait-body"></span><small>照片示意</small></div>
+                      <div class="doctor-info">
+                        <div class="doctor-name-line"><h2>赵欣 医生</h2><span class="doctor-tag">主治医师</span><span class="doctor-tag">医疗美容主诊医师</span></div>
+                        <div class="doctor-facts"><span>从业 7 年</span><span>色素管理</span><span>今日面诊中</span></div>
+                        <p class="doctor-summary">关注色斑、肤色不均及光电治疗后的长期效果管理。</p>
+                        <div class="doctor-specialty"><b>擅长：</b>色斑评估、肤色提亮、光子治疗与术后护理</div>
+                      </div>
+                      <div class="doctor-wait"><span>预计等待</span><strong>约 8 分钟</strong><div class="doctor-queue"><span>前方排队</span><b>1 人</b></div></div>
+                    </article>
+
+                    <article class="doctor-card">
+                      <div class="doctor-photo" aria-label="孙妍医生照片示意"><span class="portrait-head"></span><span class="portrait-body"></span><small>照片示意</small></div>
+                      <div class="doctor-info">
+                        <div class="doctor-name-line"><h2>孙妍 医生</h2><span class="doctor-tag">主治医师</span><span class="doctor-tag">皮肤科</span></div>
+                        <div class="doctor-facts"><span>从业 11 年</span><span>综合皮肤</span><span>今日面诊中</span></div>
+                        <p class="doctor-summary">擅长处理多种皮肤问题并存时的治疗顺序和风险评估。</p>
+                        <div class="doctor-specialty"><b>擅长：</b>综合皮肤评估、治疗排序、禁忌判断与方案调整</div>
+                      </div>
+                      <div class="doctor-wait"><span>预计等待</span><strong>约 25 分钟</strong><div class="doctor-queue"><span>前方排队</span><b>4 人</b></div></div>
+                    </article>
                   </div>
                 </section>
 
                 <footer class="page-actions">
-                  <div class="btn">返回调整流程</div>
-                  <div class="btn primary">确认人员，继续</div>
+                  <div class="btn">按我的选择安排</div>
+                  <div class="btn primary">系统自动安排（最快）</div>
                 </footer>
               </article>
             </div>
@@ -1431,15 +1516,15 @@
 
       <aside class="spec-panel">
         <h1>后段业务会话草案</h1>
-        <p class="meta">独立草案文件，不改主原型。本版已切换为 900 x 1440 源画布，并用 scale(0.58) 在浏览器中缩略展示；按 Pad 原生任务界面处理：左右分区、固定底部操作、触控热区稳定。</p>
+        <p class="meta">独立草案文件，不改主原型。本版已切换为 900 x 1440 源画布，并用 scale(0.58) 在浏览器中缩略展示；按 Pad 原生任务界面处理：单列人员选择、固定底部操作、触控热区稳定。</p>
 
         <div class="spec-section">
           <b>设计假设</b>
           <ul>
-            <li>服务人员确认页既服务“面诊”路径，也服务“直接治疗”路径，因此先确认需要的人，再由底部主按钮进入下一节点。</li>
-            <li>系统分配是默认推荐；用户仍可点选具体人员。等待状态以“空闲 / 服务中 / 排队中”和预计等待时间表达。</li>
-            <li>纯生美不需要治疗师时，不另起页面，只在治疗师栏下方展示“跳过治疗师选择”的状态。</li>
-            <li>结束页只有一个：面诊路径从服务人员确认后进入；直接治疗路径从签署完成后进入。</li>
+            <li>系统根据业务流程决定展示面诊医生或面诊咨询师；当前原型只绘制医生场景。</li>
+            <li>用户可先点选具体医生，也可通过底部主按钮让系统按最快等待时间自动安排。</li>
+            <li>本页不混入治疗师或纯生美判断，面诊医生确认后进入统一结束页。</li>
+            <li>结束页只有一个：面诊路径从面诊人员确认后进入；直接治疗路径从签署完成后进入。</li>
             <li>字号以 900 x 1440 源画布为准：主标题 24px，模块标题 18px，人员名 / 步骤名 15-16px，正文 13-14px，按钮 16px。</li>
             <li>中文字重已降档：正文 500，模块标题 700，页面主标题 700；业务页不再使用 800 / 900 / 950。</li>
           </ul>
@@ -1449,7 +1534,7 @@
           <b>页面信息层级</b>
           <ul>
             <li>顶部：门店识别、登出、当前页面任务和一句短提示。</li>
-            <li>中部：当前要完成的核心任务，服务人员页为双栏人员选择，签署页为左侧步骤进度 + 右侧当前内容。</li>
+            <li>中部：当前要完成的核心任务，面诊人员页为单列人员选择，签署页为左侧步骤进度 + 右侧当前内容。</li>
             <li>底部：低风险返回 / 终止操作放左侧，继续或提交放右侧主按钮。</li>
             <li>结束页：保留轻微完成感，但完成图标和标题降级，重点仍是手机端继续指引和倒计时登出。</li>
           </ul>
@@ -1458,7 +1543,7 @@
         <div class="spec-section">
           <b>本版效率调整</b>
           <ul>
-            <li>服务人员页利用 Pad 横向空间做左右栏，分别承载面诊咨询师 / 医生与治疗师。</li>
+            <li>面诊人员页使用紧凑单列横向卡片，一屏完整展示 6 位医生；原型头像采用统一灰阶示意，中部承载资质与擅长方向，右侧突出等待信息。</li>
             <li>签署流程从顶部步骤条改为左侧步骤栏，右侧专注当前问答、文件或签名内容。</li>
             <li>按钮、登出、人员卡、系统推荐项、签署步骤项维持 44-56px 稳定热区，相邻操作至少 8px 间距。</li>
             <li>结束页不使用大海报式视觉，改为完成反馈 + 三条下一步 + 倒计时的任务闭环。</li>
@@ -1470,7 +1555,7 @@
           <b>关键交互</b>
           <ul>
             <li>点击“登出”：任何业务页都结束当前客户会话，并返回起始默认签到页。</li>
-            <li>服务人员确认：默认系统分配，可切换人员；确认后按业务意图分流。</li>
+            <li>面诊人员确认：默认系统分配，可切换具体医生；确认后进入统一结束页。</li>
             <li>终止签署：回到“安排面诊 / 无需面诊直接治疗”的选择状态。</li>
             <li>完成校验：必签项、阅读确认、签名采集均通过后，进入统一结束节点。</li>
             <li>倒计时结束：自动登出并返回起始默认签到页。</li>
