@@ -358,7 +358,7 @@
       position: relative;
       min-height: 0;
       display: grid;
-      grid-template-columns: 104px minmax(0, 1fr) 150px;
+      grid-template-columns: 124px minmax(0, 1fr) 150px;
       gap: 14px;
       align-items: stretch;
       padding: 10px 12px;
@@ -373,16 +373,18 @@
 
     .doctor-photo {
       position: relative;
-      width: 104px;
-      height: 100%;
-      min-height: 130px;
+      width: 124px;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 3 / 4;
+      align-self: center;
       overflow: hidden;
       background: #e9ecef;
     }
 
     .portrait-head {
       position: absolute;
-      left: 34px;
+      left: 44px;
       top: 22px;
       width: 36px;
       height: 36px;
@@ -392,7 +394,7 @@
 
     .portrait-body {
       position: absolute;
-      left: 19px;
+      left: 29px;
       top: 60px;
       width: 66px;
       height: 78px;
@@ -834,6 +836,280 @@
       font-weight: 700;
     }
 
+    .document-sign-page .content {
+      min-height: 0;
+      display: block;
+      overflow: hidden;
+      padding: 20px 24px;
+      background: var(--soft);
+    }
+
+    .document-workspace {
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .document-files {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto repeat(2, 160px);
+      align-content: start;
+      gap: 10px;
+    }
+
+    .file-summary {
+      padding: 14px 16px;
+      border-left: 4px solid var(--green);
+      background: #fff;
+    }
+
+    .file-summary b {
+      display: block;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    .file-summary span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .file-tab {
+      position: relative;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 12px 12px 12px 38px;
+      border: 1px solid #e0e3e7;
+      background: #fff;
+      color: #111;
+    }
+
+    .file-tab::before {
+      content: "";
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      width: 15px;
+      height: 19px;
+      border: 1px solid #7f8791;
+      transform: translateY(-50%);
+      background: #fff;
+    }
+
+    .file-tab.active {
+      border-color: #111;
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+
+    .file-tab.done::before {
+      content: "✓";
+      display: grid;
+      place-items: center;
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .file-tab b {
+      font-size: 15px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .file-tab span {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .file-tab .special-requirement {
+      color: #4f8500;
+      font-weight: 700;
+    }
+
+    .document-preview {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      border: 1px solid #dfe3e7;
+      background: #fff;
+    }
+
+    .preview-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 18px 22px;
+      border-bottom: 1px solid #e7e9ec;
+    }
+
+    .preview-head h2 {
+      margin: 0;
+      color: #111;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .preview-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .preview-status {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 10px;
+      background: rgba(156,255,0,.32);
+      color: #315900;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .document-paper {
+      min-height: 0;
+      overflow: hidden;
+      padding: 24px 32px;
+      background: #fff;
+    }
+
+    .document-paper h3 {
+      margin: 0 0 8px;
+      color: #111;
+      font-size: 21px;
+      line-height: 1.25;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .document-meta {
+      margin-bottom: 18px;
+      color: #69707c;
+      font-size: 12px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .paper-section {
+      margin-top: 16px;
+    }
+
+    .paper-section b {
+      display: block;
+      margin-bottom: 7px;
+      color: #111;
+      font-size: 14px;
+    }
+
+    .paper-section p {
+      margin: 0;
+      color: #454d57;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .paper-section p + p {
+      margin-top: 7px;
+    }
+
+    .copy-requirement {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--green);
+      background: #f6f8f4;
+    }
+
+    .copy-requirement b {
+      display: block;
+      margin-bottom: 7px;
+      color: #315900;
+      font-size: 14px;
+    }
+
+    .copy-requirement p {
+      margin: 0;
+      color: #313840;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .preview-read-state {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 20px;
+      border-top: 1px solid #e7e9ec;
+      background: #fafbfb;
+      color: #4b5563;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .document-sign-actions {
+      padding: 12px 40px 28px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .merge-warning {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding: 9px 14px;
+      border: 1px solid #dfc66d;
+      background: #fff9e8;
+      color: #6a5100;
+      font-size: 13px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .merge-warning::before {
+      content: "!";
+      flex: 0 0 auto;
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #c49b15;
+      color: #6a5100;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .document-sign-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 12px;
+    }
+
+    .btn.disabled {
+      border-color: #d8dce1;
+      background: #eef0f2;
+      color: #9aa0a8;
+    }
+
     .signature-layout {
       display: grid;
       grid-template-rows: auto 1fr auto;
@@ -937,6 +1213,256 @@
     .danger-link {
       color: #555f6b;
       border-color: #cfd4da;
+    }
+
+    .simple-sign-page .content {
+      min-height: 0;
+      display: block;
+      overflow: hidden;
+      padding: 24px 32px;
+      background: var(--soft);
+    }
+
+    .simple-sign-panel {
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      border: 1px solid #dfe3e7;
+      background: #fff;
+    }
+
+    .simple-sign-head {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 0 22px;
+      border-bottom: 1px solid #e7e9ec;
+    }
+
+    .simple-sign-head h2 {
+      margin: 0;
+      color: #111;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .simple-sign-head span {
+      color: #69707c;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .clear-sign {
+      min-width: 96px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #d7dbe0;
+      background: #fff;
+      color: #4f5864;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .simple-sign-canvas {
+      position: relative;
+      min-height: 0;
+      margin: 20px;
+      overflow: hidden;
+      border: 1px dashed #bdc4cc;
+      background: #fff;
+    }
+
+    .simple-sign-canvas svg {
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      width: 480px;
+      height: 140px;
+      transform: translate(-50%, -50%);
+    }
+
+    .simple-sign-hint {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 28px;
+      color: #8a929d;
+      font-size: 14px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .completion-page {
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .completion-topbar {
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .completion-page .content {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      padding: 48px;
+      background: #fff;
+    }
+
+    .completion-state {
+      width: 100%;
+      max-width: 720px;
+      display: grid;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .completion-mark {
+      width: 128px;
+      height: 128px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: #111;
+      font-size: 58px;
+      line-height: 1;
+      font-weight: 700;
+      box-shadow: 0 0 0 18px rgba(156,255,0,.16);
+    }
+
+    .completion-state h1 {
+      margin: 42px 0 0;
+      color: #111;
+      font-size: 38px;
+      line-height: 1.18;
+      font-weight: 700;
+    }
+
+    .completion-state > p {
+      margin: 14px 0 0;
+      color: #4f5864;
+      font-size: 20px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .completion-receipt {
+      width: 100%;
+      margin-top: 34px;
+      padding: 0 10px;
+      border-top: 1px dashed #bfc5cc;
+      border-bottom: 1px dashed #bfc5cc;
+    }
+
+    .receipt-row {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      padding: 14px 4px;
+      border-bottom: 1px dashed #d9dde2;
+      text-align: left;
+    }
+
+    .receipt-row:last-child {
+      border-bottom: 0;
+    }
+
+    .receipt-row span {
+      color: #7a828c;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .receipt-row b {
+      color: #111;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .room-direction {
+      width: 100%;
+      margin-top: 34px;
+      padding: 30px 36px;
+      border-top: 1px solid #dfe3e7;
+      border-bottom: 1px solid #dfe3e7;
+      background: #f7f8f8;
+      color: #111;
+      font-size: 22px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .room-direction strong {
+      display: inline-block;
+      margin: 0 8px;
+      color: #111;
+      font-size: 40px;
+      line-height: 1;
+      font-weight: 700;
+      box-shadow: inset 0 -12px 0 var(--green);
+    }
+
+    .app-progress-note {
+      width: 100%;
+      min-height: 68px;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      align-items: center;
+      margin-top: 24px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--green);
+      background: #f7f8f8;
+      text-align: left;
+    }
+
+    .app-progress-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      background: #111;
+      color: var(--green);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .app-progress-note b {
+      display: block;
+      color: #111;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    .app-progress-note span {
+      display: block;
+      margin-top: 4px;
+      color: #69707c;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .completion-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 12px;
+      padding: 20px 40px 28px;
+      border-top: 1px solid var(--line);
+      background: #fff;
     }
 
     .finish-page .content {
@@ -1195,7 +1721,7 @@
         <li class="nav-item">流程确认页之后</li>
         <li class="nav-item active">面诊医生确认</li>
         <li class="nav-item active">治疗签署文书流程</li>
-        <li class="nav-item active">服务流程指引 + 倒计时登出</li>
+        <li class="nav-item active">自助签到完成</li>
         <li class="nav-item">返回起始默认签到页</li>
       </ul>
     </aside>
@@ -1327,64 +1853,73 @@
         </div>
 
         <div>
-          <p class="variant-label">状态 B：治疗签署文书 - 会话确认 + 文件阅读</p>
-          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：治疗签署文书流程前段">
+          <p class="variant-label">状态 B：多份治疗文书阅读与签署方式选择</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：多份治疗文书阅读">
             <div class="pad-screen">
-              <article class="kiosk-page sign-page">
-                <header class="page-header">
-                  <div class="topbar">
-                    <span class="store">新氧青春北京保利店</span>
-                    <span class="logout">登出</span>
+              <article class="kiosk-page sign-page document-sign-page">
+                <header class="service-topbar">
+                  <div class="service-back">‹</div>
+                  <div class="service-title">
+                    <h1>治疗文书签署</h1>
+                    <p>本次共 2 份待签署文书，请阅读后选择签署方式</p>
                   </div>
-                  <span class="eyebrow">治疗签署文书</span>
-                  <h1>请完成治疗前确认</h1>
-                  <p class="lead">直接治疗路径需要先完成问答确认与文书阅读。</p>
+                  <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
                 </header>
 
                 <section class="content">
-                  <div class="sign-workspace">
-                    <div class="progress">
-                      <div class="step done"><b>1</b><span>会话确认</span></div>
-                      <div class="step active"><b>2</b><span>文件阅读</span></div>
-                      <div class="step"><b>3</b><span>用户签署</span></div>
-                      <div class="step"><b>4</b><span>完成校验</span></div>
-                    </div>
-
-                    <div class="doc-layout">
-                      <div class="chat-box">
-                        <div class="bubble system">请确认：本次治疗项目为“舒敏修护 + 光电嫩肤”，您已知晓术后 24 小时内需加强防晒。</div>
-                        <div class="bubble user">我已确认</div>
+                  <div class="document-workspace">
+                    <nav class="document-files" aria-label="待签署文书列表">
+                      <div class="file-summary">
+                        <b>待签署 2 份</b>
+                        <span>已阅读 1 份 · 当前第 2 份</span>
                       </div>
-
-                      <div class="doc-tabs">
-                        <div class="doc-tab active">知情同意书</div>
-                        <div class="doc-tab">项目说明</div>
-                        <div class="doc-tab">护理须知</div>
+                      <div class="file-tab done">
+                        <b>就诊告知书</b>
+                        <span>已阅读</span>
                       </div>
-
-                      <div class="document">
-                        <h2>治疗知情同意书</h2>
-                        <div class="doc-line mid"></div>
-                        <div class="doc-line"></div>
-                        <div class="doc-line short"></div>
-                        <div class="doc-line"></div>
-                        <div class="doc-line mid"></div>
-                        <div class="doc-line"></div>
-                        <div class="doc-line short"></div>
-                        <div class="doc-line mid"></div>
+                      <div class="file-tab active">
+                        <b>光电治疗知情同意书</b>
+                        <span class="special-requirement">需抄写指定文案</span>
                       </div>
+                    </nav>
 
-                      <div class="read-confirm">
-                        <span class="check">✓</span>
-                        <span>已阅读到文末并确认本文件，继续阅读下一份文书。</span>
+                    <section class="document-preview" aria-label="当前文书预览">
+                      <header class="preview-head">
+                        <div>
+                          <h2>光电治疗知情同意书</h2>
+                          <p>文书 2 / 2 · 新氧青春北京保利店 · 沙磊</p>
+                        </div>
+                        <span class="preview-status">需逐份签署</span>
+                      </header>
+                      <div class="document-paper">
+                        <h3>光电治疗知情同意书</h3>
+                        <div class="document-meta">适用于光子嫩肤及相关光电治疗项目</div>
+
+                        <div class="paper-section">
+                          <b>一、治疗说明</b>
+                          <p>本人已了解本次光电治疗的目的、方式、预计效果及可能需要的治疗次数。治疗效果受个人肤质、生活习惯及术后护理等因素影响。</p>
+                        </div>
+                        <div class="paper-section">
+                          <b>二、风险与注意事项</b>
+                          <p>治疗后可能出现短暂红肿、灼热、干燥、结痂或色素变化。本人应如实告知既往病史、过敏史、用药情况及近期接受的其他治疗。</p>
+                          <p>治疗后需加强保湿与防晒，并按照医护人员告知的护理要求执行。</p>
+                        </div>
+                        <div class="copy-requirement">
+                          <b>当地卫健委要求 · 签署时需本人抄写</b>
+                          <p>“本人已充分阅读并理解上述治疗说明、风险及注意事项，自愿接受本次治疗。”</p>
+                        </div>
                       </div>
-                    </div>
+                      <div class="preview-read-state"><span class="check">✓</span><span>已阅读至文末，签署时需要抄写指定文案</span></div>
+                    </section>
                   </div>
                 </section>
 
-                <footer class="page-actions">
-                  <div class="btn danger-link">终止签署，返回选择</div>
-                  <div class="btn primary">继续下一步</div>
+                <footer class="document-sign-actions">
+                  <div class="merge-warning">因当地卫健委要求，知情同意书需要用户抄写指定文案，无法合并签署，请逐份签署。</div>
+                  <div class="document-sign-buttons">
+                    <div class="btn disabled">合并签署</div>
+                    <div class="btn primary">逐份签署</div>
+                  </div>
                 </footer>
               </article>
             </div>
@@ -1392,56 +1927,40 @@
         </div>
 
         <div>
-          <p class="variant-label">状态 C：治疗签署文书 - 用户签署 + 完成校验</p>
-          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：治疗签署文书流程后段">
+          <p class="variant-label">状态 C：第三方签字面板</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：用户签署">
             <div class="pad-screen">
-              <article class="kiosk-page sign-page">
-                <header class="page-header">
-                  <div class="topbar">
-                    <span class="store">新氧青春北京保利店</span>
-                    <span class="logout">登出</span>
+              <article class="kiosk-page sign-page simple-sign-page">
+                <header class="service-topbar">
+                  <div class="service-back">‹</div>
+                  <div class="service-title">
+                    <h1>用户签署</h1>
+                    <p>请在签字面板内完成签名</p>
                   </div>
-                  <span class="eyebrow">用户签署</span>
-                  <h1>请在下方签名确认</h1>
-                  <p class="lead">必签文书全部完成后，系统将进入服务流程指引。</p>
+                  <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
                 </header>
 
                 <section class="content">
-                  <div class="sign-workspace">
-                    <div class="progress">
-                      <div class="step done"><b>1</b><span>会话确认</span></div>
-                      <div class="step done"><b>2</b><span>文件阅读</span></div>
-                      <div class="step active"><b>3</b><span>用户签署</span></div>
-                      <div class="step"><b>4</b><span>完成校验</span></div>
+                  <div class="simple-sign-panel">
+                    <div class="simple-sign-head">
+                      <div>
+                        <h2>请在下方签名</h2>
+                        <span>请使用本人手写签名</span>
+                      </div>
+                      <div class="clear-sign">清除重签</div>
                     </div>
-
-                    <div class="signature-layout">
-                      <div class="sign-list">
-                        <div class="sign-item done"><b>知情同意书</b><span>已阅读，待签名同步</span></div>
-                        <div class="sign-item done"><b>项目说明</b><span>已确认风险与禁忌</span></div>
-                        <div class="sign-item"><b>护理须知</b><span>需完成签名</span></div>
-                        <div class="sign-item"><b>签署校验</b><span>待系统检查必签项</span></div>
-                      </div>
-
-                      <div class="signature-box">
-                        <svg viewBox="0 0 360 100" aria-hidden="true">
-                          <path d="M12 58 C55 14, 78 18, 61 62 C52 90, 103 68, 126 32 C106 85, 170 82, 196 44 C179 82, 237 78, 267 34 C252 78, 302 78, 348 48" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <div class="signature-hint">请使用手指在虚线框内签名</div>
-                      </div>
-
-                      <div class="audit">
-                        <div class="audit-row"><span class="check">✓</span><span>会话问题均已确认</span><span>通过</span></div>
-                        <div class="audit-row"><span class="check">✓</span><span>3 份文书均已阅读</span><span>通过</span></div>
-                        <div class="audit-row"><span class="check">✓</span><span>签名已采集，可提交</span><span>通过</span></div>
-                      </div>
+                    <div class="simple-sign-canvas">
+                      <svg viewBox="0 0 360 100" aria-hidden="true">
+                        <path d="M12 58 C55 14, 78 18, 61 62 C52 90, 103 68, 126 32 C106 85, 170 82, 196 44 C179 82, 237 78, 267 34 C252 78, 302 78, 348 48" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <div class="simple-sign-hint">请使用手指在签字区域内签名</div>
                     </div>
                   </div>
                 </section>
 
                 <footer class="page-actions">
-                  <div class="btn danger-link">终止签署，返回选择</div>
-                  <div class="btn green">提交签署</div>
+                  <div class="btn danger-link">终止签署返回</div>
+                  <div class="btn primary">提交签署</div>
                 </footer>
               </article>
             </div>
@@ -1449,64 +1968,36 @@
         </div>
 
         <div>
-          <p class="variant-label">状态 D：统一结束节点 - 服务流程指引 + 倒计时登出</p>
-          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：服务流程指引和倒计时登出">
+          <p class="variant-label">状态 D：自助签到完成</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：自助签到完成">
             <div class="pad-screen">
-              <article class="kiosk-page finish-page">
-                <header class="page-header">
-                  <div class="topbar">
-                    <span class="store">新氧青春北京保利店</span>
-                    <span class="logout">登出</span>
-                  </div>
-                  <span class="eyebrow">服务流程指引</span>
-                  <h1>接下来请按服务指引继续</h1>
-                  <p class="lead">面诊路径和治疗签署完成路径都进入此同一个结束节点。</p>
+              <article class="kiosk-page completion-page">
+                <header class="completion-topbar">
+                  <span class="store">新氧青春北京保利店</span>
+                  <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
                 </header>
 
                 <section class="content">
-                  <div class="finish-hero">
-                    <div class="finish-mark">✓</div>
-                    <div>
-                      <h2>已完成本次到店自助确认</h2>
-                      <p>请留意 App 或小程序内的服务流程指引，门店人员会按队列为您安排下一步。</p>
+                  <div class="completion-state">
+                    <div class="completion-mark">✓</div>
+                    <h1>已完成自助签到</h1>
+                    <p>您的服务要求我们已经收到。</p>
+                    <div class="completion-receipt" aria-label="本次服务确认摘要">
+                      <div class="receipt-row"><span>就诊项目</span><b>光子嫩肤年卡 · 第 2 次、舒敏修护护理</b></div>
+                      <div class="receipt-row"><span>面诊医生</span><b>李婧 医生</b></div>
+                      <div class="receipt-row"><span>服务流程</span><b>皮肤检测、术前术后对比照、温水与坚果</b></div>
                     </div>
-                  </div>
-
-                  <div class="next-steps">
-                    <div class="next-card">
-                      <div class="next-icon">1</div>
-                      <div>
-                        <b>查看 App / 小程序消息</b>
-                        <span>服务人员、等待时间、房间或面诊提醒会同步到手机端。</span>
-                      </div>
-                    </div>
-                    <div class="next-card">
-                      <div class="next-icon">2</div>
-                      <div>
-                        <b>在休息区等待叫号</b>
-                        <span>若等待时间变化，请以前台和手机端通知为准。</span>
-                      </div>
-                    </div>
-                    <div class="next-card">
-                      <div class="next-icon">3</div>
-                      <div>
-                        <b>保护个人信息</b>
-                        <span>本设备将自动退出当前客户会话。</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="countdown">
-                    <div class="timer">10</div>
-                    <div>
-                      <b>10 秒后自动返回签到首页</b>
-                      <span>您也可以点击“登出”立即结束本次会话。</span>
+                    <div class="room-direction">请您到<strong>2号面诊室</strong>进行面诊。</div>
+                    <div class="app-progress-note">
+                      <div class="app-progress-icon">氧</div>
+                      <div><b>打开新氧青春App可查看服务进度</b><span>排队进度、面诊提醒和房间变化会同步更新。</span></div>
                     </div>
                   </div>
                 </section>
 
-                <footer class="page-actions single">
-                  <div class="btn primary">立即登出并返回首页</div>
+                <footer class="completion-actions">
+                  <div class="btn">再逛逛</div>
+                  <div class="btn primary">退出登录（10）秒后自动登出</div>
                 </footer>
               </article>
             </div>
@@ -1534,7 +2025,7 @@
           <b>页面信息层级</b>
           <ul>
             <li>顶部：门店识别、登出、当前页面任务和一句短提示。</li>
-            <li>中部：当前要完成的核心任务，面诊人员页为单列人员选择，签署页为左侧步骤进度 + 右侧当前内容。</li>
+            <li>中部：面诊人员页为单列人员选择；文书阅读页为左侧文件列表 + 右侧完整预览；签名页承载当前文件的签署动作。</li>
             <li>底部：低风险返回 / 终止操作放左侧，继续或提交放右侧主按钮。</li>
             <li>结束页：保留轻微完成感，但完成图标和标题降级，重点仍是手机端继续指引和倒计时登出。</li>
           </ul>
@@ -1544,9 +2035,9 @@
           <b>本版效率调整</b>
           <ul>
             <li>面诊人员页使用紧凑单列横向卡片，一屏完整展示 6 位医生；原型头像采用统一灰阶示意，中部承载资质与擅长方向，右侧突出等待信息。</li>
-            <li>签署流程从顶部步骤条改为左侧步骤栏，右侧专注当前问答、文件或签名内容。</li>
-            <li>按钮、登出、人员卡、系统推荐项、签署步骤项维持 44-56px 稳定热区，相邻操作至少 8px 间距。</li>
-            <li>结束页不使用大海报式视觉，改为完成反馈 + 三条下一步 + 倒计时的任务闭环。</li>
+            <li>文书阅读页左侧只区分不同文件，右侧专注当前文书；底部提供合并签署和逐份签署。</li>
+            <li>按钮、登出、人员卡和签署操作维持 44-56px 稳定热区，相邻操作至少 8px 间距。</li>
+            <li>签名页只保留签字面板和提交操作，结束页集中突出完成状态与面诊室指引。</li>
             <li>系统推荐卡从黑色展示块改为浅绿提示条，减少视觉停留，让用户更快进入人员对比。</li>
           </ul>
         </div>
@@ -1556,9 +2047,10 @@
           <ul>
             <li>点击“登出”：任何业务页都结束当前客户会话，并返回起始默认签到页。</li>
             <li>面诊人员确认：默认系统分配，可切换具体医生；确认后进入统一结束页。</li>
+            <li>文书签署：特殊文件需要抄写指定文案时禁用合并签署，并引导用户逐份完成。</li>
             <li>终止签署：回到“安排面诊 / 无需面诊直接治疗”的选择状态。</li>
-            <li>完成校验：必签项、阅读确认、签名采集均通过后，进入统一结束节点。</li>
-            <li>倒计时结束：自动登出并返回起始默认签到页。</li>
+            <li>提交签署：第三方签名提交完成后进入统一结束节点。</li>
+            <li>退出登录倒计时结束：自动登出并返回起始默认签到页。</li>
           </ul>
         </div>
 
@@ -1567,8 +2059,7 @@
           <ul>
             <li>服务人员排序：优先按等待时间、擅长项目、客户历史偏好，还是门店运营规则？</li>
             <li>治疗签署终止后回退到哪里：本次治疗项目确认页，还是服务人员确认页？</li>
-            <li>倒计时是否固定 10 秒，还是按门店配置可调？</li>
-            <li>结束页是否需要展示叫号、房间、当前队列号等门店履约信息？</li>
+            <li>面诊室编号由门店排班系统实时返回，还是由现场人员确认后写入？</li>
           </ul>
         </div>
       </aside>
