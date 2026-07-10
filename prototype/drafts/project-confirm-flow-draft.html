@@ -1,0 +1,3042 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>项目菜单 / 治疗项目确认 / 流程确认 - Pad 任务界面草案</title>
+  <style>
+    :root {
+      --green: #9cff00;
+      --black: #111111;
+      --ink: #171717;
+      --muted: #69707c;
+      --line: #e5e7eb;
+      --soft: #f7f7f8;
+      --soft2: #eef0f3;
+      --pad-w: 900px;
+      --pad-h: 1440px;
+      --pad-scale: .58;
+      --pad-preview-w: 559px;
+      --pad-preview-h: 872px;
+      --pad-frame: 32px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--soft2);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 250px minmax(900px, 1fr);
+      gap: 22px;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      height: calc(100vh - 48px);
+      padding: 20px;
+      border-radius: 18px;
+      background: #151515;
+      color: #f8fafc;
+      box-shadow: 0 24px 70px rgba(0,0,0,.18);
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--green);
+      color: #111;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand-lockup b {
+      display: block;
+      font-size: 16px;
+      line-height: 1.1;
+    }
+
+    .brand-lockup span {
+      display: block;
+      margin-top: 3px;
+      color: #a3a3a3;
+      font-size: 11px;
+    }
+
+    .nav-title {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-item {
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      color: #d4d4d8;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .nav-item.active {
+      border-color: var(--green);
+      background: var(--green);
+      color: #111;
+      font-weight: 700;
+    }
+
+    .stage {
+      display: grid;
+      grid-template-columns: minmax(560px, var(--pad-preview-w)) minmax(360px, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .pad-stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    .pad-stack > div {
+      width: var(--pad-preview-w);
+    }
+
+    .variant-label {
+      margin: 0 0 10px;
+      color: #111;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .pad-shell {
+      position: relative;
+      width: var(--pad-preview-w);
+      height: var(--pad-preview-h);
+    }
+
+    .pad-screen {
+      box-sizing: content-box;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--pad-w);
+      height: var(--pad-h);
+      overflow: hidden;
+      transform: scale(var(--pad-scale));
+      transform-origin: top left;
+      border: var(--pad-frame) solid #171717;
+      border-radius: 58px;
+      background: #fff;
+      box-shadow: 0 34px 100px rgba(17,17,17,.26);
+    }
+
+    .task-page {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      background: #fff;
+    }
+
+    .menu-page {
+      position: relative;
+      display: block;
+    }
+
+    .treatment-picker {
+      position: relative;
+      display: block;
+      height: 100%;
+      background: #f6f8fb;
+    }
+
+    .treatment-header {
+      height: 92px;
+      display: grid;
+      grid-template-columns: 96px 1fr auto;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 1px solid #cfd5df;
+      background: #f6f8fb;
+    }
+
+    .treatment-back {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      color: #111;
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 500;
+    }
+
+    .store-name {
+      justify-self: center;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .user-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #111;
+      font-size: 17px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .level-badge {
+      min-width: 42px;
+      height: 28px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 3px;
+      background: #2f6f45;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .text-logout {
+      color: #59708f;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .treatment-title {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      padding: 0 88px;
+      border-bottom: 2px solid #111;
+      background: #f6f8fb;
+    }
+
+    .treatment-title h1 {
+      margin: 0;
+      color: #111;
+      font-size: 24px;
+      line-height: 1.15;
+      font-weight: 600;
+    }
+
+    .service-tabs {
+      height: 70px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 2px solid #111;
+      background: #f6f8fb;
+    }
+
+    .service-tab {
+      display: grid;
+      place-items: center;
+      border-right: 2px solid #111;
+      color: #111;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .service-tab:last-child {
+      border-right: 0;
+    }
+
+    .service-tab.active {
+      background: #111;
+      color: var(--green);
+    }
+
+    .treatment-board {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 240px;
+      bottom: 70px;
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      border-bottom: 2px solid #111;
+      background: #f6f8fb;
+    }
+
+    .skin-rail {
+      display: grid;
+      grid-template-rows: repeat(4, 1fr);
+      border-right: 2px solid #111;
+    }
+
+    .skin-item {
+      display: grid;
+      place-items: center;
+      border-bottom: 2px solid #111;
+      color: #111;
+      font-size: 19px;
+      font-weight: 500;
+    }
+
+    .skin-item:last-child {
+      border-bottom: 0;
+    }
+
+    .skin-item.active {
+      background: rgba(156,255,0,.22);
+      font-weight: 700;
+    }
+
+    .treatment-detail {
+      padding: 34px 36px;
+      color: #111;
+    }
+
+    .condition-title {
+      margin: 0 0 12px;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .condition-copy {
+      max-width: 700px;
+      margin: 0 0 24px;
+      color: #28313d;
+      font-size: 17px;
+      line-height: 1.55;
+      font-weight: 400;
+    }
+
+    .plan-label {
+      margin: 0 0 8px;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .plan-note {
+      margin: 0 0 16px;
+      color: #303844;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .plan-tree {
+      display: grid;
+      gap: 16px;
+      max-width: 710px;
+    }
+
+    .plan-row {
+      display: grid;
+      grid-template-columns: 34px 1.35fr .72fr .78fr 1fr;
+      align-items: center;
+      column-gap: 16px;
+      min-height: 34px;
+      color: #111;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    .plan-row.sub {
+      margin-left: 46px;
+      grid-template-columns: 34px 1.05fr .72fr .78fr 1fr;
+    }
+
+    .select-dot {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #3351d9;
+    }
+
+    .select-dot::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .plan-name {
+      color: #3351d9;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .plan-muted {
+      color: #1f2933;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    .severity-copy {
+      margin-top: 30px;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .solution-panel {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+
+    .solution-copy {
+      min-height: 166px;
+      padding: 18px 20px;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .solution-eyebrow {
+      margin: 0 0 8px;
+      color: #4b5563;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .solution-copy .condition-title {
+      margin-bottom: 10px;
+    }
+
+    .solution-copy .condition-copy {
+      margin-bottom: 0;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .case-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      min-height: 166px;
+    }
+
+    .skin-photo,
+    .effect-photo {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid #dfe3e8;
+      background:
+        radial-gradient(circle at 35% 28%, rgba(255,255,255,.56) 0 12%, transparent 13%),
+        radial-gradient(circle at 70% 58%, rgba(210,140,112,.28) 0 9%, transparent 10%),
+        linear-gradient(135deg, #f4d8c9, #e8bda9 52%, #f6e3d8);
+    }
+
+    .effect-photo {
+      background:
+        radial-gradient(circle at 42% 34%, rgba(255,255,255,.58) 0 13%, transparent 14%),
+        linear-gradient(135deg, #f7e4da, #efcbbd 54%, #fff0e9);
+    }
+
+    .skin-photo::after,
+    .effect-photo::after {
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: rgba(17,17,17,.72);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .skin-photo::after { content: "常见状态"; }
+    .effect-photo::after { content: "案例效果"; }
+
+    .project-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .treatment-card {
+      min-height: 250px;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .treatment-card.selected {
+      border-color: #111;
+      box-shadow: inset 0 0 0 1px #111;
+    }
+
+    .card-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .card-top h3 {
+      margin: 0;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.18;
+      font-weight: 700;
+    }
+
+    .select-state {
+      min-width: 58px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--green);
+      color: #111;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .treatment-card:not(.selected) .select-state {
+      background: #111;
+      color: var(--green);
+    }
+
+    .card-desc {
+      margin: 0;
+      color: #56606b;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .decision-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .decision-cell {
+      min-height: 48px;
+      display: grid;
+      align-content: center;
+      gap: 2px;
+      padding: 7px 9px;
+      border-radius: 8px;
+      background: #f7f7f8;
+    }
+
+    .decision-cell span {
+      color: #707782;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .decision-cell b {
+      color: #111;
+      font-size: 14px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .pain-level {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .pain-level i {
+      width: 16px;
+      height: 6px;
+      border-radius: 999px;
+      background: #d7dce3;
+    }
+
+    .pain-level i.on {
+      background: #111;
+    }
+
+    .card-cases {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .case-thumb {
+      height: 54px;
+      display: flex;
+      align-items: flex-end;
+      padding: 7px;
+      border-radius: 8px;
+      overflow: hidden;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      background:
+        radial-gradient(circle at 55% 34%, rgba(255,255,255,.5) 0 14%, transparent 15%),
+        linear-gradient(135deg, #d9aa96, #f0d4c7);
+    }
+
+    .case-thumb.after {
+      background:
+        radial-gradient(circle at 45% 35%, rgba(255,255,255,.6) 0 14%, transparent 15%),
+        linear-gradient(135deg, #efc8b8, #fdece4);
+      color: #111;
+    }
+
+    .treatment-footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 76px;
+      display: grid;
+      grid-template-columns: 1fr 176px;
+      gap: 14px;
+      align-items: center;
+      padding: 10px 10px 10px 24px;
+      border-top: 2px solid #111;
+      background: #f6f8fb;
+    }
+
+    .payment-summary {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #111;
+      font-size: 16px;
+      white-space: nowrap;
+    }
+
+    .payment-summary span {
+      color: #3351d9;
+      font-weight: 500;
+    }
+
+    .pay-button {
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #111;
+      color: var(--green);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* High-fidelity project menu: white/gray task UI with green/black accents. */
+    .treatment-picker {
+      background:
+        linear-gradient(180deg, #fbfcfd 0%, #ffffff 42%, #f7f8fa 100%);
+    }
+
+    .treatment-header {
+      height: 88px;
+      grid-template-columns: 72px 1fr auto;
+      padding: 0 34px;
+      border-bottom: 1px solid #edf0f3;
+      background: rgba(255,255,255,.96);
+    }
+
+    .treatment-back {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      border: 1px solid #e1e5ea;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(17,17,17,.05);
+      font-size: 28px;
+    }
+
+    .store-name {
+      color: #2a2f36;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .user-line {
+      gap: 9px;
+      color: #2a2f36;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .level-badge {
+      min-width: 40px;
+      height: 24px;
+      border-radius: 6px;
+      background: #111;
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    .text-logout {
+      color: #69707c;
+      font-size: 15px;
+    }
+
+    .treatment-title {
+      height: 70px;
+      padding: 0 42px;
+      border-bottom: 0;
+      background: #fff;
+    }
+
+    .treatment-title h1 {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .service-tabs {
+      height: 62px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 0 42px 14px;
+      border-bottom: 1px solid #edf0f3;
+      background: #fff;
+    }
+
+    .service-tab {
+      border: 1px solid #e2e6ec;
+      border-right: 1px solid #e2e6ec;
+      border-radius: 8px;
+      background: #f7f8fa;
+      color: #404852;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .service-tab.active {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+      box-shadow: 0 8px 20px rgba(17,17,17,.12);
+    }
+
+    .treatment-board {
+      top: 220px;
+      bottom: 92px;
+      grid-template-columns: 94px 1fr;
+      gap: 18px;
+      padding: 24px 34px 22px 24px;
+      border-bottom: 0;
+      background: #f7f8fa;
+    }
+
+    .skin-rail {
+      display: grid;
+      grid-template-rows: repeat(4, 74px);
+      gap: 10px;
+      padding: 10px;
+      border-right: 0;
+      border-radius: 8px;
+      background: #eceff3;
+    }
+
+    .skin-item {
+      border: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+      border-radius: 8px;
+      background: #fff;
+      color: #525b67;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .skin-item.active {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+      box-shadow: 0 10px 24px rgba(17,17,17,.14);
+    }
+
+    .treatment-detail {
+      min-width: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .solution-panel {
+      grid-template-columns: 1fr 244px;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .solution-copy {
+      min-height: 150px;
+      padding: 18px 20px;
+      border: 1px solid #edf0f3;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 10px 28px rgba(17,17,17,.04);
+    }
+
+    .solution-eyebrow {
+      margin-bottom: 7px;
+      color: #69707c;
+      font-size: 13px;
+      letter-spacing: .02em;
+    }
+
+    .condition-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .solution-copy .condition-copy {
+      max-width: 560px;
+      color: #58616d;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .case-panel {
+      min-height: 150px;
+      gap: 10px;
+    }
+
+    .skin-photo,
+    .effect-photo {
+      border: 0;
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.35), 0 10px 28px rgba(17,17,17,.08);
+      background:
+        radial-gradient(circle at 52% 32%, rgba(255,255,255,.58) 0 13%, transparent 14%),
+        radial-gradient(circle at 35% 55%, rgba(189,111,88,.28) 0 8%, transparent 9%),
+        radial-gradient(circle at 70% 65%, rgba(129,72,58,.16) 0 7%, transparent 8%),
+        linear-gradient(140deg, #f2d4c6 0%, #dfac99 58%, #f8e2d9 100%);
+    }
+
+    .effect-photo {
+      background:
+        radial-gradient(circle at 48% 32%, rgba(255,255,255,.68) 0 15%, transparent 16%),
+        radial-gradient(circle at 72% 62%, rgba(233,167,139,.16) 0 7%, transparent 8%),
+        linear-gradient(140deg, #f8e6de 0%, #efc5b6 58%, #fff3ed 100%);
+    }
+
+    .skin-photo::after,
+    .effect-photo::after {
+      background: rgba(17,17,17,.62);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .plan-label {
+      margin: 0 0 12px;
+      color: #111;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .project-card-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .treatment-card {
+      min-height: 246px;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid #e4e8ee;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 10px 26px rgba(17,17,17,.045);
+    }
+
+    .treatment-card.selected {
+      border-color: #111;
+      box-shadow: inset 0 0 0 1px #111, 0 14px 32px rgba(17,17,17,.08);
+    }
+
+    .card-top h3 {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .select-state {
+      min-width: 54px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--green);
+      color: #111;
+      font-size: 13px;
+    }
+
+    .treatment-card:not(.selected) .select-state {
+      background: #f1f3f6;
+      color: #111;
+      box-shadow: inset 0 0 0 1px #dfe3e8;
+    }
+
+    .card-desc {
+      color: #69707c;
+      font-size: 13px;
+      line-height: 1.38;
+    }
+
+    .decision-grid {
+      gap: 7px;
+    }
+
+    .decision-cell {
+      min-height: 46px;
+      padding: 7px 8px;
+      border-radius: 8px;
+      background: #f7f8fa;
+    }
+
+    .decision-cell span {
+      color: #7a828d;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .decision-cell b {
+      color: #111;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .pain-level i {
+      width: 15px;
+      height: 5px;
+      background: #d9dee5;
+    }
+
+    .pain-level i.on {
+      background: var(--green);
+      box-shadow: inset 0 0 0 1px rgba(17,17,17,.12);
+    }
+
+    .card-cases {
+      gap: 7px;
+    }
+
+    .case-thumb {
+      height: 50px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 52% 35%, rgba(255,255,255,.55) 0 15%, transparent 16%),
+        radial-gradient(circle at 70% 65%, rgba(157,92,72,.18) 0 8%, transparent 9%),
+        linear-gradient(135deg, #ddb19e, #f3d8ca);
+    }
+
+    .case-thumb.after {
+      background:
+        radial-gradient(circle at 46% 35%, rgba(255,255,255,.66) 0 15%, transparent 16%),
+        linear-gradient(135deg, #f2cdbd, #fff0e8);
+    }
+
+    .treatment-footer {
+      height: 92px;
+      grid-template-columns: 1fr 188px;
+      padding: 14px 34px;
+      border-top: 1px solid #e5e7eb;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 -12px 30px rgba(17,17,17,.06);
+    }
+
+    .payment-summary {
+      min-height: 58px;
+      gap: 10px;
+      padding: 0 18px;
+      border-radius: 8px;
+      background: #f7f8fa;
+      color: #111;
+      font-size: 15px;
+    }
+
+    .payment-summary span {
+      color: #111;
+      font-weight: 700;
+    }
+
+    .pay-button {
+      height: 58px;
+      border-radius: 8px;
+      box-shadow: 0 12px 28px rgba(17,17,17,.16);
+      font-size: 17px;
+    }
+
+    .scheme-menu .task-content {
+      min-height: 0;
+      overflow: hidden;
+      padding: 18px 32px 0;
+      background: #fff;
+    }
+
+    .scheme-menu {
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .scheme-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .scheme-tab {
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #e2e6ec;
+      border-radius: 8px;
+      background: #f7f8fa;
+      color: #404852;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .scheme-tab.active {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .scheme-layout {
+      height: calc(100% - 68px);
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .scheme-rail {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      padding: 10px;
+      border-radius: 8px;
+      background: #f1f3f6;
+    }
+
+    .scheme-rail-item {
+      height: 66px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #e2e6ec;
+      border-radius: 8px;
+      background: #fff;
+      color: #525b67;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .scheme-rail-item.active {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .scheme-detail {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .scheme-hero {
+      display: grid;
+      grid-template-columns: 1fr 216px;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .scheme-copy {
+      min-height: 134px;
+      padding: 16px 18px;
+      border: 1px solid #edf0f3;
+      border-radius: 8px;
+      background: #f9fafb;
+    }
+
+    .scheme-copy p {
+      margin: 0;
+    }
+
+    .scheme-copy .scheme-eyebrow {
+      margin-bottom: 6px;
+      color: #69707c;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .scheme-copy h2 {
+      margin: 0 0 8px;
+      color: #111;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .scheme-copy .scheme-desc {
+      color: #58616d;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .scheme-copy .scheme-desc + .scheme-desc {
+      margin-top: 7px;
+    }
+
+    .scheme-case-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .scheme-section-title {
+      margin: 0 0 10px;
+      color: #111;
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .scheme-projects {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .scheme-projects .treatment-card {
+      min-height: 224px;
+      padding: 13px;
+      gap: 9px;
+    }
+
+    .scheme-projects .case-thumb {
+      height: 42px;
+    }
+
+    .scheme-projects .decision-cell {
+      min-height: 42px;
+      padding: 6px 8px;
+    }
+
+    .scheme-menu .scheme-tabs,
+    .scheme-menu .scheme-tab,
+    .scheme-menu .scheme-rail,
+    .scheme-menu .scheme-rail-item,
+    .scheme-menu .primary {
+      border-radius: 0;
+    }
+
+    .scheme-menu .scheme-tabs {
+      gap: 0;
+      margin-bottom: 16px;
+      border: 1px solid #e1e5ea;
+      border-left: 0;
+    }
+
+    .scheme-menu .scheme-tab {
+      border: 0;
+      border-left: 1px solid #e1e5ea;
+      background: #f7f8fa;
+    }
+
+    .scheme-menu .scheme-tab.active {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .scheme-menu .scheme-rail {
+      gap: 0;
+      padding: 0;
+      background: #eef1f5;
+    }
+
+    .scheme-menu .scheme-rail-item {
+      height: 72px;
+      border: 0;
+      border-bottom: 1px solid #dfe3e8;
+      background: #fff;
+    }
+
+    .scheme-menu .scheme-rail-item.active {
+      background: #111;
+      color: var(--green);
+    }
+
+    .scheme-menu .scheme-hero {
+      grid-template-columns: 1fr 220px;
+      margin-bottom: 14px;
+    }
+
+    .scheme-menu .scheme-copy {
+      min-height: 124px;
+      padding: 0 4px 0 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .scheme-menu .scheme-copy h2 {
+      font-size: 22px;
+    }
+
+    .scheme-menu .scheme-case-strip {
+      min-height: 124px;
+    }
+
+    .scheme-menu .skin-photo,
+    .scheme-menu .effect-photo,
+    .scheme-menu .case-thumb {
+      border-radius: 0;
+    }
+
+    .scheme-menu .scheme-section-title {
+      margin-bottom: 8px;
+    }
+
+    .solution-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .severity-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .severity-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      color: #111;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .severity-heading span {
+      color: #69707c;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .solution-row {
+      min-height: 96px;
+      display: grid;
+      grid-template-columns: 1.32fr 1fr 136px 36px;
+      gap: 12px;
+      align-items: stretch;
+      padding: 12px;
+      border: 1px solid #e1e5ea;
+      background: #fff;
+    }
+
+    .solution-row.selected {
+      border-color: #9cff00;
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+
+    .solution-main h3 {
+      margin: 0 0 5px;
+      color: #111;
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .solution-main p {
+      margin: 0;
+      color: #69707c;
+      font-size: 12px;
+      line-height: 1.38;
+    }
+
+    .solution-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .solution-metric {
+      display: grid;
+      align-content: center;
+      gap: 2px;
+      padding: 7px 8px;
+      background: #f7f8fa;
+    }
+
+    .solution-metric span {
+      color: #7a828d;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .solution-metric b {
+      color: #111;
+      font-size: 12px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .solution-cases {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .solution-cases .case-thumb {
+      height: 100%;
+      min-height: 72px;
+    }
+
+    .solution-action {
+      display: grid;
+      place-items: center;
+      align-self: stretch;
+      background: transparent;
+      color: transparent;
+      font-size: 0;
+    }
+
+    .solution-row.selected .solution-action {
+      background: transparent;
+      color: #111;
+    }
+
+    .solution-row.selected .solution-action::before {
+      content: "✓";
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: #111;
+      font-size: 15px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .asset-menu .task-content {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 14px;
+      padding-top: 20px;
+    }
+
+    .asset-intro {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eef1f4;
+    }
+
+    .asset-intro b {
+      display: block;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .asset-intro span {
+      display: block;
+      margin-top: 4px;
+      color: #69707c;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .asset-count {
+      color: #111;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .asset-list {
+      min-height: 0;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+
+    .asset-row {
+      grid-template-columns: 1.18fr 1.05fr 154px 36px;
+      min-height: 104px;
+    }
+
+    .asset-row.warning {
+      border-color: #e3c15c;
+      box-shadow: inset 4px 0 0 #e3c15c;
+    }
+
+    .asset-order {
+      margin-top: 6px;
+      color: #8a929d;
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .asset-status-panel {
+      display: grid;
+      align-content: center;
+      gap: 6px;
+      padding: 9px 10px;
+      background: #f7f8fa;
+    }
+
+    .asset-status-panel b {
+      color: #111;
+      font-size: 18px;
+      line-height: 1.05;
+      font-weight: 700;
+    }
+
+    .asset-status-panel span {
+      color: #69707c;
+      font-size: 11px;
+      line-height: 1.25;
+      font-weight: 600;
+    }
+
+    .asset-status-panel.warning-note {
+      background: #fff8df;
+    }
+
+    .asset-status-panel.warning-note b {
+      color: #7a5600;
+      font-size: 14px;
+    }
+
+    .warning-strip {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid #ead385;
+      background: #fff8df;
+      color: #5f4600;
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .warning-strip::before {
+      content: "!";
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 1px solid #d7ae32;
+      color: #6e5000;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .topbar {
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .back {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #d9dde3;
+      border-radius: 999px;
+      background: #fff;
+      color: #111;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .title-wrap h1 {
+      margin: 0;
+      color: #111;
+      font-size: 26px;
+      line-height: 1.12;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .title-wrap {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .title-wrap p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.25;
+      font-weight: 400;
+    }
+
+    .logout {
+      flex: 0 0 auto;
+      width: 56px;
+      height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border-radius: 999px;
+      border: 1px solid #d5d9de;
+      background: #fff;
+      color: #111;
+    }
+
+    .logout-icon {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    .logout-icon::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 13px;
+      height: 17px;
+      border: 2px solid #111;
+      border-right: 0;
+      border-radius: 2px 0 0 2px;
+    }
+
+    .logout-icon::after {
+      content: "";
+      position: absolute;
+      right: 1px;
+      top: 11px;
+      width: 13px;
+      height: 2px;
+      border-radius: 999px;
+      background: #111;
+      box-shadow: 4px -4px 0 -1px #111, 4px 4px 0 -1px #111;
+    }
+
+    .top-switch {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 28px;
+      min-height: 56px;
+      padding: 0 6px;
+    }
+
+    .top-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      min-height: 56px;
+      color: #69707c;
+      font-size: 16px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .top-link.active {
+      color: #111;
+      font-weight: 700;
+    }
+
+    .top-link.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 4px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .top-tabs {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .tab {
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      border: 1px solid #dfe3e8;
+      background: #f7f7f8;
+      color: #4b5563;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .tab.active {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .task-content {
+      min-height: 0;
+      overflow: hidden;
+      padding: 24px 32px 0;
+      background: #fff;
+    }
+
+    .split-menu {
+      height: 100%;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 20px;
+      min-height: 0;
+    }
+
+    .menu-page .task-content {
+      padding-top: 24px;
+    }
+
+    .menu-page .split-menu {
+      height: auto;
+      grid-template-columns: 220px 1fr;
+      align-items: start;
+    }
+
+    .side-filter,
+    .intent-panel,
+    .flow-side {
+      min-height: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f7f7f8;
+    }
+
+    .side-filter {
+      padding: 16px;
+    }
+
+    .menu-page .side-filter {
+      min-height: 460px;
+    }
+
+    .filter-title,
+    .panel-title {
+      margin: 0 0 8px;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .filter-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .filter-item {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      background: #fff;
+      color: #4b5563;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .filter-item.active {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .list-zone {
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-head b {
+      color: #111;
+      font-size: 18px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .section-head span {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .compact-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .menu-page .compact-list {
+      gap: 11px;
+    }
+
+    .item-row {
+      min-height: 84px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 12px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .menu-page .item-row {
+      min-height: 88px;
+      padding: 12px 16px;
+    }
+
+    .item-row.selected {
+      border-color: #111;
+      box-shadow: inset 0 0 0 1px #111;
+    }
+
+    .item-main {
+      min-width: 0;
+    }
+
+    .item-main h3 {
+      margin: 0 0 4px;
+      color: #111;
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-main p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .item-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #eef0f3;
+      color: #58616d;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .tag.green {
+      background: rgba(156,255,0,.28);
+      color: #2f5f00;
+    }
+
+    .row-action {
+      min-width: 78px;
+      height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      border-radius: 8px;
+      background: var(--green);
+      color: #111;
+      font-size: 15px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .intent-panel,
+    .flow-side {
+      padding: 16px;
+      display: grid;
+      align-content: start;
+      gap: 16px;
+    }
+
+    .mini-summary {
+      padding: 16px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .mini-summary b {
+      display: block;
+      color: #111;
+      font-size: 20px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .mini-summary span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .summary-chip {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border-radius: 8px;
+      background: #111;
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .note-box {
+      padding: 16px;
+      border-radius: 8px;
+      background: rgba(156,255,0,.15);
+      border: 1px solid rgba(156,255,0,.6);
+      color: #2b3b00;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .bottom-bar {
+      display: grid;
+      gap: 8px;
+      padding: 20px 32px 28px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.98);
+    }
+
+    .menu-page .bottom-bar {
+      position: absolute;
+      left: 32px;
+      right: 32px;
+      bottom: 28px;
+      padding: 0;
+      border-top: 0;
+      background: transparent;
+    }
+
+    .bottom-with-summary {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .bottom-summary {
+      min-height: 64px;
+      display: grid;
+      align-items: center;
+      gap: 10px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f7f7f8;
+      color: #111;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .bottom-summary b {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .bottom-summary span {
+      display: block;
+      margin-top: 3px;
+      color: #69707c;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .bottom-summary.summary-pricing {
+      grid-template-columns: 1fr auto;
+      column-gap: 22px;
+    }
+
+    .summary-price {
+      display: grid;
+      justify-items: end;
+      gap: 2px;
+      white-space: nowrap;
+    }
+
+    .summary-price span {
+      margin: 0;
+      color: #69707c;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .summary-price strong {
+      color: #111;
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .scheme-menu .bottom-summary,
+    .scheme-menu .warning-strip {
+      border-radius: 0;
+    }
+
+    .bottom-with-summary .primary,
+    .bottom-with-summary .secondary {
+      min-width: 220px;
+    }
+
+    .bottom-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .primary,
+    .secondary {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.18;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: #111;
+      color: var(--green);
+    }
+
+    .secondary {
+      border: 1px solid #111;
+      background: #fff;
+      color: #111;
+    }
+
+    .context-strip {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 12px 32px;
+      border-bottom: 1px solid var(--line);
+      background: #f7f7f8;
+    }
+
+    .context-strip b {
+      display: block;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .context-strip span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .status-pill {
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 18px;
+      border: 1px solid #dfe3e8;
+      border-radius: 999px;
+      background: #fff;
+      color: #3f6212;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-pill.add-service {
+      border-color: var(--green);
+      border-radius: 0;
+      background: var(--green);
+      color: #111;
+    }
+
+    .confirm-grid {
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 20px;
+      min-height: 0;
+    }
+
+    .confirm-list {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      min-height: 0;
+    }
+
+    .treatment-row {
+      min-height: 84px;
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 12px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .num {
+      width: 48px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #eef0f3;
+      color: #111;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .duration {
+      min-width: 78px;
+      color: #111;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .confirm-page .task-content {
+      padding-top: 20px;
+    }
+
+    .confirm-page .section-head {
+      display: none;
+    }
+
+    .confirm-page .solution-row,
+    .confirm-page .primary,
+    .confirm-page .secondary {
+      border-radius: 0;
+    }
+
+    .confirm-project-row {
+      grid-template-columns: 44px 1.2fr 1fr 36px;
+      min-height: 98px;
+    }
+
+    .confirm-project-row .num {
+      width: 44px;
+      height: 54px;
+      border-radius: 0;
+    }
+
+    .ai-panel {
+      min-height: 0;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid #e3e7ec;
+      border-radius: 0;
+      background: #f7f8fa;
+    }
+
+    .ai-panel-title {
+      margin: 0;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+
+    .ai-panel-title span {
+      display: block;
+      margin-top: 4px;
+      color: #69707c;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .ai-note {
+      display: grid;
+      gap: 5px;
+      padding: 11px 12px;
+      background: #fff;
+      border: 1px solid #edf0f3;
+    }
+
+    .ai-note b {
+      color: #111;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .ai-note span {
+      color: #5f6874;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .same-day-recommend {
+      margin-top: 2px;
+      padding-top: 14px;
+      border-top: 1px solid #eef1f4;
+    }
+
+    .recommend-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 9px;
+    }
+
+    .recommend-title b {
+      color: #111;
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+
+    .recommend-title span {
+      color: #7a828d;
+      font-size: 11px;
+      line-height: 1.3;
+      font-weight: 600;
+    }
+
+    .recommend-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .recommend-project-row {
+      grid-template-columns: 1.2fr 1fr 56px;
+      min-height: 88px;
+      padding: 10px;
+      border-color: #e3e7ec;
+    }
+
+    .recommend-action {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      background: #111;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .recommend-action.add {
+      width: 48px;
+      background: var(--green);
+      color: #111;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .empty-confirm-note {
+      display: grid;
+      gap: 4px;
+      padding: 14px 16px;
+      border: 1px solid #e3e7ec;
+      background: #f7f8fa;
+    }
+
+    .empty-confirm-note b {
+      color: #111;
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+
+    .empty-confirm-note span {
+      color: #69707c;
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .empty-confirm-page .confirm-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .empty-confirm-page .empty-confirm-note {
+      min-height: 360px;
+      align-content: center;
+      padding: 28px;
+    }
+
+    .empty-confirm-page .empty-confirm-note b {
+      font-size: 22px;
+    }
+
+    .empty-confirm-page .empty-confirm-note span {
+      max-width: 520px;
+      font-size: 14px;
+    }
+
+    .intent-choice {
+      min-height: 64px;
+      display: grid;
+      align-content: center;
+      gap: 6px;
+      padding: 12px 16px;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .intent-choice.active {
+      border-color: #111;
+      box-shadow: inset 0 0 0 1px #111;
+    }
+
+    .intent-choice b {
+      color: #111;
+      font-size: 16px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .intent-choice span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.25;
+      font-weight: 400;
+    }
+
+    .flow-grid {
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 248px;
+      gap: 20px;
+      min-height: 0;
+    }
+
+    .flow-main {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .setting-row {
+      min-height: 92px;
+      display: grid;
+      grid-template-columns: 1fr 64px;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .setting-row h3 {
+      margin: 0 0 4px;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.16;
+      font-weight: 700;
+    }
+
+    .setting-row p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .switch {
+      width: 64px;
+      height: 36px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .switch::after {
+      content: "";
+      display: block;
+      width: 28px;
+      height: 28px;
+      margin-left: 28px;
+      border-radius: 50%;
+      background: #111;
+    }
+
+    .snack-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .snack {
+      min-height: 56px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      background: #fff;
+      color: #111;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .snack.active {
+      border-color: #111;
+      background: rgba(156,255,0,.18);
+    }
+
+    .spec-panel {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      max-height: calc(100vh - 48px);
+      overflow: auto;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 22px 60px rgba(17,17,17,.08);
+    }
+
+    .spec-panel h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+
+    .spec-panel .meta {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .spec-section {
+      border-top: 1px solid #edf0f2;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
+
+    .spec-section b {
+      display: block;
+      margin-bottom: 8px;
+      color: #111;
+      font-size: 14px;
+    }
+
+    .spec-section p,
+    .spec-section li {
+      color: #4b5563;
+      font-size: 13px;
+      line-height: 1.58;
+    }
+
+    .spec-section ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    @media (max-width: 1100px) {
+      .workspace { grid-template-columns: 1fr; }
+      .sidebar,
+      .spec-panel { position: static; height: auto; max-height: none; }
+      .stage { grid-template-columns: 1fr; }
+    }
+
+    body.embed {
+      background: transparent;
+    }
+
+    body.embed .workspace {
+      display: block;
+      min-height: 0;
+      padding: 18px;
+    }
+
+    body.embed .sidebar,
+    body.embed .spec-panel {
+      display: none;
+    }
+
+    body.embed .variant-label {
+      display: none;
+    }
+
+    body.embed .stage {
+      display: block;
+    }
+
+    body.embed .pad-stack {
+      justify-content: center;
+    }
+
+    body.embed.unit-mode .pad-stack {
+      display: grid;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const prototypeParams = new URLSearchParams(window.location.search);
+    if (prototypeParams.get("embed") === "1") {
+      document.body.classList.add("embed");
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const unit = Number(prototypeParams.get("unit"));
+      if (!Number.isNaN(unit)) {
+        document.body.classList.add("unit-mode");
+        document.querySelectorAll(".pad-stack > div").forEach((el, index) => {
+          if (index !== unit) el.remove();
+        });
+      }
+    });
+  </script>
+  <main class="workspace">
+    <aside class="sidebar">
+      <div class="brand-lockup">
+        <div class="brand-mark">氧</div>
+        <div>
+          <b>自助签到台</b>
+          <span>页面草案 B · Pad 原生版</span>
+        </div>
+      </div>
+
+      <p class="nav-title">本草案页面</p>
+      <ul class="nav-list">
+        <li class="nav-item active">项目菜单：新购项目</li>
+        <li class="nav-item active">项目菜单：我的资产</li>
+        <li class="nav-item active">治疗项目确认：有项目</li>
+        <li class="nav-item active">治疗项目确认：无项目</li>
+        <li class="nav-item active">流程确认页</li>
+      </ul>
+    </aside>
+
+    <section class="stage">
+      <div class="pad-stack">
+        <div>
+          <p class="variant-label">项目菜单 A：方案型项目选择 · 新购项目</p>
+          <div class="pad-shell" aria-label="项目菜单新购项目 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page scheme-menu">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>项目菜单</h1>
+                    <p>项目菜单 · 沙大爷 · 新氧青春北京保利店</p>
+                  </div>
+                  <div class="top-switch" aria-label="项目菜单切换">
+                    <span class="top-link active">新购项目</span>
+                    <span class="top-link">我的资产</span>
+                  </div>
+                  <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
+                </header>
+
+                <section class="task-content">
+                  <nav class="scheme-tabs" aria-label="项目赛道">
+                    <div class="scheme-tab active">护肤</div>
+                    <div class="scheme-tab">抗衰</div>
+                    <div class="scheme-tab">问题肌</div>
+                    <div class="scheme-tab">美学</div>
+                  </nav>
+
+                  <div class="scheme-layout">
+                    <aside class="scheme-rail" aria-label="护肤适应症">
+                      <div class="scheme-rail-item active">油</div>
+                      <div class="scheme-rail-item">干</div>
+                      <div class="scheme-rail-item">黄</div>
+                      <div class="scheme-rail-item">黑</div>
+                    </aside>
+
+                    <section class="scheme-detail">
+                      <div class="scheme-hero">
+                        <div class="scheme-copy">
+                          <p class="scheme-eyebrow">护肤 / 油性肌肤解决方案</p>
+                          <h2>单纯性出油</h2>
+                          <p class="scheme-desc">面部容易泛油光，早上起床满脸油、化妆容易脱妆，T 区比 U 区更明显。部分顾客可能伴随毛孔粗大，但无明显粉刺、丘疹等痤疮表现。</p>
+                          <p class="scheme-desc">这类肤况通常先从控油、疏通角质和稳定皮脂分泌入手。若只是轻度出油，可选择温和酸类管理；如果同时伴随毛孔粗大、肤色粗糙，则更适合叠加光电类项目。</p>
+                        </div>
+                        <div class="scheme-case-strip" aria-label="适应症示例图">
+                          <div class="skin-photo"></div>
+                          <div class="effect-photo"></div>
+                        </div>
+                      </div>
+
+                      <p class="scheme-section-title">可选方案</p>
+                      <div class="solution-list">
+                        <section class="severity-group">
+                          <div class="severity-heading">轻度 <span>仅 T 区出油，无毛孔粗大</span></div>
+                          <article class="solution-row selected">
+                            <div class="solution-main">
+                              <h3>水杨酸治疗</h3>
+                              <p>轻度出油、闭口倾向，适合首次控油和角质管理。</p>
+                            </div>
+                            <div class="solution-metrics">
+                              <div class="solution-metric"><span>价格/规格</span><b>XXX元/次</b></div>
+                              <div class="solution-metric"><span>套餐</span><b>XXX元/3次</b></div>
+                              <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                              <div class="solution-metric"><span>疼痛度</span><b class="pain-level"><i class="on"></i><i></i><i></i></b></div>
+                            </div>
+                            <div class="solution-cases">
+                              <div class="case-thumb">治疗前</div>
+                              <div class="case-thumb after">治疗后</div>
+                            </div>
+                            <div class="solution-action" aria-label="已选"></div>
+                          </article>
+                          <article class="solution-row selected">
+                            <div class="solution-main">
+                              <h3>博乐达</h3>
+                              <p>适合油脂分泌旺盛、反复闭口，强调温和刷酸护理。</p>
+                            </div>
+                            <div class="solution-metrics">
+                              <div class="solution-metric"><span>价格/规格</span><b>XXX元/次</b></div>
+                              <div class="solution-metric"><span>套餐</span><b>XXX元/3次</b></div>
+                              <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                              <div class="solution-metric"><span>疼痛度</span><b class="pain-level"><i class="on"></i><i></i><i></i></b></div>
+                            </div>
+                            <div class="solution-cases">
+                              <div class="case-thumb">治疗前</div>
+                              <div class="case-thumb after">治疗后</div>
+                            </div>
+                            <div class="solution-action" aria-label="已选"></div>
+                          </article>
+                        </section>
+
+                        <section class="severity-group">
+                          <div class="severity-heading">中重度 <span>全面出油，伴随毛孔粗大</span></div>
+                          <article class="solution-row">
+                            <div class="solution-main">
+                              <h3>元气超光子</h3>
+                              <p>出油伴随肤色不均、毛孔粗大，可同步改善肤质光泽。</p>
+                            </div>
+                            <div class="solution-metrics">
+                              <div class="solution-metric"><span>价格/规格</span><b>XXX元/次</b></div>
+                              <div class="solution-metric"><span>套餐</span><b>XXX元/3次</b></div>
+                              <div class="solution-metric"><span>治疗时长</span><b>25分钟左右</b></div>
+                              <div class="solution-metric"><span>疼痛度</span><b class="pain-level"><i class="on"></i><i class="on"></i><i></i></b></div>
+                            </div>
+                            <div class="solution-cases">
+                              <div class="case-thumb">治疗前</div>
+                              <div class="case-thumb after">治疗后</div>
+                            </div>
+                            <div class="solution-action" aria-label="未选择"></div>
+                          </article>
+                          <article class="solution-row">
+                            <div class="solution-main">
+                              <h3>BBL Hero</h3>
+                              <p>适合希望综合改善出油、粗糙和肤色状态的进阶项目。</p>
+                            </div>
+                            <div class="solution-metrics">
+                              <div class="solution-metric"><span>价格/规格</span><b>XXX元/次</b></div>
+                              <div class="solution-metric"><span>套餐</span><b>XXX元/6次</b></div>
+                              <div class="solution-metric"><span>治疗时长</span><b>30分钟左右</b></div>
+                              <div class="solution-metric"><span>疼痛度</span><b class="pain-level"><i class="on"></i><i class="on"></i><i></i></b></div>
+                            </div>
+                            <div class="solution-cases">
+                              <div class="case-thumb">治疗前</div>
+                              <div class="case-thumb after">治疗后</div>
+                            </div>
+                            <div class="solution-action" aria-label="未选择"></div>
+                          </article>
+                        </section>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="bottom-with-summary">
+                    <div class="bottom-summary summary-pricing">
+                      <div>
+                        <b>已选 2 个治疗项目</b>
+                        <span>预计耗时 30 分钟 · 实际治疗时间以院内实际情况为准</span>
+                      </div>
+                      <div class="summary-price">
+                        <span>总价</span>
+                        <strong>XXX元</strong>
+                      </div>
+                    </div>
+                    <div class="primary">去购买</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">项目菜单 B：我的资产</p>
+          <div class="pad-shell" aria-label="项目菜单我的资产 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page scheme-menu asset-menu">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>项目菜单</h1>
+                    <p>我的资产 · 沙大爷 · 可用资产 3 个</p>
+                  </div>
+                  <div class="top-switch" aria-label="项目菜单切换">
+                    <span class="top-link">新购项目</span>
+                    <span class="top-link active">我的资产</span>
+                  </div>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+
+                <section class="task-content">
+                  <div class="asset-intro">
+                    <div>
+                      <b>已购未消耗项目</b>
+                      <span>可直接加入今日治疗；如与今日预约项目存在间隔要求，系统会在底部提示。</span>
+                    </div>
+                    <div class="asset-count">3 个可用资产</div>
+                  </div>
+
+                  <section class="asset-list" aria-label="我的资产项目列表">
+                    <article class="solution-row asset-row selected warning">
+                      <div class="solution-main">
+                        <h3>光子嫩肤年卡 · 第 2 次</h3>
+                        <p>适合肤色暗沉、毛孔粗大、轻度泛红；今日已约水光基础护理时建议确认间隔。</p>
+                        <div class="asset-order">订单 ID：SOYQ202607090238</div>
+                      </div>
+                      <div class="solution-metrics">
+                        <div class="solution-metric"><span>剩余次数</span><b>4 次</b></div>
+                        <div class="solution-metric"><span>适用门店</span><b>北京保利店</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>60分钟左右</b></div>
+                        <div class="solution-metric"><span>流程要求</span><b>建议面诊</b></div>
+                      </div>
+                      <div class="asset-status-panel warning-note">
+                        <span>同日提醒</span>
+                        <b>需确认间隔</b>
+                      </div>
+                      <div class="solution-action" aria-label="已选"></div>
+                    </article>
+
+                    <article class="solution-row asset-row selected">
+                      <div class="solution-main">
+                        <h3>舒敏修护护理</h3>
+                        <p>适合清洁后泛红、干痒、屏障不稳定；可作为今日舒缓护理安排。</p>
+                        <div class="asset-order">订单 ID：SOYQ202606180746</div>
+                      </div>
+                      <div class="solution-metrics">
+                        <div class="solution-metric"><span>剩余次数</span><b>2 次</b></div>
+                        <div class="solution-metric"><span>规格</span><b>单次护理</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>40分钟左右</b></div>
+                        <div class="solution-metric"><span>流程要求</span><b>无需面诊</b></div>
+                      </div>
+                      <div class="asset-status-panel">
+                        <span>今日安排</span>
+                        <b>可直接加入</b>
+                      </div>
+                      <div class="solution-action" aria-label="已选"></div>
+                    </article>
+
+                    <article class="solution-row asset-row">
+                      <div class="solution-main">
+                        <h3>水光基础护理</h3>
+                        <p>治疗类项目，需完成知情同意与术前确认；如当天已有光电项目，建议咨询后再安排。</p>
+                        <div class="asset-order">订单 ID：SOYQ202605261104</div>
+                      </div>
+                      <div class="solution-metrics">
+                        <div class="solution-metric"><span>剩余次数</span><b>1 次</b></div>
+                        <div class="solution-metric"><span>规格</span><b>基础版</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>75分钟左右</b></div>
+                        <div class="solution-metric"><span>流程要求</span><b>需签署</b></div>
+                      </div>
+                      <div class="asset-status-panel">
+                        <span>今日安排</span>
+                        <b>可加入</b>
+                      </div>
+                      <div class="solution-action" aria-label="未选择"></div>
+                    </article>
+                  </section>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="warning-strip">不建议同日治疗：已选光子嫩肤年卡与今日已约水光基础护理存在间隔要求，建议咨询后确认是否调整。</div>
+                  <div class="bottom-with-summary">
+                    <div class="bottom-summary">
+                      <div>
+                        <b>已选 2 个资产项目</b>
+                        <span>预计耗时 100 分钟 · 实际治疗时间以院内实际情况为准</span>
+                      </div>
+                    </div>
+                    <div class="primary">添加至今日治疗</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">治疗项目确认 A：有项目</p>
+          <div class="pad-shell" aria-label="有本次治疗项目 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page confirm-page">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>治疗项目确认</h1>
+                    <p>老客可直达；项目菜单完成后也流入这里</p>
+                  </div>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+                <section class="context-strip">
+                  <div>
+                    <b>已预约2个项目</b>
+                    <span>预计治疗时长约 1 小时 40 分钟</span>
+                  </div>
+                  <div class="status-pill add-service">增加服务项目</div>
+                </section>
+
+                <section class="task-content">
+                  <div class="confirm-grid">
+                    <section class="confirm-list">
+                      <article class="solution-row selected confirm-project-row">
+                        <div class="num">1</div>
+                        <div class="solution-main">
+                          <h3>光子嫩肤年卡 · 第 2 次</h3>
+                          <p>建议先做皮肤检测，适合肤色暗沉、毛孔粗大、轻度泛红。</p>
+                        </div>
+                        <div class="solution-metrics">
+                          <div class="solution-metric"><span>治疗时长</span><b>60分钟左右</b></div>
+                          <div class="solution-metric"><span>剩余次数</span><b>4 次</b></div>
+                          <div class="solution-metric"><span>流程要求</span><b>建议面诊</b></div>
+                          <div class="solution-metric"><span>治疗重点</span><b>提亮肤色</b></div>
+                        </div>
+                        <div class="solution-action" aria-label="已选"></div>
+                      </article>
+                      <article class="solution-row selected confirm-project-row">
+                        <div class="num">2</div>
+                        <div class="solution-main">
+                          <h3>舒敏修护护理</h3>
+                          <p>可直接治疗，适合清洁后泛红、干痒、屏障不稳定。</p>
+                        </div>
+                        <div class="solution-metrics">
+                          <div class="solution-metric"><span>治疗时长</span><b>40分钟左右</b></div>
+                          <div class="solution-metric"><span>规格</span><b>单次护理</b></div>
+                          <div class="solution-metric"><span>流程要求</span><b>无需面诊</b></div>
+                          <div class="solution-metric"><span>治疗重点</span><b>舒缓屏障</b></div>
+                        </div>
+                        <div class="solution-action" aria-label="已选"></div>
+                      </article>
+
+                      <section class="same-day-recommend" aria-label="建议本次一同治疗的项目">
+                        <div class="recommend-title">
+                          <b>建议本次一同治疗</b>
+                          <span>结合今日项目与可用资产</span>
+                        </div>
+                        <div class="recommend-list">
+                          <article class="solution-row recommend-project-row">
+                            <div class="solution-main">
+                              <h3>屏障修护精华导入</h3>
+                              <p>一同治疗理由：可作为光电后舒缓补充，降低干痒紧绷感。</p>
+                            </div>
+                            <div class="solution-metrics">
+                              <div class="solution-metric"><span>资产状态</span><b>剩余 2 次</b></div>
+                              <div class="solution-metric"><span>治疗时长</span><b>20分钟左右</b></div>
+                            </div>
+                            <div class="recommend-action add" aria-label="添加资产项目">+</div>
+                          </article>
+                          <article class="solution-row recommend-project-row">
+                            <div class="solution-main">
+                              <h3>医用修护面膜护理</h3>
+                              <p>一同治疗理由：适合术后即时镇静与补水，帮助缓解泛红。</p>
+                            </div>
+                            <div class="solution-metrics">
+                              <div class="solution-metric"><span>资产状态</span><b>未持有</b></div>
+                              <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                            </div>
+                            <div class="recommend-action" aria-label="购买项目">购买</div>
+                          </article>
+                        </div>
+                      </section>
+                    </section>
+
+                    <aside class="ai-panel">
+                      <p class="ai-panel-title">AI羊点评<span>基于今日已选项目生成，仅供到店服务参考</span></p>
+                      <div class="ai-note">
+                        <b>预计总时长 100 分钟</b>
+                        <span>包含光子嫩肤约 60 分钟、舒敏修护约 40 分钟，实际治疗时间以院内安排为准。</span>
+                      </div>
+                      <div class="ai-note">
+                        <b>改善方向</b>
+                        <span>本次组合更偏向肤色提亮、毛孔细腻度和屏障舒缓，适合近期泛红和肤质粗糙并存的状态。</span>
+                      </div>
+                      <div class="ai-note">
+                        <b>术前注意</b>
+                        <span>治疗前避免暴晒、刷酸和强清洁；若近期有破皮、过敏、医嘱禁忌或孕哺情况，需先告知门店人员。</span>
+                      </div>
+                    </aside>
+                  </div>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="bottom-two">
+                    <div class="secondary">安排面诊</div>
+                    <div class="primary">无需面诊，直接治疗</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">治疗项目确认 B：无项目</p>
+          <div class="pad-shell" aria-label="无本次治疗项目 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page confirm-page empty-confirm-page">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>治疗项目确认</h1>
+                    <p>尚未预约或尚未选择服务项目</p>
+                  </div>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+                <section class="context-strip">
+                  <div>
+                    <b>今天还没有治疗项目</b>
+                    <span>可先面诊，也可从资产或项目菜单添加本次治疗</span>
+                  </div>
+                  <div class="status-pill add-service">选择服务项目</div>
+                </section>
+
+                <section class="task-content">
+                  <div class="confirm-grid">
+                    <section class="confirm-list">
+                      <div class="empty-confirm-note">
+                        <b>暂无本次治疗项目</b>
+                        <span>当前还没有已预约或已选择的治疗项目，因此暂不生成项目推荐和 AI 点评。请先选择服务项目，或安排面诊后由服务人员协助确认方案。</span>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="bottom-two">
+                    <div class="secondary">安排面诊</div>
+                    <div class="primary">选择服务项目</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">流程确认页：三块配置区 + 右侧摘要</p>
+          <div class="pad-shell" aria-label="流程确认页 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>流程确认</h1>
+                    <p>确认检测、拍照与门店配置服务</p>
+                  </div>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+                <section class="context-strip">
+                  <div>
+                    <b>直接治疗 · 2 个项目</b>
+                    <span>确认后进入服务人员确认页</span>
+                  </div>
+                  <div class="status-pill">预计 100 分钟</div>
+                </section>
+
+                <section class="task-content">
+                  <div class="flow-grid">
+                    <section class="flow-main">
+                      <div class="setting-row">
+                        <div>
+                          <h3>皮肤检测</h3>
+                          <p>记录当前肤况，辅助医生或治疗师确认方案。</p>
+                        </div>
+                        <div class="switch"></div>
+                      </div>
+                      <div class="setting-row">
+                        <div>
+                          <h3>术前术后对比照</h3>
+                          <p>用于服务记录和后续效果跟进。</p>
+                        </div>
+                        <div class="switch"></div>
+                      </div>
+                      <div class="setting-row">
+                        <div>
+                          <h3>饮品零食</h3>
+                          <p>按门店库存展示，客户可选择或不需要。</p>
+                        </div>
+                        <div class="switch"></div>
+                      </div>
+                      <div class="snack-grid">
+                        <div class="snack active">温水</div>
+                        <div class="snack">无糖茶</div>
+                        <div class="snack active">坚果</div>
+                        <div class="snack">不需要</div>
+                      </div>
+                    </section>
+
+                    <aside class="flow-side">
+                      <p class="panel-title">流程摘要</p>
+                      <div class="mini-summary"><b>3 项</b><span>检测、拍照、饮品零食</span></div>
+                      <div class="summary-chip">下一步：服务人员确认</div>
+                      <div class="note-box">不可履约配置后续应隐藏或置灰。</div>
+                    </aside>
+                  </div>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="primary">确认流程安排</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="spec-panel">
+        <h1>900 画布 Pad 任务界面草案</h1>
+        <p class="meta">本版按小米 Pad 6 竖屏 `900 x 1440` 逻辑画布排版，并在浏览器中用 `scale(.58)` 缩略展示。整合评审预览统一使用 `559 x 872` 外框。</p>
+
+        <div class="spec-section">
+          <b>设计假设</b>
+          <ul>
+            <li>源画布为 `900 x 1440`，浏览器缩略展示统一为 `559 x 872` 外框。</li>
+            <li>新客建档后进入项目菜单；老客识别后直接进入治疗项目确认页。</li>
+            <li>项目菜单完成选择或支付后流向治疗项目确认页，确认后进入流程确认页。</li>
+            <li>这些页面都是扫码后的业务页，因此每个 Pad 画布顶部都有“登出”。</li>
+            <li>支付页本身不在本草案展开，只表达支付后返回资产或继续购买。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>Pad 布局调整</b>
+          <ul>
+            <li>项目菜单改为顶栏轻切换、左侧分类 / 筛选、右侧项目 / 资产列表；已选摘要下沉到底部操作区。</li>
+            <li>治疗项目确认页改为左侧已选项目卡片、右侧 AI羊点评，服务意图通过底部按钮推进。</li>
+            <li>流程确认页改为左侧三块配置区、右侧流程摘要。</li>
+            <li>底部主操作区固定，避免客户找不到下一步。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>字号和触控</b>
+          <ul>
+            <li>字号以 900 画布为准：主标题 26px，模块标题 18px，项目名 16px，正文 14px，按钮 15-16px。</li>
+            <li>中文字重已降档：正文 400，模块与列表标题 600-700，页面主标题 700；不再使用 800 / 900 / 950。</li>
+            <li>返回、门形登出 icon、顶栏切换、筛选、列表操作、底部按钮等可点热区均按 56px 左右源画布尺寸设计，缩略展示时整体等比缩放。</li>
+            <li>相邻点击元素保持 8px 以上间距，适合前台站立操作。</li>
+            <li>绿和黑只用于选中态、主按钮、状态点缀，不做大面积黑底业务页。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>需要确认的问题</b>
+          <ul>
+            <li>项目菜单底部已选摘要是否常驻，还是只在已有选择时出现？</li>
+            <li>无项目时“安排面诊”是否直接进入服务人员确认页，还是需要先选择咨询师 / 医生类型？</li>
+            <li>皮肤检测和拍照是否允许客户关闭，或由项目规则强制开启？</li>
+            <li>饮品零食是否按“饮品一项 + 小食一项”分别选择？</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

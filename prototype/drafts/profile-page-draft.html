@@ -1,0 +1,1093 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>自助签到台页面原型：首次到院建档页草案</title>
+  <style>
+    :root {
+      --green: #9cff00;
+      --wechat: #07c160;
+      --black: #111111;
+      --ink: #171717;
+      --muted: #69707c;
+      --line: #e5e7eb;
+      --soft: #f7f7f8;
+      --page: #eef0f3;
+      --pad-w: 900px;
+      --pad-h: 1440px;
+      --pad-scale: .58;
+      --pad-preview-w: 559px;
+      --pad-preview-h: 872px;
+      --pad-frame: 32px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--page);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 250px minmax(760px, 1fr);
+      gap: 22px;
+      padding: 24px;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      height: calc(100vh - 48px);
+      padding: 20px;
+      border-radius: 18px;
+      background: #151515;
+      color: #f8fafc;
+      box-shadow: 0 24px 70px rgba(0,0,0,.18);
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--green);
+      color: #111;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand-lockup b {
+      display: block;
+      font-size: 16px;
+      line-height: 1.1;
+    }
+
+    .brand-lockup span {
+      display: block;
+      margin-top: 3px;
+      color: #a3a3a3;
+      font-size: 11px;
+    }
+
+    .nav-title {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin: 0 0 10px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-item {
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      color: #d4d4d8;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .nav-item.active {
+      border-color: var(--green);
+      background: var(--green);
+      color: #111;
+      font-weight: 700;
+    }
+
+    .stage {
+      display: grid;
+      grid-template-columns: minmax(560px, var(--pad-preview-w)) minmax(320px, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .pad-stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    .variant-label {
+      margin: 0 0 10px;
+      color: #111;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .pad-shell {
+      position: relative;
+      width: var(--pad-preview-w);
+      height: var(--pad-preview-h);
+    }
+
+    .pad-screen {
+      box-sizing: content-box;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--pad-w);
+      height: var(--pad-h);
+      overflow: hidden;
+      transform: scale(var(--pad-scale));
+      transform-origin: top left;
+      border: var(--pad-frame) solid #171717;
+      border-radius: 58px;
+      background: #fff;
+      box-shadow: 0 34px 100px rgba(17,17,17,.26);
+    }
+
+    .profile-page {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background: #fff;
+    }
+
+    .app-header {
+      padding: 30px 40px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 56px;
+    }
+
+    .title-block {
+      min-width: 0;
+    }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.18;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .title-block p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .logout {
+      flex: 0 0 auto;
+      width: 52px;
+      height: 52px;
+      padding: 0;
+      border: 1px solid #d5d9de;
+      border-radius: 26px;
+      background: #fff;
+      color: #111;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logout-icon {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    .logout-icon::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 13px;
+      height: 17px;
+      border: 2px solid #111;
+      border-right: 0;
+      border-radius: 2px 0 0 2px;
+    }
+
+    .logout-icon::after {
+      content: "";
+      position: absolute;
+      right: 1px;
+      top: 11px;
+      width: 13px;
+      height: 2px;
+      border-radius: 999px;
+      background: #111;
+      box-shadow: 4px -4px 0 -1px #111, 4px 4px 0 -1px #111;
+    }
+
+    .task-layout {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-content: start;
+      gap: 16px;
+      padding: 24px 40px 16px;
+      background: #f7f7f8;
+    }
+
+    .pane {
+      min-width: 0;
+      display: grid;
+      gap: 12px;
+      padding: 20px 24px;
+      border: 0;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 1px 0 rgba(17,17,17,.04);
+    }
+
+    .pane-head {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .pane-head h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .pane-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.3;
+      font-weight: 400;
+    }
+
+    .status-tag {
+      flex: 0 0 auto;
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #f1f3f5;
+      color: #343a40;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-tag.ok {
+      background: rgba(7,193,96,.12);
+      color: #087d43;
+    }
+
+    .status-tag.need {
+      background: rgba(156,255,0,.36);
+      color: #111;
+    }
+
+    .field-list {
+      display: grid;
+      gap: 0;
+      align-content: start;
+    }
+
+    .field-row {
+      min-height: 56px;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 0;
+      border: 0;
+      border-bottom: 1px solid #edf0f2;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .field-row:last-child {
+      border-bottom: 0;
+    }
+
+    .field-row.need {
+      border-bottom-color: #d9dde3;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .field-label {
+      color: #69707c;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .field-value {
+      min-width: 0;
+      color: #111;
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 500;
+      letter-spacing: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .placeholder {
+      color: #9aa1aa;
+      font-weight: 500;
+    }
+
+    .verify {
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #eef0f2;
+      color: #343a40;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .verify.ok {
+      background: rgba(7,193,96,.12);
+      color: #087d43;
+    }
+
+    .verify.need {
+      background: rgba(156,255,0,.36);
+      color: #111;
+    }
+
+    .coupon-strip {
+      position: relative;
+      min-height: 72px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      border: 1px solid rgba(156,255,0,.55);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(156,255,0,.24), rgba(255,255,255,.74) 62%),
+        #fff;
+    }
+
+    .coupon-strip h3 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .coupon-strip p {
+      margin: 4px 0 0;
+      color: #4b5563;
+      font-size: 13px;
+      line-height: 1.28;
+      font-weight: 400;
+    }
+
+    .coupon-amount {
+      color: #111;
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .coupon-amount small {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .check-watermark {
+      position: absolute;
+      right: 54px;
+      bottom: -10px;
+      color: rgba(7,193,96,.18);
+      font-size: 72px;
+      line-height: 1;
+      font-weight: 700;
+      transform: rotate(-10deg);
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      margin-top: 8px;
+    }
+
+    .choice {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0;
+      border: 0;
+      border-bottom: 1px solid #edf0f2;
+      border-radius: 0;
+      background: transparent;
+      color: #30343a;
+      font-size: 15px;
+      line-height: 1.15;
+      font-weight: 500;
+    }
+
+    .choice::after {
+      content: "请选择 ▾";
+      color: #8b949f;
+      font-size: 13px;
+      font-weight: 400;
+      margin-left: 16px;
+      white-space: nowrap;
+    }
+
+    .choice.selected {
+      border-color: #edf0f2;
+      background: transparent;
+      color: #111;
+    }
+
+    .choice.selected::after {
+      content: "▾";
+      color: #69707c;
+    }
+
+    .choice.open {
+      position: relative;
+      min-height: 52px;
+      background: rgba(156,255,0,.14);
+      box-shadow: inset 3px 0 0 var(--green);
+      padding-left: 12px;
+      padding-right: 12px;
+      border-bottom-color: rgba(156,255,0,.5);
+      color: #111;
+      font-weight: 700;
+    }
+
+    .choice.open::after {
+      content: "收起 ▴";
+      color: #111;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .dropdown-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 10px 12px 14px;
+      border-bottom: 1px solid #edf0f2;
+      background: #fbfcfd;
+    }
+
+    .dropdown-option {
+      min-height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #dfe3e8;
+      background: #fff;
+      color: #30343a;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .dropdown-option.active {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .assist-list {
+      display: grid;
+      gap: 0;
+      margin-top: 8px;
+    }
+
+    .assist-row {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0;
+      border-bottom: 1px solid #edf0f2;
+      border-radius: 0;
+      background: transparent;
+      color: #343a40;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .assist-row strong {
+      color: #111;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .skip-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    .coupon-highlight {
+      color: #e53935;
+      font-weight: 600;
+    }
+
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-height: 48px;
+      margin-bottom: 12px;
+      color: #525a64;
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .checkbox {
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      margin-top: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 2px;
+      background: #111;
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .consent b {
+      color: #111;
+      font-weight: 600;
+    }
+
+    .footer {
+      padding: 16px 40px 24px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(12px);
+    }
+
+    .footer-actions {
+      display: block;
+    }
+
+    .btn {
+      min-height: 56px;
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      font-size: 16px;
+      line-height: 1.15;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .btn.secondary {
+      border: 1px solid #d5d9de;
+      background: #fff;
+      color: #111;
+    }
+
+    .btn.primary {
+      border: 1px solid #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .btn.disabled {
+      border-color: #d9dde3;
+      background: #eceff2;
+      color: #9aa1aa;
+    }
+
+    .spec-panel {
+      position: sticky;
+      top: 24px;
+      padding: 22px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 22px 60px rgba(17,17,17,.08);
+    }
+
+    .spec-panel h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    .spec-panel .meta {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .spec-section {
+      border-top: 1px solid #edf0f2;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
+
+    .spec-section b {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .spec-section p,
+    .spec-section li {
+      color: #4b5563;
+      font-size: 13px;
+      line-height: 1.58;
+    }
+
+    .spec-section ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    @media (max-width: 1100px) {
+      .workspace { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; }
+      .stage { grid-template-columns: 1fr; }
+      .spec-panel { position: static; }
+    }
+
+    body.embed {
+      background: transparent;
+    }
+
+    body.embed .workspace {
+      display: block;
+      min-height: 0;
+      padding: 18px;
+    }
+
+    body.embed .sidebar,
+    body.embed .spec-panel {
+      display: none;
+    }
+
+    body.embed .variant-label {
+      display: none;
+    }
+
+    body.embed .stage {
+      display: block;
+    }
+
+    body.embed .pad-stack {
+      justify-content: center;
+    }
+
+    body.embed.unit-mode .pad-stack {
+      display: grid;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const prototypeParams = new URLSearchParams(window.location.search);
+    if (prototypeParams.get("embed") === "1") {
+      document.body.classList.add("embed");
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const unit = Number(prototypeParams.get("unit"));
+      if (!Number.isNaN(unit)) {
+        document.body.classList.add("unit-mode");
+        document.querySelectorAll(".pad-stack > div").forEach((el, index) => {
+          if (index !== unit) el.remove();
+        });
+      }
+    });
+  </script>
+  <main class="workspace">
+    <aside class="sidebar">
+      <div class="brand-lockup">
+        <div class="brand-mark">氧</div>
+        <div>
+          <b>自助签到台</b>
+          <span>页面高保真原型草案</span>
+        </div>
+      </div>
+
+      <p class="nav-title">页面导航</p>
+      <ul class="nav-list">
+        <li class="nav-item">起始默认签到页</li>
+        <li class="nav-item active">首次到院建档页</li>
+        <li class="nav-item">项目菜单</li>
+        <li class="nav-item">本次治疗项目确认页</li>
+        <li class="nav-item">流程确认页</li>
+        <li class="nav-item">服务人员确认页</li>
+        <li class="nav-item">治疗签署文书流程</li>
+        <li class="nav-item">服务流程指引 + 倒计时登出</li>
+      </ul>
+    </aside>
+
+    <section class="stage">
+      <div class="pad-stack">
+        <div>
+          <p class="variant-label">状态 A：手机号已获取，更多信息可跳过</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：手机号已获取">
+            <div class="pad-screen">
+              <article class="profile-page">
+                <header class="app-header">
+                  <div class="topbar">
+                    <div class="title-block">
+                      <div class="title-line">
+                        <h1>您好，欢迎您首次来到新氧青春诊所</h1>
+                      </div>
+                      <p>请填写个人信息</p>
+                    </div>
+                    <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
+                  </div>
+                </header>
+
+                <div class="task-layout">
+                  <section class="pane" aria-label="基础必填信息">
+                    <div class="pane-head">
+                      <div>
+                        <h2>请填写个人信息</h2>
+                        <p>用于身份核验、建档和服务联系。</p>
+                      </div>
+                    </div>
+                    <div class="field-list">
+                      <div class="field-row">
+                        <div class="field-label">姓名</div>
+                        <div class="field-value">沙磊</div>
+                      </div>
+                      <div class="field-row">
+                        <div class="field-label">身份证号</div>
+                        <div class="field-value">110101 1996 **** 0826</div>
+                      </div>
+                      <div class="field-row">
+                        <div class="field-label">您希望我们如何称呼您</div>
+                        <div class="field-value">沙大爷</div>
+                      </div>
+                      <div class="field-row">
+                        <div class="field-label">您的手机号</div>
+                        <div class="field-value">138 **** 0826</div>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="pane" aria-label="更多信息领券">
+                    <div class="pane-head">
+                      <div>
+                        <h2>完善更多信息</h2>
+                        <p>可获得 <span class="coupon-highlight">50元无门槛代金券</span></p>
+                      </div>
+                      <span class="status-tag">可跳过</span>
+                    </div>
+                    <div>
+                      <div class="coupon-strip">
+                        <div>
+                          <h3>完善资料得代金券</h3>
+                          <p>7 项完整填写，提交后发放。</p>
+                        </div>
+                        <div class="coupon-amount"><small>¥</small>50</div>
+                      </div>
+                      <div class="choice-grid">
+                        <div class="choice open">是否方便透露您的年龄范围</div>
+                        <div class="dropdown-options" aria-label="年龄范围选项">
+                          <div class="dropdown-option">18-24岁</div>
+                          <div class="dropdown-option active">25-30岁</div>
+                          <div class="dropdown-option">31-35岁</div>
+                          <div class="dropdown-option">36岁以上</div>
+                        </div>
+                        <div class="choice">您的医美经验有几年</div>
+                        <div class="choice">做过/能接受哪些医美项目</div>
+                        <div class="choice">您通过哪个渠道了解到我们</div>
+                        <div class="choice">您希望通过医美解决哪些问题</div>
+                        <div class="choice">您的职业类型</div>
+                        <div class="choice">您居住的城市</div>
+                      </div>
+                      <p class="skip-note">跳过后仍可提交信息，本次不发放 50元无门槛代金券。</p>
+                    </div>
+                  </section>
+                </div>
+
+                <footer class="footer">
+                  <div class="consent">
+                    <span class="checkbox">✓</span>
+                    <span>我已阅读并同意 <b>个人信息处理规则</b>，授权新氧青春用于建档、身份核验及本次到店服务。</span>
+                  </div>
+                  <div class="footer-actions">
+                    <div class="btn primary">提交</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">状态 B：手机号未获取，需要补填</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：手机号需补填">
+            <div class="pad-screen">
+              <article class="profile-page">
+                <header class="app-header">
+                  <div class="topbar">
+                    <div class="title-block">
+                      <div class="title-line">
+                        <h1>您好，欢迎您首次来到新氧青春诊所</h1>
+                      </div>
+                      <p>请补充您的手机号后继续。</p>
+                    </div>
+                    <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
+                  </div>
+                </header>
+
+                <div class="task-layout">
+                  <section class="pane" aria-label="基础必填信息">
+                    <div class="pane-head">
+                      <div>
+                        <h2>请填写个人信息</h2>
+                        <p>还差 1 项即可完成建档。</p>
+                      </div>
+                    </div>
+                    <div class="field-list">
+                      <div class="field-row">
+                        <div class="field-label">姓名</div>
+                        <div class="field-value">沙磊</div>
+                      </div>
+                      <div class="field-row">
+                        <div class="field-label">身份证号</div>
+                        <div class="field-value">110101 1996 **** 0826</div>
+                      </div>
+                      <div class="field-row">
+                        <div class="field-label">您希望我们如何称呼您</div>
+                        <div class="field-value">沙大爷</div>
+                      </div>
+                      <div class="field-row need">
+                        <div class="field-label">您的手机号</div>
+                        <div class="field-value placeholder">请输入本人手机号</div>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="pane" aria-label="更多信息领券">
+                    <div class="pane-head">
+                      <div>
+                        <h2>完善更多信息</h2>
+                        <p>可获得 <span class="coupon-highlight">50元无门槛代金券</span></p>
+                      </div>
+                      <span class="status-tag">暂未发券</span>
+                    </div>
+                    <div>
+                      <div class="coupon-strip">
+                        <div>
+                          <h3>50元无门槛代金券</h3>
+                          <p>基础信息完成后，完善 7 项资料领取。</p>
+                        </div>
+                        <div class="coupon-amount"><small>¥</small>50</div>
+                      </div>
+                      <div class="assist-list">
+                        <div class="assist-row"><span>发券条件</span><strong>更多信息完整填写</strong></div>
+                        <div class="assist-row"><span>当前状态</span><strong>先补填您的手机号</strong></div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+
+                <footer class="footer">
+                  <div class="consent">
+                    <span class="checkbox">✓</span>
+                    <span>我已阅读并同意 <b>个人信息处理规则</b>，授权新氧青春用于建档、身份核验及本次到店服务。</span>
+                  </div>
+                  <div class="footer-actions">
+                    <div class="btn primary">提交</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">状态 C：更多信息完整填写，发放 50元无门槛代金券</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：更多信息完整填写">
+            <div class="pad-screen">
+              <article class="profile-page">
+                <header class="app-header">
+                  <div class="topbar">
+                    <div class="title-block">
+                      <div class="title-line">
+                        <h1>您好，欢迎您首次来到新氧青春诊所</h1>
+                      </div>
+                      <p>资料已完成，代金券已发放。</p>
+                    </div>
+                    <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
+                  </div>
+                </header>
+
+                <div class="task-layout">
+                  <section class="pane" aria-label="基础必填信息">
+                    <div class="pane-head">
+                      <div>
+                        <h2>请填写个人信息</h2>
+                        <p>身份核验已完成。</p>
+                      </div>
+                    </div>
+                    <div class="field-list">
+                      <div class="field-row">
+                        <div class="field-label">姓名</div>
+                        <div class="field-value">沙磊</div>
+                      </div>
+                      <div class="field-row">
+                        <div class="field-label">身份证号</div>
+                        <div class="field-value">110101 1996 **** 0826</div>
+                      </div>
+                      <div class="field-row">
+                        <div class="field-label">您希望我们如何称呼您</div>
+                        <div class="field-value">沙大爷</div>
+                      </div>
+                      <div class="field-row">
+                        <div class="field-label">您的手机号</div>
+                        <div class="field-value">138 **** 0826</div>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="pane" aria-label="更多信息领券">
+                    <div class="pane-head">
+                      <div>
+                        <h2>完善更多信息</h2>
+                        <p>已获得 <span class="coupon-highlight">50元无门槛代金券</span></p>
+                      </div>
+                      <span class="status-tag ok">已发券</span>
+                    </div>
+                    <div>
+                      <div class="coupon-strip">
+                        <div>
+                          <h3>50元无门槛代金券已领取</h3>
+                          <p>将进入账户，可在项目菜单中查看。</p>
+                        </div>
+                        <div class="coupon-amount"><small>¥</small>50</div>
+                        <div class="check-watermark">✓</div>
+                      </div>
+                      <div class="choice-grid">
+                        <div class="choice selected">是否方便透露您的年龄范围：25-30岁</div>
+                        <div class="choice selected">您的医美经验有几年：无</div>
+                        <div class="choice selected">做过/能接受哪些医美项目：光电美肤</div>
+                        <div class="choice selected">您通过哪个渠道了解到我们：朋友推荐</div>
+                        <div class="choice selected">您希望通过医美解决哪些问题：肤色提亮</div>
+                        <div class="choice selected">您的职业类型：互联网</div>
+                        <div class="choice selected">您居住的城市：北京</div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+
+                <footer class="footer">
+                  <div class="consent">
+                    <span class="checkbox">✓</span>
+                    <span>我已阅读并同意 <b>个人信息处理规则</b>，授权新氧青春用于建档、身份核验及本次到店服务。</span>
+                  </div>
+                  <div class="footer-actions">
+                    <div class="btn primary">提交</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="spec-panel">
+        <h1>首次到院建档页</h1>
+        <p class="meta">本版已切换为 `900 x 1440` 源画布，并在浏览器中整体 `scale(0.58)` 缩略展示；字号和字重均按真实 Pad 逻辑画布设计。</p>
+
+        <div class="spec-section">
+          <b>设计假设</b>
+          <ul>
+            <li>首次到院建档仍是一个页面节点，不再展示分页步骤；“完善更多信息”只是页内补充区。</li>
+            <li>当前批注要求信息区竖向排布，因此不再使用左右双栏；通过弱分隔线和浅灰底提升扫读效率。</li>
+            <li>源画布为 `900 x 1440`，浏览器缩略展示不再影响排版字号判断。</li>
+            <li>手机号优先自动获取；未获取时，手机号行成为唯一高优先级待补填项。</li>
+            <li>完整填写更多信息后，券条显示对钩水印并发放 50元无门槛代金券；跳过可继续但不发券。</li>
+            <li>个人信息声明默认勾选；如果用户取消勾选，确定按钮应置灰且不可点击。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>页面信息层级</b>
+          <ul>
+            <li>顶部：标题文案为“您好，欢迎您首次来到新氧青春诊所”，源画布字号 26px、字重 700；说明文字 14px、字重 400。</li>
+            <li>中部：模块标题 18px、字段值 16px、正文和标签 13-15px；去掉一堆输入框式线框，仅保留行分隔。</li>
+            <li>更多信息：7 项按竖向下拉选择展示，行尾用“请选择 ▾”提示可点选，行高 48px。</li>
+            <li>底部：固定个人信息声明 + 一个直角确定按钮，按钮文字 16px、字重 600。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>关键交互</b>
+          <ul>
+            <li>点击门形登出 icon 结束当前客户会话并返回默认签到页。</li>
+            <li>基础必填信息完成后，可直接完成建档并进入项目菜单。</li>
+            <li>未填写更多信息时点击提交仍可继续，但本次不发 50元无门槛代金券。</li>
+            <li>点击更多信息入口后，通过下拉选择完成补充，不画成独立页面。</li>
+            <li>取消勾选个人信息声明后，确定按钮不可点击。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>需要用户确认的问题</b>
+          <ul>
+            <li>身份证失败时是否在左栏行内重试，还是弹出“请找前台”。</li>
+            <li>更多信息入口点击后，是右栏原地展开，还是弹出底部选择面板。</li>
+            <li>50元无门槛代金券是否在项目菜单中立即抵扣，还是仅进入券包。</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

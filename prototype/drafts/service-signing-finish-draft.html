@@ -1,0 +1,1493 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>服务人员确认 + 治疗签署 + 结束闭环草案</title>
+  <style>
+    :root {
+      --green: #9cff00;
+      --black: #111111;
+      --ink: #171717;
+      --muted: #69707c;
+      --line: #e5e7eb;
+      --soft: #f7f7f8;
+      --page: #eef0f3;
+      --pad-w: 900px;
+      --pad-h: 1440px;
+      --pad-scale: .58;
+      --pad-preview-w: 559px;
+      --pad-preview-h: 872px;
+      --pad-frame: 32px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--page);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 250px minmax(1120px, 1fr);
+      gap: 22px;
+      padding: 24px;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      height: calc(100vh - 48px);
+      padding: 20px;
+      border-radius: 18px;
+      background: #151515;
+      color: #f8fafc;
+      box-shadow: 0 24px 70px rgba(0,0,0,.18);
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--green);
+      color: #111;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .brand-lockup b {
+      display: block;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .brand-lockup span {
+      display: block;
+      margin-top: 3px;
+      color: #a3a3a3;
+      font-size: 18px;
+    }
+
+    .nav-title {
+      color: var(--green);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin: 0 0 10px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-item {
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      color: #d4d4d8;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .nav-item.active {
+      border-color: var(--green);
+      background: var(--green);
+      color: #111;
+      font-weight: 700;
+    }
+
+    .stage {
+      display: grid;
+      grid-template-columns: minmax(540px, 1fr) 360px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .pad-grid {
+      display: grid;
+      grid-template-columns: repeat(2, var(--pad-preview-w));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .pad-grid > div {
+      position: relative;
+      width: var(--pad-preview-w);
+      height: calc(var(--pad-preview-h) + 30px);
+    }
+
+    .variant-label {
+      margin: 0 0 10px;
+      color: #111;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .pad-shell {
+      position: absolute;
+      left: 0;
+      top: 30px;
+      width: var(--pad-preview-w);
+      height: var(--pad-preview-h);
+    }
+
+    .pad-screen {
+      box-sizing: content-box;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--pad-w);
+      height: var(--pad-h);
+      overflow: hidden;
+      transform: scale(var(--pad-scale));
+      transform-origin: top left;
+      border: var(--pad-frame) solid #171717;
+      border-radius: 58px;
+      background: #fff;
+      box-shadow: 0 34px 100px rgba(17,17,17,.24);
+    }
+
+    .kiosk-page {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background: #fff;
+    }
+
+    .page-header {
+      padding: 32px 40px 24px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .store {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #111;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .store::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(156,255,0,.2);
+    }
+
+    .logout {
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #d4d4d8;
+      border-radius: 999px;
+      padding: 0 14px;
+      background: #fff;
+      color: #111;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #111;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #111;
+      font-size: 24px;
+      line-height: 1.16;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.42;
+      font-weight: 500;
+    }
+
+    .content {
+      min-height: 0;
+      overflow: hidden;
+      padding: 24px;
+      background: var(--soft);
+    }
+
+    .service-page .content {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 16px;
+    }
+
+    .route-strip {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: #3f4652;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .route-arrow {
+      color: #111;
+      font-weight: 700;
+    }
+
+    .person-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .person-panel {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .wait-pill,
+    .tag {
+      flex: 0 0 auto;
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .wait-pill {
+      background: rgba(156,255,0,.42);
+      color: #111;
+      border: 1px solid rgba(17,17,17,.12);
+    }
+
+    .tag {
+      background: #f1f2f4;
+      color: #505761;
+    }
+
+    .assign-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 12px;
+      min-height: 72px;
+      border: 1px solid rgba(17,17,17,.12);
+      border-radius: 12px;
+      background: rgba(156,255,0,.24);
+      color: #111;
+    }
+
+    .assign-dot {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: #111;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .assign-card b {
+      display: block;
+      font-size: 15px;
+      line-height: 1.15;
+    }
+
+    .assign-card span {
+      display: block;
+      margin-top: 3px;
+      color: #4b5563;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .assign-choice {
+      color: #111;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .person-list {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .person-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      min-height: 76px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .person-card.selected {
+      border-color: #111;
+      box-shadow: inset 0 0 0 1px #111;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #e8ebee;
+      color: #111;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .selected .avatar {
+      background: var(--green);
+    }
+
+    .person-card h3 {
+      margin: 0 0 2px;
+      color: #111;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .person-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.32;
+      font-weight: 500;
+    }
+
+    .person-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .person-meta span {
+      border-radius: 999px;
+      background: #f1f2f4;
+      color: #4f5864;
+      padding: 2px 6px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .skip-panel {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 16px;
+      min-height: 56px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px dashed #bfc5cc;
+      color: #4b5563;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .skip-panel b {
+      display: block;
+      color: #111;
+      margin-bottom: 2px;
+      font-size: 15px;
+    }
+
+    .page-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 12px;
+      padding: 20px 40px 28px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .page-actions.single {
+      grid-template-columns: 1fr;
+    }
+
+    .btn {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      border: 1px solid #cfd4da;
+      background: #fff;
+      color: #111;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .btn.primary {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .btn.green {
+      border-color: var(--green);
+      background: var(--green);
+      color: #111;
+    }
+
+    .sign-page .content {
+      display: grid;
+      grid-template-rows: 1fr;
+      gap: 0;
+    }
+
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 7px;
+      border-radius: 13px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .step {
+      min-height: 48px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 2px;
+      border-radius: 10px;
+      background: #f3f4f6;
+      color: #5c6470;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .step b {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #d9dde2;
+      color: #111;
+      font-size: 13px;
+    }
+
+    .step.active {
+      background: #111;
+      color: #fff;
+    }
+
+    .step.active b,
+    .step.done b {
+      background: var(--green);
+      color: #111;
+    }
+
+    .step.done {
+      background: rgba(156,255,0,.28);
+      color: #111;
+    }
+
+    .sign-workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 20px;
+    }
+
+    .sign-workspace .progress {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(4, minmax(64px, auto));
+      align-content: start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 16px;
+    }
+
+    .sign-workspace .step {
+      min-height: 64px;
+      justify-items: start;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .sign-workspace .step b {
+      margin-bottom: 2px;
+    }
+
+    .chat-layout {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .chat-box {
+      min-height: 0;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .bubble {
+      max-width: 86%;
+      padding: 8px 10px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .bubble.system {
+      background: #f1f2f4;
+      color: #222;
+      border-top-left-radius: 4px;
+    }
+
+    .bubble.user {
+      justify-self: end;
+      background: #111;
+      color: #fff;
+      border-top-right-radius: 4px;
+    }
+
+    .question-card {
+      padding: 16px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .question-card h2 {
+      margin: 0 0 10px;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .choice {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #111;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .choice.selected {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .doc-layout {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .doc-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+
+    .doc-tab {
+      min-height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #4b5563;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .doc-tab.active {
+      background: #111;
+      color: var(--green);
+      border-color: #111;
+    }
+
+    .document {
+      min-height: 0;
+      padding: 16px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .document h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.25;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .doc-line {
+      height: 8px;
+      border-radius: 999px;
+      background: #e8ebee;
+      margin-top: 7px;
+    }
+
+    .doc-line.short { width: 64%; }
+    .doc-line.mid { width: 82%; }
+
+    .read-confirm {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 9px;
+      align-items: center;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(156,255,0,.3);
+      border: 1px solid rgba(17,17,17,.1);
+      color: #111;
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #111;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .signature-layout {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .sign-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .sign-item {
+      padding: 14px;
+      min-height: 72px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .sign-item.done {
+      border-color: rgba(17,17,17,.2);
+      background: rgba(156,255,0,.28);
+    }
+
+    .sign-item b {
+      display: block;
+      color: #111;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .sign-item span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.32;
+      font-weight: 500;
+    }
+
+    .signature-box {
+      position: relative;
+      min-height: 360px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .signature-box::before {
+      content: "";
+      position: absolute;
+      inset: 20px;
+      border: 1px dashed #cad0d7;
+      border-radius: 12px;
+    }
+
+    .signature-box svg {
+      position: absolute;
+      left: 120px;
+      top: 116px;
+      width: 440px;
+      height: 120px;
+    }
+
+    .signature-hint {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 24px;
+      text-align: center;
+      color: #8a929d;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .audit {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .audit-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
+      color: #111;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .audit-row span:last-child {
+      color: #3f7d00;
+      font-weight: 700;
+    }
+
+    .danger-link {
+      color: #555f6b;
+      border-color: #cfd4da;
+    }
+
+    .finish-page .content {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
+      background: #fff;
+      padding: 24px;
+    }
+
+    .finish-hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: center;
+      padding: 20px;
+      border-radius: 16px;
+      background: #f7f7f8;
+      color: #111;
+      border: 1px solid var(--line);
+    }
+
+    .finish-mark {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: #111;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .finish-hero h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.18;
+      font-weight: 700;
+    }
+
+    .finish-hero p {
+      margin: 6px 0 0;
+      color: #4b5563;
+      font-size: 14px;
+      line-height: 1.42;
+      font-weight: 500;
+    }
+
+    .next-steps {
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .next-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+    }
+
+    .next-icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #111;
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .next-card b {
+      display: block;
+      color: #111;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .next-card span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(156,255,0,.26);
+      border: 1px solid rgba(17,17,17,.1);
+    }
+
+    .timer {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #111;
+      color: var(--green);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .countdown b {
+      display: block;
+      color: #111;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .countdown span {
+      color: #4b5563;
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .spec-panel {
+      position: sticky;
+      top: 24px;
+      padding: 22px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 22px 60px rgba(17,17,17,.08);
+    }
+
+    .spec-panel h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    .spec-panel .meta {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .spec-section {
+      border-top: 1px solid #edf0f2;
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+
+    .spec-section b {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .spec-section p,
+    .spec-section li {
+      color: #4b5563;
+      font-size: 18px;
+      line-height: 1.58;
+    }
+
+    .spec-section ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    @media (max-width: 1280px) {
+      .workspace { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; }
+      .stage { grid-template-columns: 1fr; }
+      .spec-panel { position: static; }
+    }
+
+    @media (max-width: 1120px) {
+      .pad-grid { grid-template-columns: 1fr; }
+    }
+
+    body.embed {
+      background: transparent;
+    }
+
+    body.embed .workspace {
+      display: block;
+      min-height: 0;
+      padding: 18px;
+    }
+
+    body.embed .sidebar,
+    body.embed .spec-panel {
+      display: none;
+    }
+
+    body.embed .variant-label {
+      display: none;
+    }
+
+    body.embed .stage {
+      display: block;
+    }
+
+    body.embed.unit-mode .pad-grid {
+      display: grid;
+      grid-template-columns: var(--pad-preview-w);
+      gap: 0;
+      justify-content: center;
+    }
+
+    body.embed .pad-grid > div {
+      height: var(--pad-preview-h);
+    }
+
+    body.embed .pad-shell {
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const prototypeParams = new URLSearchParams(window.location.search);
+    if (prototypeParams.get("embed") === "1") {
+      document.body.classList.add("embed");
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const unit = Number(prototypeParams.get("unit"));
+      if (!Number.isNaN(unit)) {
+        document.body.classList.add("unit-mode");
+        document.querySelectorAll(".pad-grid > div").forEach((el, index) => {
+          if (index !== unit) el.remove();
+        });
+      }
+    });
+  </script>
+  <main class="workspace">
+    <aside class="sidebar">
+      <div class="brand-lockup">
+        <div class="brand-mark">氧</div>
+        <div>
+          <b>自助签到台</b>
+          <span>页面高保真草案</span>
+        </div>
+      </div>
+
+      <p class="nav-title">本草案范围</p>
+      <ul class="nav-list">
+        <li class="nav-item">流程确认页之后</li>
+        <li class="nav-item active">服务人员确认页</li>
+        <li class="nav-item active">治疗签署文书流程</li>
+        <li class="nav-item active">服务流程指引 + 倒计时登出</li>
+        <li class="nav-item">返回起始默认签到页</li>
+      </ul>
+    </aside>
+
+    <section class="stage">
+      <div class="pad-grid">
+        <div>
+          <p class="variant-label">状态 A：服务人员确认页</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：服务人员确认页">
+            <div class="pad-screen">
+              <article class="kiosk-page service-page">
+                <header class="page-header">
+                  <div class="topbar">
+                    <span class="store">新氧青春北京保利店</span>
+                    <span class="logout">登出</span>
+                  </div>
+                  <span class="eyebrow">服务人员确认</span>
+                  <h1>沙大爷，请确认本次服务人员</h1>
+                  <p class="lead">系统已按您的流程安排推荐人员，也可以指定当前在店人员。</p>
+                </header>
+
+                <section class="content">
+                  <div class="route-strip">
+                    <span>需要面诊 → 统一结束页</span>
+                    <span class="route-arrow">→</span>
+                    <span>直接治疗 → 签署文书</span>
+                  </div>
+
+                  <div class="person-columns">
+                    <section class="person-panel">
+                      <div class="panel-head">
+                        <h2>面诊咨询师 / 医生</h2>
+                        <span class="wait-pill">预计等 6 分钟</span>
+                      </div>
+                      <div class="assign-card">
+                        <div class="assign-dot">荐</div>
+                        <div>
+                          <b>系统分配：李医生</b>
+                          <span>面诊空闲中，擅长敏感肌评估</span>
+                        </div>
+                        <span class="assign-choice">已选</span>
+                      </div>
+                      <div class="person-list">
+                        <div class="person-card selected">
+                          <div class="avatar">李</div>
+                          <div>
+                            <h3>李医生</h3>
+                            <p>皮肤科医生，今日可面诊 3 人</p>
+                            <div class="person-meta"><span>空闲</span><span>约 6 分钟</span></div>
+                          </div>
+                        </div>
+                        <div class="person-card">
+                          <div class="avatar">周</div>
+                          <div>
+                            <h3>周咨询师</h3>
+                            <p>项目方案沟通，正在接待客户</p>
+                            <div class="person-meta"><span>服务中</span><span>约 18 分钟</span></div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section class="person-panel">
+                      <div class="panel-head">
+                        <h2>治疗师</h2>
+                        <span class="wait-pill">预计等 12 分钟</span>
+                      </div>
+                      <div class="assign-card">
+                        <div class="assign-dot">荐</div>
+                        <div>
+                          <b>系统分配：陈治疗师</b>
+                          <span>设备即将空出，匹配本次项目</span>
+                        </div>
+                        <span class="assign-choice">可改</span>
+                      </div>
+                      <div class="person-list">
+                        <div class="person-card selected">
+                          <div class="avatar">陈</div>
+                          <div>
+                            <h3>陈治疗师</h3>
+                            <p>光电项目治疗师，设备 B 排队中</p>
+                            <div class="person-meta"><span>排队中</span><span>约 12 分钟</span></div>
+                          </div>
+                        </div>
+                        <div class="person-card">
+                          <div class="avatar">赵</div>
+                          <div>
+                            <h3>赵治疗师</h3>
+                            <p>清洁补水与舒缓护理</p>
+                            <div class="person-meta"><span>空闲</span><span>约 3 分钟</span></div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <div class="skip-panel">
+                      <div>
+                        <b>纯生美场景</b>
+                        若本次项目不需要治疗师，右栏可自动标记为无需确认。
+                      </div>
+                      <span class="tag">跳过治疗师选择</span>
+                    </div>
+                  </div>
+                </section>
+
+                <footer class="page-actions">
+                  <div class="btn">返回调整流程</div>
+                  <div class="btn primary">确认人员，继续</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">状态 B：治疗签署文书 - 会话确认 + 文件阅读</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：治疗签署文书流程前段">
+            <div class="pad-screen">
+              <article class="kiosk-page sign-page">
+                <header class="page-header">
+                  <div class="topbar">
+                    <span class="store">新氧青春北京保利店</span>
+                    <span class="logout">登出</span>
+                  </div>
+                  <span class="eyebrow">治疗签署文书</span>
+                  <h1>请完成治疗前确认</h1>
+                  <p class="lead">直接治疗路径需要先完成问答确认与文书阅读。</p>
+                </header>
+
+                <section class="content">
+                  <div class="sign-workspace">
+                    <div class="progress">
+                      <div class="step done"><b>1</b><span>会话确认</span></div>
+                      <div class="step active"><b>2</b><span>文件阅读</span></div>
+                      <div class="step"><b>3</b><span>用户签署</span></div>
+                      <div class="step"><b>4</b><span>完成校验</span></div>
+                    </div>
+
+                    <div class="doc-layout">
+                      <div class="chat-box">
+                        <div class="bubble system">请确认：本次治疗项目为“舒敏修护 + 光电嫩肤”，您已知晓术后 24 小时内需加强防晒。</div>
+                        <div class="bubble user">我已确认</div>
+                      </div>
+
+                      <div class="doc-tabs">
+                        <div class="doc-tab active">知情同意书</div>
+                        <div class="doc-tab">项目说明</div>
+                        <div class="doc-tab">护理须知</div>
+                      </div>
+
+                      <div class="document">
+                        <h2>治疗知情同意书</h2>
+                        <div class="doc-line mid"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line short"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line mid"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line short"></div>
+                        <div class="doc-line mid"></div>
+                      </div>
+
+                      <div class="read-confirm">
+                        <span class="check">✓</span>
+                        <span>已阅读到文末并确认本文件，继续阅读下一份文书。</span>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <footer class="page-actions">
+                  <div class="btn danger-link">终止签署，返回选择</div>
+                  <div class="btn primary">继续下一步</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">状态 C：治疗签署文书 - 用户签署 + 完成校验</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：治疗签署文书流程后段">
+            <div class="pad-screen">
+              <article class="kiosk-page sign-page">
+                <header class="page-header">
+                  <div class="topbar">
+                    <span class="store">新氧青春北京保利店</span>
+                    <span class="logout">登出</span>
+                  </div>
+                  <span class="eyebrow">用户签署</span>
+                  <h1>请在下方签名确认</h1>
+                  <p class="lead">必签文书全部完成后，系统将进入服务流程指引。</p>
+                </header>
+
+                <section class="content">
+                  <div class="sign-workspace">
+                    <div class="progress">
+                      <div class="step done"><b>1</b><span>会话确认</span></div>
+                      <div class="step done"><b>2</b><span>文件阅读</span></div>
+                      <div class="step active"><b>3</b><span>用户签署</span></div>
+                      <div class="step"><b>4</b><span>完成校验</span></div>
+                    </div>
+
+                    <div class="signature-layout">
+                      <div class="sign-list">
+                        <div class="sign-item done"><b>知情同意书</b><span>已阅读，待签名同步</span></div>
+                        <div class="sign-item done"><b>项目说明</b><span>已确认风险与禁忌</span></div>
+                        <div class="sign-item"><b>护理须知</b><span>需完成签名</span></div>
+                        <div class="sign-item"><b>签署校验</b><span>待系统检查必签项</span></div>
+                      </div>
+
+                      <div class="signature-box">
+                        <svg viewBox="0 0 360 100" aria-hidden="true">
+                          <path d="M12 58 C55 14, 78 18, 61 62 C52 90, 103 68, 126 32 C106 85, 170 82, 196 44 C179 82, 237 78, 267 34 C252 78, 302 78, 348 48" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="signature-hint">请使用手指在虚线框内签名</div>
+                      </div>
+
+                      <div class="audit">
+                        <div class="audit-row"><span class="check">✓</span><span>会话问题均已确认</span><span>通过</span></div>
+                        <div class="audit-row"><span class="check">✓</span><span>3 份文书均已阅读</span><span>通过</span></div>
+                        <div class="audit-row"><span class="check">✓</span><span>签名已采集，可提交</span><span>通过</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <footer class="page-actions">
+                  <div class="btn danger-link">终止签署，返回选择</div>
+                  <div class="btn green">提交签署</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">状态 D：统一结束节点 - 服务流程指引 + 倒计时登出</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：服务流程指引和倒计时登出">
+            <div class="pad-screen">
+              <article class="kiosk-page finish-page">
+                <header class="page-header">
+                  <div class="topbar">
+                    <span class="store">新氧青春北京保利店</span>
+                    <span class="logout">登出</span>
+                  </div>
+                  <span class="eyebrow">服务流程指引</span>
+                  <h1>接下来请按服务指引继续</h1>
+                  <p class="lead">面诊路径和治疗签署完成路径都进入此同一个结束节点。</p>
+                </header>
+
+                <section class="content">
+                  <div class="finish-hero">
+                    <div class="finish-mark">✓</div>
+                    <div>
+                      <h2>已完成本次到店自助确认</h2>
+                      <p>请留意 App 或小程序内的服务流程指引，门店人员会按队列为您安排下一步。</p>
+                    </div>
+                  </div>
+
+                  <div class="next-steps">
+                    <div class="next-card">
+                      <div class="next-icon">1</div>
+                      <div>
+                        <b>查看 App / 小程序消息</b>
+                        <span>服务人员、等待时间、房间或面诊提醒会同步到手机端。</span>
+                      </div>
+                    </div>
+                    <div class="next-card">
+                      <div class="next-icon">2</div>
+                      <div>
+                        <b>在休息区等待叫号</b>
+                        <span>若等待时间变化，请以前台和手机端通知为准。</span>
+                      </div>
+                    </div>
+                    <div class="next-card">
+                      <div class="next-icon">3</div>
+                      <div>
+                        <b>保护个人信息</b>
+                        <span>本设备将自动退出当前客户会话。</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="countdown">
+                    <div class="timer">10</div>
+                    <div>
+                      <b>10 秒后自动返回签到首页</b>
+                      <span>您也可以点击“登出”立即结束本次会话。</span>
+                    </div>
+                  </div>
+                </section>
+
+                <footer class="page-actions single">
+                  <div class="btn primary">立即登出并返回首页</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="spec-panel">
+        <h1>后段业务会话草案</h1>
+        <p class="meta">独立草案文件，不改主原型。本版已切换为 900 x 1440 源画布，并用 scale(0.58) 在浏览器中缩略展示；按 Pad 原生任务界面处理：左右分区、固定底部操作、触控热区稳定。</p>
+
+        <div class="spec-section">
+          <b>设计假设</b>
+          <ul>
+            <li>服务人员确认页既服务“面诊”路径，也服务“直接治疗”路径，因此先确认需要的人，再由底部主按钮进入下一节点。</li>
+            <li>系统分配是默认推荐；用户仍可点选具体人员。等待状态以“空闲 / 服务中 / 排队中”和预计等待时间表达。</li>
+            <li>纯生美不需要治疗师时，不另起页面，只在治疗师栏下方展示“跳过治疗师选择”的状态。</li>
+            <li>结束页只有一个：面诊路径从服务人员确认后进入；直接治疗路径从签署完成后进入。</li>
+            <li>字号以 900 x 1440 源画布为准：主标题 24px，模块标题 18px，人员名 / 步骤名 15-16px，正文 13-14px，按钮 16px。</li>
+            <li>中文字重已降档：正文 500，模块标题 700，页面主标题 700；业务页不再使用 800 / 900 / 950。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>页面信息层级</b>
+          <ul>
+            <li>顶部：门店识别、登出、当前页面任务和一句短提示。</li>
+            <li>中部：当前要完成的核心任务，服务人员页为双栏人员选择，签署页为左侧步骤进度 + 右侧当前内容。</li>
+            <li>底部：低风险返回 / 终止操作放左侧，继续或提交放右侧主按钮。</li>
+            <li>结束页：保留轻微完成感，但完成图标和标题降级，重点仍是手机端继续指引和倒计时登出。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>本版效率调整</b>
+          <ul>
+            <li>服务人员页利用 Pad 横向空间做左右栏，分别承载面诊咨询师 / 医生与治疗师。</li>
+            <li>签署流程从顶部步骤条改为左侧步骤栏，右侧专注当前问答、文件或签名内容。</li>
+            <li>按钮、登出、人员卡、系统推荐项、签署步骤项维持 44-56px 稳定热区，相邻操作至少 8px 间距。</li>
+            <li>结束页不使用大海报式视觉，改为完成反馈 + 三条下一步 + 倒计时的任务闭环。</li>
+            <li>系统推荐卡从黑色展示块改为浅绿提示条，减少视觉停留，让用户更快进入人员对比。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>关键交互</b>
+          <ul>
+            <li>点击“登出”：任何业务页都结束当前客户会话，并返回起始默认签到页。</li>
+            <li>服务人员确认：默认系统分配，可切换人员；确认后按业务意图分流。</li>
+            <li>终止签署：回到“安排面诊 / 无需面诊直接治疗”的选择状态。</li>
+            <li>完成校验：必签项、阅读确认、签名采集均通过后，进入统一结束节点。</li>
+            <li>倒计时结束：自动登出并返回起始默认签到页。</li>
+          </ul>
+        </div>
+
+        <div class="spec-section">
+          <b>需要用户确认的问题</b>
+          <ul>
+            <li>服务人员排序：优先按等待时间、擅长项目、客户历史偏好，还是门店运营规则？</li>
+            <li>治疗签署终止后回退到哪里：本次治疗项目确认页，还是服务人员确认页？</li>
+            <li>倒计时是否固定 10 秒，还是按门店配置可调？</li>
+            <li>结束页是否需要展示叫号、房间、当前队列号等门店履约信息？</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>
