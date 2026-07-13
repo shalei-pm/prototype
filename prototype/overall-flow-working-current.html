@@ -94,11 +94,11 @@
 <div class="note-grid">
   <div class="note"><b>视觉载体</b>Pad 竖屏固定放置；新氧青春海报风格，杂志感，荧光绿、灰、黑。</div>
   <div class="note"><b>操作角色</b>客户自助操作；前台仅在需要时辅助讲解，不代操作。</div>
-  <div class="note"><b>核心结构</b>项目选择模块右侧接共同节点；流程确认后进入服务人员确认页。</div>
+  <div class="note"><b>核心结构</b>三个核心确认按重要性推进：先确认本次项目，再确认服务人员，最后确认流程细节。</div>
 </div>
 
 <div class="canvas">
-  <div class="rule"><b>当前主线</b>扫码签到 → 客户识别 → 新客建档 / 老客直达项目确认 → 项目选择或项目带入 → 本次治疗项目确认 → 流程确认 → 服务人员确认 → 面诊结束或治疗签署 → 结束闭环。</div>
+  <div class="rule"><b>当前主线</b>扫码签到 → 客户识别 → 新客建档 / 老客直达项目确认 → 项目选择或项目带入 → 本次治疗项目确认 → 服务人员确认 → 流程确认 → 面诊结束或治疗签署 → 结束闭环。</div>
 
   <div class="node">
     <div class="title">默认签到页</div>
@@ -160,21 +160,21 @@
     <div class="flow-arrow"><div class="pill">确认本次治疗项目后</div><div class="shaft"></div></div>
   </div>
 
-  <div class="node">
-    <span class="logout">登出</span>
-    <div class="title">流程确认页</div>
-    <div class="copy">确认是否皮肤检测、是否拍摄术前术后对比照、饮品零食选择。按门店配置展示可选项。</div>
-  </div>
-  <div class="flow-arrow"><div class="pill">确认流程安排后</div><div class="shaft"></div></div>
-
   <div class="node green">
     <span class="logout">登出</span>
     <div class="title">服务人员确认页</div>
-    <div class="copy">根据业务流程确认服务人员。左侧确认面诊咨询师 / 医生，右侧确认治疗师；纯生美场景可跳过治疗师选择。展示简介、等待状态、预计等待时间，支持系统分配或指定人员。</div>
+    <div class="copy">系统根据本次项目和服务意图，决定需要确认的服务人员角色，并动态替换页面标题与人员列表。当前评审原型只展开面诊医生，重点展示简介、执业信息、排队人数和预计等待时间。</div>
     <div class="service-grid">
-      <div class="service-card"><b>面诊咨询师 / 医生</b>需要面诊时确认咨询师或面诊医生，完成后进入结束闭环。</div>
-      <div class="service-card"><b>治疗师</b>不需要面诊直接治疗时确认治疗师；如果是纯生美，可跳过治疗师选择。</div>
+      <div class="service-card"><b>按我的选择安排</b>用户选择具体服务人员，系统按所选人员排队与安排。</div>
+      <div class="service-card"><b>系统自动安排（最快）</b>不指定具体人员，由系统结合排队情况进行最快分配。</div>
     </div>
+  </div>
+  <div class="flow-arrow"><div class="pill">确认服务人员后</div><div class="shaft"></div></div>
+
+  <div class="node">
+    <span class="logout">登出</span>
+    <div class="title">流程确认页</div>
+    <div class="copy">最后确认是否进行皮肤检测、是否拍摄术前术后对比照，以及饮品零食等流程细节；可选内容按门店配置展示。</div>
   </div>
 
   <div class="branch-flow">
@@ -188,7 +188,7 @@
         <span class="logout">登出</span>
         <div class="label">治疗流程</div>
         <div class="title">治疗签署文书流程</div>
-        <div class="copy">确认治疗服务人员后进入签署文书。签署可终止；终止后的回退点待确认。</div>
+        <div class="copy">完成服务人员和流程细节确认后进入签署文书。签署可终止；终止后的回退点待确认。</div>
         <div class="sign-steps">
           <div><b>会话确认</b>问答确认项目、风险与特殊情况。</div>
           <div><b>文件阅读</b>阅读知情同意、项目说明、注意事项。</div>
