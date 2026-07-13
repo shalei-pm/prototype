@@ -2508,6 +2508,345 @@
       background: rgba(156,255,0,.22);
     }
 
+    .payment-confirm-state {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .payment-confirm-state .task-content {
+      padding-bottom: 160px;
+    }
+
+    .payment-preview-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .payment-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      background: rgba(17,17,17,.46);
+    }
+
+    .payment-sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 11;
+      display: grid;
+      gap: 18px;
+      padding: 28px 32px 32px;
+      border-top: 4px solid var(--green);
+      background: #fff;
+      box-shadow: 0 -24px 60px rgba(17,17,17,.18);
+    }
+
+    .payment-sheet-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .payment-sheet-head h2 {
+      margin: 0;
+      color: #111;
+      font-size: 24px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .payment-sheet-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .payment-order-id {
+      color: #8a929d;
+      font-size: 12px;
+      line-height: 1.3;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .payment-items {
+      display: grid;
+      gap: 0;
+    }
+
+    .payment-item {
+      min-height: 54px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 1px solid #eef1f4;
+      color: #111;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .payment-item span {
+      color: #69707c;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .payment-pricing {
+      display: grid;
+      gap: 8px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .payment-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+      color: #69707c;
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .payment-price-row b {
+      color: #111;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .payment-price-row.discount b {
+      color: #4d7c0f;
+    }
+
+    .payment-price-row.total {
+      margin-top: 4px;
+      padding-top: 12px;
+      border-top: 1px solid #eef1f4;
+      color: #111;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .payment-price-row.total strong {
+      color: #111;
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .payment-page,
+    .payment-result-page {
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .payment-page .task-content,
+    .payment-result-page .task-content {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      background: #f7f8fa;
+    }
+
+    .payment-focus {
+      width: min(720px, 100%);
+      display: grid;
+      justify-items: center;
+      gap: 18px;
+      padding: 26px 36px 30px;
+      border-top: 4px solid var(--green);
+      background: #fff;
+      box-shadow: 0 18px 48px rgba(17,17,17,.08);
+      text-align: center;
+    }
+
+    .payment-focus-label {
+      margin: 0;
+      color: #69707c;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 600;
+    }
+
+    .payment-due {
+      margin: -4px 0 2px;
+      color: #111;
+      font-size: 42px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .payment-qr-frame {
+      width: 300px;
+      height: 300px;
+      display: grid;
+      place-items: center;
+      padding: 14px;
+      border: 1px solid #dfe3e7;
+      background: #fff;
+    }
+
+    .payment-qr-frame img {
+      display: block;
+      width: 270px;
+      height: 270px;
+      image-rendering: pixelated;
+    }
+
+    .payment-methods {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: #303844;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 600;
+    }
+
+    .payment-methods i {
+      width: 1px;
+      height: 16px;
+      background: #d7dbe0;
+    }
+
+    .payment-countdown {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      color: #69707c;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .payment-countdown strong {
+      color: #111;
+      font-size: 27px;
+      line-height: 1;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .payment-expire-note {
+      margin: -6px 0 0;
+      color: #8a929d;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .payment-waiting {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #dfe3e7;
+      color: #303844;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .payment-result {
+      width: min(650px, 100%);
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .payment-result-icon {
+      width: 112px;
+      height: 112px;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: #111;
+    }
+
+    .payment-result.incomplete .payment-result-icon {
+      border: 1px solid #d7dbe0;
+      background: #eef0f3;
+      color: #555f6c;
+    }
+
+    .payment-result-icon svg {
+      width: 54px;
+      height: 54px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .payment-result h2 {
+      margin: 8px 0 0;
+      color: #111;
+      font-size: 34px;
+      line-height: 1.12;
+      font-weight: 700;
+    }
+
+    .payment-result-amount {
+      color: #111;
+      font-size: 27px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .payment-result-copy {
+      max-width: 560px;
+      margin: 0;
+      color: #5f6874;
+      font-size: 15px;
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .payment-result-copy b {
+      color: #111;
+      font-weight: 700;
+    }
+
+    .payment-result-timer {
+      margin-top: 8px;
+      color: #69707c;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .payment-result-timer b {
+      color: #111;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .asset-row.just-purchased {
+      border-color: var(--green);
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+
+    .asset-status-panel.just-purchased-note {
+      background: rgba(156,255,0,.22);
+    }
+
+    .asset-status-panel.just-purchased-note b {
+      font-size: 15px;
+    }
+
     .spec-panel {
       position: sticky;
       top: 24px;
@@ -2629,6 +2968,9 @@
       <p class="nav-title">本草案页面</p>
       <ul class="nav-list">
         <li class="nav-item active">项目菜单：新购项目</li>
+        <li class="nav-item active">项目购买：支付确认</li>
+        <li class="nav-item active">项目购买：扫码支付</li>
+        <li class="nav-item active">项目购买：支付结果</li>
         <li class="nav-item active">项目菜单：我的资产</li>
         <li class="nav-item active">治疗项目确认：有项目</li>
         <li class="nav-item active">治疗项目确认：无项目</li>
@@ -2789,6 +3131,195 @@
         </div>
 
         <div>
+          <p class="variant-label">项目菜单 04-A：支付确认半弹窗</p>
+          <div class="pad-shell" aria-label="项目购买支付确认 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page scheme-menu payment-confirm-state">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>项目菜单</h1>
+                    <p>项目菜单 · 沙大爷 · 新氧青春北京保利店</p>
+                  </div>
+                  <div class="top-switch" aria-label="项目菜单切换">
+                    <span class="top-link active">新购项目</span>
+                    <span class="top-link">我的资产</span>
+                  </div>
+                  <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
+                </header>
+
+                <section class="task-content">
+                  <nav class="scheme-tabs" aria-label="项目赛道">
+                    <div class="scheme-tab active">护肤</div>
+                    <div class="scheme-tab">抗衰</div>
+                    <div class="scheme-tab">问题肌</div>
+                    <div class="scheme-tab">美学</div>
+                  </nav>
+                  <div class="payment-preview-list" aria-hidden="true">
+                    <article class="solution-row selected">
+                      <div class="solution-main">
+                        <h3>水杨酸治疗</h3>
+                        <p>轻度出油、闭口倾向，适合首次控油和角质管理。</p>
+                      </div>
+                      <div class="solution-metrics">
+                        <div class="solution-metric"><span>价格/规格</span><b>680元/次</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                      </div>
+                      <div class="solution-cases">
+                        <div class="case-thumb">治疗前</div>
+                        <div class="case-thumb after">治疗后</div>
+                      </div>
+                      <div class="solution-action" aria-label="已选"></div>
+                    </article>
+                    <article class="solution-row selected">
+                      <div class="solution-main">
+                        <h3>博乐达</h3>
+                        <p>适合油脂分泌旺盛、反复闭口，强调温和刷酸护理。</p>
+                      </div>
+                      <div class="solution-metrics">
+                        <div class="solution-metric"><span>价格/规格</span><b>1,280元/3次</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                      </div>
+                      <div class="solution-cases">
+                        <div class="case-thumb">治疗前</div>
+                        <div class="case-thumb after">治疗后</div>
+                      </div>
+                      <div class="solution-action" aria-label="已选"></div>
+                    </article>
+                  </div>
+                </section>
+
+                <div class="payment-scrim" aria-hidden="true"></div>
+                <section class="payment-sheet" role="dialog" aria-label="支付确认">
+                  <div class="payment-sheet-head">
+                    <div>
+                      <h2>支付确认</h2>
+                      <p>请确认本次购买项目、优惠和应付金额</p>
+                    </div>
+                    <div class="payment-order-id">待支付订单 · 2 个项目</div>
+                  </div>
+                  <div class="payment-items">
+                    <div class="payment-item"><div>水杨酸治疗 <span>单次</span></div><b>¥680.00</b></div>
+                    <div class="payment-item"><div>博乐达 <span>3次套餐</span></div><b>¥1,280.00</b></div>
+                  </div>
+                  <div class="payment-pricing">
+                    <div class="payment-price-row"><span>项目合计</span><b>¥1,960.00</b></div>
+                    <div class="payment-price-row discount"><span>优惠合计 · 新客券与门店活动</span><b>-¥280.00</b></div>
+                    <div class="payment-price-row total"><span>应付金额</span><strong>¥1,680.00</strong></div>
+                  </div>
+                  <div class="bottom-two">
+                    <div class="secondary">取消</div>
+                    <div class="primary">支付</div>
+                  </div>
+                </section>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">项目菜单 04-B：扫码支付</p>
+          <div class="pad-shell" aria-label="扫码支付 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page payment-page">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>扫码支付</h1>
+                    <p>订单号 SOYQ202607130419 · 2 个项目</p>
+                  </div>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+
+                <section class="task-content">
+                  <div class="payment-focus">
+                    <p class="payment-focus-label">本次应付</p>
+                    <div class="payment-due">¥1,680.00</div>
+                    <div class="payment-qr-frame">
+                      <img src="../assets/payment-qr-demo.png" alt="不可支付的演示二维码" />
+                    </div>
+                    <div class="payment-methods"><span>微信支付</span><i></i><span>支付宝</span></div>
+                    <div class="payment-countdown"><span>请在</span><strong>01:00</strong><span>内完成支付</span></div>
+                    <p class="payment-expire-note">支付有效期为 60 秒，超时后待支付订单将自动取消。</p>
+                  </div>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="payment-waiting">正在等待支付结果，请使用手机扫描上方二维码</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">项目菜单 04-C：支付成功</p>
+          <div class="pad-shell" aria-label="支付成功 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page payment-result-page">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>支付结果</h1>
+                    <p>订单号 SOYQ202607130419</p>
+                  </div>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+
+                <section class="task-content">
+                  <div class="payment-result">
+                    <div class="payment-result-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>
+                    </div>
+                    <h2>支付成功</h2>
+                    <div class="payment-result-amount">¥1,680.00</div>
+                    <p class="payment-result-copy">水杨酸治疗与博乐达已加入“我的资产”，并已<b>自动选入今日治疗</b>。您可以在资产列表中继续调整本次治疗项目。</p>
+                    <div class="payment-result-timer"><b>5</b> 秒后自动进入我的资产</div>
+                  </div>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="primary">查看我的资产</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">项目菜单 04-D：支付未完成</p>
+          <div class="pad-shell" aria-label="支付未完成 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page payment-result-page">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>支付结果</h1>
+                    <p>订单号 SOYQ202607130419</p>
+                  </div>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+
+                <section class="task-content">
+                  <div class="payment-result incomplete">
+                    <div class="payment-result-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+                    </div>
+                    <h2>支付未完成</h2>
+                    <p class="payment-result-copy">支付二维码已超过 60 秒有效期，本次待支付订单已取消，未产生扣款。您可以返回项目菜单重新选择或再次发起购买。</p>
+                    <div class="payment-result-timer"><b>3</b> 秒后返回项目菜单</div>
+                  </div>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="primary">返回项目菜单</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
           <p class="variant-label">项目菜单 B：我的资产</p>
           <div class="pad-shell" aria-label="项目菜单我的资产 Pad 原型">
             <div class="pad-screen">
@@ -2810,16 +3341,54 @@
                   <div class="asset-intro">
                     <div>
                       <b>已购未消耗项目</b>
-                      <span>可直接加入今日治疗；如与今日预约项目存在间隔要求，系统会在底部提示。</span>
+                      <span>刚刚购买的项目已自动选入今日治疗；您仍可取消选择或继续加入其他资产。</span>
                     </div>
                     <div class="asset-count">3 个可用资产</div>
                   </div>
 
                   <section class="asset-list" aria-label="我的资产项目列表">
-                    <article class="solution-row asset-row selected warning">
+                    <article class="solution-row asset-row selected just-purchased">
+                      <div class="solution-main">
+                        <h3>水杨酸治疗</h3>
+                        <p>刚刚购买，已自动加入今日治疗；适合轻度出油、闭口倾向和角质管理。</p>
+                        <div class="asset-order">订单 ID：SOYQ202607130419</div>
+                      </div>
+                      <div class="solution-metrics">
+                        <div class="solution-metric"><span>剩余次数</span><b>1 次</b></div>
+                        <div class="solution-metric"><span>规格</span><b>单次治疗</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                        <div class="solution-metric"><span>流程要求</span><b>无需面诊</b></div>
+                      </div>
+                      <div class="asset-status-panel just-purchased-note">
+                        <span>刚刚购买</span>
+                        <b>已选入今日</b>
+                      </div>
+                      <div class="solution-action" aria-label="已选"></div>
+                    </article>
+
+                    <article class="solution-row asset-row selected just-purchased">
+                      <div class="solution-main">
+                        <h3>博乐达 · 3次套餐</h3>
+                        <p>刚刚购买，已自动加入今日治疗；适合油脂分泌旺盛和反复闭口护理。</p>
+                        <div class="asset-order">订单 ID：SOYQ202607130419</div>
+                      </div>
+                      <div class="solution-metrics">
+                        <div class="solution-metric"><span>剩余次数</span><b>3 次</b></div>
+                        <div class="solution-metric"><span>规格</span><b>疗程套餐</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                        <div class="solution-metric"><span>流程要求</span><b>无需面诊</b></div>
+                      </div>
+                      <div class="asset-status-panel just-purchased-note">
+                        <span>刚刚购买</span>
+                        <b>已选入今日</b>
+                      </div>
+                      <div class="solution-action" aria-label="已选"></div>
+                    </article>
+
+                    <article class="solution-row asset-row">
                       <div class="solution-main">
                         <h3>光子嫩肤年卡 · 第 2 次</h3>
-                        <p>适合肤色暗沉、毛孔粗大、轻度泛红；今日已约水光基础护理时建议确认间隔。</p>
+                        <p>历史可用资产，适合肤色暗沉、毛孔粗大与轻度泛红，本次尚未选择。</p>
                         <div class="asset-order">订单 ID：SOYQ202607090238</div>
                       </div>
                       <div class="solution-metrics">
@@ -2827,44 +3396,6 @@
                         <div class="solution-metric"><span>适用门店</span><b>北京保利店</b></div>
                         <div class="solution-metric"><span>治疗时长</span><b>60分钟左右</b></div>
                         <div class="solution-metric"><span>流程要求</span><b>建议面诊</b></div>
-                      </div>
-                      <div class="asset-status-panel warning-note">
-                        <span>同日提醒</span>
-                        <b>需确认间隔</b>
-                      </div>
-                      <div class="solution-action" aria-label="已选"></div>
-                    </article>
-
-                    <article class="solution-row asset-row selected">
-                      <div class="solution-main">
-                        <h3>舒敏修护护理</h3>
-                        <p>适合清洁后泛红、干痒、屏障不稳定；可作为今日舒缓护理安排。</p>
-                        <div class="asset-order">订单 ID：SOYQ202606180746</div>
-                      </div>
-                      <div class="solution-metrics">
-                        <div class="solution-metric"><span>剩余次数</span><b>2 次</b></div>
-                        <div class="solution-metric"><span>规格</span><b>单次护理</b></div>
-                        <div class="solution-metric"><span>治疗时长</span><b>40分钟左右</b></div>
-                        <div class="solution-metric"><span>流程要求</span><b>无需面诊</b></div>
-                      </div>
-                      <div class="asset-status-panel">
-                        <span>今日安排</span>
-                        <b>可直接加入</b>
-                      </div>
-                      <div class="solution-action" aria-label="已选"></div>
-                    </article>
-
-                    <article class="solution-row asset-row">
-                      <div class="solution-main">
-                        <h3>水光基础护理</h3>
-                        <p>治疗类项目，需完成知情同意与术前确认；如当天已有光电项目，建议咨询后再安排。</p>
-                        <div class="asset-order">订单 ID：SOYQ202605261104</div>
-                      </div>
-                      <div class="solution-metrics">
-                        <div class="solution-metric"><span>剩余次数</span><b>1 次</b></div>
-                        <div class="solution-metric"><span>规格</span><b>基础版</b></div>
-                        <div class="solution-metric"><span>治疗时长</span><b>75分钟左右</b></div>
-                        <div class="solution-metric"><span>流程要求</span><b>需签署</b></div>
                       </div>
                       <div class="asset-status-panel">
                         <span>今日安排</span>
@@ -2876,12 +3407,11 @@
                 </section>
 
                 <footer class="bottom-bar">
-                  <div class="warning-strip">不建议同日治疗：已选光子嫩肤年卡与今日已约水光基础护理存在间隔要求，建议咨询后确认是否调整。</div>
                   <div class="bottom-with-summary">
                     <div class="bottom-summary">
                       <div>
                         <b>已选 2 个资产项目</b>
-                        <span>预计耗时 100 分钟 · 实际治疗时间以院内实际情况为准</span>
+                        <span>预计耗时 30 分钟 · 实际治疗时间以院内实际情况为准</span>
                       </div>
                     </div>
                     <div class="primary">添加至今日治疗</div>
@@ -3133,9 +3663,9 @@
           <ul>
             <li>源画布为 `900 x 1440`，浏览器缩略展示统一为 `559 x 872` 外框。</li>
             <li>新客建档后进入项目菜单；老客识别后直接进入治疗项目确认页。</li>
-            <li>项目菜单完成选择或支付后流向治疗项目确认页，确认后进入流程确认页。</li>
+            <li>项目菜单完成购买后先回到我的资产，新购项目默认选入今日治疗，再流向治疗项目确认页。</li>
             <li>这些页面都是扫码后的业务页，因此每个 Pad 画布顶部都有“登出”。</li>
-            <li>支付页本身不在本草案展开，只表达支付后返回资产或继续购买。</li>
+            <li>支付确认使用覆盖项目菜单的半弹窗；扫码、成功和未完成使用完整任务页。</li>
           </ul>
         </div>
 
@@ -3143,6 +3673,7 @@
           <b>Pad 布局调整</b>
           <ul>
             <li>项目菜单改为顶栏轻切换、左侧分类 / 筛选、右侧项目 / 资产列表；已选摘要下沉到底部操作区。</li>
+            <li>支付二维码有效期为 60 秒；成功后进入我的资产，未完成状态 3 秒后返回项目菜单。</li>
             <li>治疗项目确认页使用通栏项目卡片；AI羊点评放在内容末尾、固定按钮上方，以可变长度的自然段归纳预计时间、改善点和术前注意，不使用等宽指标表格。</li>
             <li>流程确认页平铺展示附加服务，重点标明每项预计额外耗时。</li>
             <li>底部主操作区固定，避免客户找不到下一步。</li>
