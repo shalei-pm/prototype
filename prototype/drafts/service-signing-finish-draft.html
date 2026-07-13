@@ -898,9 +898,10 @@
       position: absolute;
       left: 13px;
       top: 50%;
-      width: 15px;
-      height: 19px;
+      width: 16px;
+      height: 16px;
       border: 1px solid #7f8791;
+      border-radius: 50%;
       transform: translateY(-50%);
       background: #fff;
     }
@@ -915,6 +916,7 @@
       display: grid;
       place-items: center;
       border-color: #111;
+      border-radius: 50%;
       background: #111;
       color: var(--green);
       font-size: 11px;
@@ -928,6 +930,7 @@
     }
 
     .file-tab span {
+      display: block;
       margin-top: 6px;
       color: var(--muted);
       font-size: 12px;
@@ -977,8 +980,8 @@
       display: inline-flex;
       align-items: center;
       padding: 0 10px;
-      background: rgba(156,255,0,.32);
-      color: #315900;
+      background: #fff3c4;
+      color: #6a5100;
       font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
@@ -1223,6 +1226,10 @@
       background: var(--soft);
     }
 
+    .simple-sign-page {
+      position: relative;
+    }
+
     .simple-sign-panel {
       height: 100%;
       min-height: 0;
@@ -1268,6 +1275,12 @@
       font-weight: 700;
     }
 
+    .sign-state-blank .clear-sign {
+      border-color: #e1e4e8;
+      background: #f2f4f6;
+      color: #a0a6ae;
+    }
+
     .simple-sign-canvas {
       position: relative;
       min-height: 0;
@@ -1286,6 +1299,10 @@
       transform: translate(-50%, -50%);
     }
 
+    .sign-state-blank .signature-stroke {
+      display: none;
+    }
+
     .simple-sign-hint {
       position: absolute;
       left: 0;
@@ -1295,6 +1312,72 @@
       font-size: 14px;
       text-align: center;
       font-weight: 600;
+    }
+
+    .submit-sign.disabled-state,
+    .sign-state-blank .submit-sign {
+      border-color: #d8dce1;
+      background: #eef0f2;
+      color: #9aa0a8;
+    }
+
+    .terminate-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      place-items: center;
+      padding: 40px;
+      background: rgba(17,17,17,.42);
+    }
+
+    .sign-state-terminate .terminate-layer {
+      display: grid;
+    }
+
+    .terminate-dialog {
+      width: min(560px, 100%);
+      padding: 30px;
+      border: 1px solid #111;
+      border-radius: 0;
+      background: #fff;
+      box-shadow: 0 30px 80px rgba(17,17,17,.24);
+    }
+
+    .terminate-dialog .dialog-eyebrow {
+      display: block;
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .terminate-dialog h2 {
+      margin: 10px 0 0;
+      color: #111;
+      font-size: 24px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .terminate-dialog p {
+      margin: 14px 0 0;
+      color: #5f6874;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .terminate-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .danger-confirm {
+      border-color: #111;
+      background: #111;
+      color: #fff;
     }
 
     .completion-page {
@@ -1696,6 +1779,10 @@
     if (prototypeParams.get("embed") === "1") {
       document.body.classList.add("embed");
     }
+    const signState = prototypeParams.get("signState");
+    if (["blank", "signed", "terminate"].includes(signState)) {
+      document.body.classList.add(`sign-state-${signState}`);
+    }
     document.addEventListener("DOMContentLoaded", () => {
       const unit = Number(prototypeParams.get("unit"));
       if (!Number.isNaN(unit)) {
@@ -1871,14 +1958,15 @@
                     <nav class="document-files" aria-label="待签署文书列表">
                       <div class="file-summary">
                         <b>待签署 2 份</b>
-                        <span>已阅读 1 份 · 当前第 2 份</span>
+                        <span>已阅读 2 份 · 当前第 2 份</span>
                       </div>
                       <div class="file-tab done">
                         <b>就诊告知书</b>
                         <span>已阅读</span>
                       </div>
-                      <div class="file-tab active">
+                      <div class="file-tab active done">
                         <b>光电治疗知情同意书</b>
+                        <span>已阅读</span>
                         <span class="special-requirement">需抄写指定文案</span>
                       </div>
                     </nav>
@@ -1927,15 +2015,15 @@
         </div>
 
         <div>
-          <p class="variant-label">状态 C：第三方签字面板</p>
+          <p class="variant-label">状态 C：第三方签字面板状态变体</p>
           <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：用户签署">
             <div class="pad-screen">
               <article class="kiosk-page sign-page simple-sign-page">
                 <header class="service-topbar">
                   <div class="service-back">‹</div>
                   <div class="service-title">
-                    <h1>用户签署</h1>
-                    <p>请在签字面板内完成签名</p>
+                    <h1>治疗文书签署</h1>
+                    <p>光电治疗知情同意书 · 第1份 / 共2份</p>
                   </div>
                   <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
                 </header>
@@ -1944,13 +2032,13 @@
                   <div class="simple-sign-panel">
                     <div class="simple-sign-head">
                       <div>
-                        <h2>请在下方签名</h2>
-                        <span>请使用本人手写签名</span>
+                        <h2>光电治疗知情同意书</h2>
+                        <span>第1份 / 共2份 · 请使用本人手写签名</span>
                       </div>
                       <div class="clear-sign">清除重签</div>
                     </div>
                     <div class="simple-sign-canvas">
-                      <svg viewBox="0 0 360 100" aria-hidden="true">
+                      <svg class="signature-stroke" viewBox="0 0 360 100" aria-hidden="true">
                         <path d="M12 58 C55 14, 78 18, 61 62 C52 90, 103 68, 126 32 C106 85, 170 82, 196 44 C179 82, 237 78, 267 34 C252 78, 302 78, 348 48" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
                       <div class="simple-sign-hint">请使用手指在签字区域内签名</div>
@@ -1960,8 +2048,20 @@
 
                 <footer class="page-actions">
                   <div class="btn danger-link">终止签署返回</div>
-                  <div class="btn primary">提交签署</div>
+                  <div class="btn primary submit-sign">提交签署</div>
                 </footer>
+
+                <div class="terminate-layer" aria-label="终止签署确认">
+                  <div class="terminate-dialog">
+                    <span class="dialog-eyebrow">终止签署</span>
+                    <h2>确认终止本次文书签署？</h2>
+                    <p>已完成的签署记录将保留，尚未签署的文书需要稍后继续完成。您可以返回继续签署，或确认终止本次流程。</p>
+                    <div class="terminate-actions">
+                      <div class="btn secondary">继续签署</div>
+                      <div class="btn danger-confirm">确认终止</div>
+                    </div>
+                  </div>
+                </div>
               </article>
             </div>
           </div>
@@ -2037,7 +2137,7 @@
             <li>面诊人员页使用紧凑单列横向卡片，一屏完整展示 6 位医生；原型头像采用统一灰阶示意，中部承载资质与擅长方向，右侧突出等待信息。</li>
             <li>文书阅读页左侧只区分不同文件，右侧专注当前文书；底部提供合并签署和逐份签署。</li>
             <li>按钮、登出、人员卡和签署操作维持 44-56px 稳定热区，相邻操作至少 8px 间距。</li>
-            <li>签名页只保留签字面板和提交操作，结束页集中突出完成状态与面诊室指引。</li>
+            <li>签名页展示当前文书名称与份数进度，并支持空白禁用、已签可提交和终止确认状态；结束页集中突出完成状态与面诊室指引。</li>
             <li>系统推荐卡从黑色展示块改为浅绿提示条，减少视觉停留，让用户更快进入人员对比。</li>
           </ul>
         </div>

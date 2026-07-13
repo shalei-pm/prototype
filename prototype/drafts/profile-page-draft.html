@@ -265,6 +265,10 @@
       box-shadow: 0 1px 0 rgba(17,17,17,.04);
     }
 
+    .extra-pane.expanded {
+      box-shadow: inset 0 3px 0 var(--green), 0 1px 0 rgba(17,17,17,.04);
+    }
+
     .pane-head {
       min-height: 48px;
       display: flex;
@@ -614,6 +618,12 @@
       display: block;
     }
 
+    .footer-actions.two {
+      display: grid;
+      grid-template-columns: .72fr 1.28fr;
+      gap: 12px;
+    }
+
     .btn {
       min-height: 56px;
       border-radius: 0;
@@ -774,7 +784,7 @@
     <section class="stage">
       <div class="pad-stack">
         <div>
-          <p class="variant-label">状态 A：手机号已获取，更多信息可跳过</p>
+          <p class="variant-label">状态 A：核心信息已确认，选填信息自动展开</p>
           <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：手机号已获取">
             <div class="pad-screen">
               <article class="profile-page">
@@ -794,9 +804,10 @@
                   <section class="pane" aria-label="基础必填信息">
                     <div class="pane-head">
                       <div>
-                        <h2>请填写个人信息</h2>
-                        <p>用于身份核验、建档和服务联系。</p>
+                        <h2>核心信息</h2>
+                        <p>用于身份核验、建档和服务联系，确认后再填写选填信息。</p>
                       </div>
+                      <span class="status-tag ok">已确认</span>
                     </div>
                     <div class="field-list">
                       <div class="field-row">
@@ -818,13 +829,13 @@
                     </div>
                   </section>
 
-                  <section class="pane" aria-label="更多信息领券">
+                  <section class="pane extra-pane expanded" aria-label="更多信息领券">
                     <div class="pane-head">
                       <div>
                         <h2>完善更多信息</h2>
-                        <p>可获得 <span class="coupon-highlight">50元无门槛代金券</span></p>
+                        <p>核心信息已确认，以下内容为选填；完整填写可获得 <span class="coupon-highlight">50元无门槛代金券</span></p>
                       </div>
-                      <span class="status-tag">可跳过</span>
+                      <span class="status-tag">选填</span>
                     </div>
                     <div>
                       <div class="coupon-strip">
@@ -859,8 +870,9 @@
                     <span class="checkbox">✓</span>
                     <span>我已阅读并同意 <b>个人信息处理规则</b>，授权新氧青春用于建档、身份核验及本次到店服务。</span>
                   </div>
-                  <div class="footer-actions">
-                    <div class="btn primary">提交</div>
+                  <div class="footer-actions two">
+                    <div class="btn secondary">暂不填写</div>
+                    <div class="btn primary">完成填写并领取代金券</div>
                   </div>
                 </footer>
               </article>

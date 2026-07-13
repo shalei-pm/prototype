@@ -196,7 +196,7 @@
     }
 
     .unit-no {
-      min-width: 30px;
+      min-width: 34px;
       height: 22px;
       display: inline-flex;
       align-items: center;
@@ -250,10 +250,12 @@
         <a href="#project-assets">05 项目菜单-我的资产</a>
         <a href="#confirm-has-project">06 治疗项目确认页</a>
         <a href="#confirm-empty">07 治疗项目确认 · 无项目</a>
-        <a href="#flow-confirm">08 治疗流程确认页</a>
-        <a href="#service-staff">09 服务人员-面诊医生确认页</a>
+        <a href="#service-staff">08 服务人员-面诊医生确认页</a>
+        <a href="#flow-confirm">09 治疗流程确认页</a>
         <a href="#sign-read">10 治疗文书签署-文书列表</a>
-        <a href="#sign-submit">11 治疗文书-用户签署</a>
+        <a href="#sign-submit-blank">11A 治疗文书-用户签署 · 空白</a>
+        <a href="#sign-submit-signed">11B 治疗文书-用户签署 · 已签名</a>
+        <a href="#sign-submit-terminate">11C 治疗文书-用户签署 · 终止确认</a>
         <a href="#finish-page">12 签到分诊完成页</a>
       </nav>
     </aside>
@@ -289,14 +291,14 @@
         <article id="profile-auto-phone" class="prototype-unit">
           <h2 class="unit-title"><span class="unit-no">03</span>建档页</h2>
           <div class="frame-wrap">
-            <iframe title="建档页" src="drafts/profile-page-draft.html?embed=1&unit=0&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="建档页" src="drafts/profile-page-draft.html?embed=1&unit=0&v=progressive-profile-20260713" scrolling="no"></iframe>
           </div>
         </article>
 
         <article id="project-new" class="prototype-unit">
           <h2 class="unit-title"><span class="unit-no">04</span>项目菜单-新购项目</h2>
           <div class="frame-wrap">
-            <iframe title="项目菜单-新购项目" src="drafts/project-confirm-flow-draft.html?embed=1&unit=0&v=square-cta-20260710" scrolling="no"></iframe>
+            <iframe title="项目菜单-新购项目" src="drafts/project-confirm-flow-draft.html?embed=1&unit=0&v=severity-content-20260713" scrolling="no"></iframe>
           </div>
         </article>
 
@@ -310,7 +312,7 @@
         <article id="confirm-has-project" class="prototype-unit">
           <h2 class="unit-title"><span class="unit-no">06</span>治疗项目确认页</h2>
           <div class="frame-wrap">
-            <iframe title="治疗项目确认页" src="drafts/project-confirm-flow-draft.html?embed=1&unit=2&v=square-cta-20260710" scrolling="no"></iframe>
+            <iframe title="治疗项目确认页" src="drafts/project-confirm-flow-draft.html?embed=1&unit=2&v=ai-editorial-summary-20260713" scrolling="no"></iframe>
           </div>
         </article>
 
@@ -321,31 +323,45 @@
           </div>
         </article>
 
-        <article id="flow-confirm" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">08</span>治疗流程确认页</h2>
+        <article id="service-staff" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">08</span>服务人员-面诊医生确认页</h2>
           <div class="frame-wrap">
-            <iframe title="治疗流程确认页" src="drafts/project-confirm-flow-draft.html?embed=1&unit=4&v=flow-time-summary-20260710" scrolling="no"></iframe>
+            <iframe title="服务人员-面诊医生确认页" src="drafts/service-signing-finish-draft.html?embed=1&unit=0&v=doctor-compact-20260710" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="service-staff" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">09</span>服务人员-面诊医生确认页</h2>
+        <article id="flow-confirm" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">09</span>治疗流程确认页</h2>
           <div class="frame-wrap">
-            <iframe title="服务人员-面诊医生确认页" src="drafts/service-signing-finish-draft.html?embed=1&unit=0&v=doctor-compact-20260710" scrolling="no"></iframe>
+            <iframe title="治疗流程确认页" src="drafts/project-confirm-flow-draft.html?embed=1&unit=4&v=flow-time-summary-20260710" scrolling="no"></iframe>
           </div>
         </article>
 
         <article id="sign-read" class="prototype-unit">
           <h2 class="unit-title"><span class="unit-no">10</span>治疗文书签署-文书列表</h2>
           <div class="frame-wrap">
-            <iframe title="治疗文书签署-文书列表" src="drafts/service-signing-finish-draft.html?embed=1&unit=1&v=document-two-files-20260710" scrolling="no"></iframe>
+            <iframe title="治疗文书签署-文书列表" src="drafts/service-signing-finish-draft.html?embed=1&unit=1&v=document-read-status-20260713" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="sign-submit" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">11</span>治疗文书-用户签署</h2>
+        <article id="sign-submit-blank" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">11A</span>治疗文书-用户签署 · 空白签名</h2>
           <div class="frame-wrap">
-            <iframe title="治疗文书-用户签署" src="drafts/service-signing-finish-draft.html?embed=1&unit=2&v=simple-sign-20260710" scrolling="no"></iframe>
+            <iframe title="治疗文书-用户签署空白状态" src="drafts/service-signing-finish-draft.html?embed=1&unit=2&signState=blank&v=sign-states-20260713" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="sign-submit-signed" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">11B</span>治疗文书-用户签署 · 已签名</h2>
+          <div class="frame-wrap">
+            <iframe title="治疗文书-用户签署已签名状态" src="drafts/service-signing-finish-draft.html?embed=1&unit=2&signState=signed&v=sign-states-20260713" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="sign-submit-terminate" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">11C</span>治疗文书-用户签署 · 终止确认</h2>
+          <div class="frame-wrap">
+            <iframe title="治疗文书-用户签署终止确认状态" src="drafts/service-signing-finish-draft.html?embed=1&unit=2&signState=terminate&v=sign-states-20260713" scrolling="no"></iframe>
           </div>
         </article>
 
