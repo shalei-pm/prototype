@@ -2042,6 +2042,80 @@
       color: #111;
     }
 
+    .flow-summary-strip {
+      min-height: 92px;
+      align-items: stretch;
+      background: #f7f7f8;
+    }
+
+    .flow-summary-heading {
+      display: grid;
+      align-content: center;
+      min-width: 210px;
+    }
+
+    .flow-summary-time {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-left: auto;
+    }
+
+    .flow-time-formula {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-right: 24px;
+      border-right: 1px solid #d7dbe0;
+      white-space: nowrap;
+    }
+
+    .flow-summary-strip .flow-time-formula span {
+      display: inline;
+      margin: 0;
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .flow-summary-strip .flow-time-formula b {
+      display: inline;
+      color: #111;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .flow-time-formula i {
+      color: #9ca3af;
+      font-size: 17px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .flow-time-total {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding-left: 24px;
+      white-space: nowrap;
+    }
+
+    .flow-summary-strip .flow-time-total span {
+      display: inline;
+      margin: 0;
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .flow-time-total strong {
+      color: #111;
+      font-size: 27px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
     .confirm-grid {
       height: 100%;
       display: grid;
@@ -2309,28 +2383,20 @@
     }
 
     .setting-row {
-      min-height: 112px;
+      min-height: 154px;
       display: grid;
-      grid-template-columns: 34px 1fr 156px;
+      grid-template-columns: minmax(0, 1fr) 156px;
       align-items: center;
-      gap: 18px;
-      padding: 20px 18px;
+      gap: 28px;
+      padding: 22px 18px;
       border: 0;
       border-bottom: 1px solid var(--line);
       border-radius: 0;
       background: #fff;
     }
 
-    .setting-check {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      background: var(--green);
-      color: #111;
-      font-size: 17px;
-      line-height: 1;
-      font-weight: 800;
+    .setting-copy {
+      min-width: 0;
     }
 
     .setting-row h3 {
@@ -2339,6 +2405,50 @@
       font-size: 18px;
       line-height: 1.16;
       font-weight: 700;
+    }
+
+    .setting-help {
+      max-width: 590px;
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 400;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .flow-choice {
+      min-width: 108px;
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 16px;
+      border: 1px solid #dfe3e8;
+      border-radius: 0;
+      background: #fff;
+      color: #4b5563;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 600;
+    }
+
+    .flow-choice.active {
+      border-color: #111;
+      background: var(--green);
+      color: #111;
+    }
+
+    .choice-check {
+      font-size: 13px;
+      font-weight: 800;
     }
 
     .time-cost {
@@ -2371,7 +2481,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
     .snack {
@@ -2941,40 +3051,58 @@
                 <header class="topbar">
                   <div class="back">‹</div>
                   <div class="title-wrap">
-                    <h1>流程确认</h1>
-                    <p>确认检测、拍照与门店配置服务</p>
+                    <h1>治疗流程确认</h1>
+                    <p>请确认以下服务安排</p>
                   </div>
                   <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
                 </header>
-                <section class="context-strip">
-                  <div>
+                <section class="context-strip flow-summary-strip">
+                  <div class="flow-summary-heading">
                     <b>已选择 3 项附加服务</b>
-                    <span>本次治疗项目预计 100 分钟</span>
+                    <span>根据当前选择实时计算</span>
                   </div>
-                  <div class="status-pill">附加流程约 +15 分钟</div>
+                  <div class="flow-summary-time">
+                    <div class="flow-time-formula">
+                      <span>基础治疗 <b>100 分钟</b></span>
+                      <i>+</i>
+                      <span>附加服务 <b>15 分钟</b></span>
+                    </div>
+                    <div class="flow-time-total">
+                      <span>本次预计共</span>
+                      <strong>115 分钟</strong>
+                    </div>
+                  </div>
                 </section>
 
                 <section class="task-content">
                   <div class="flow-grid">
                     <section class="flow-main">
                       <div class="setting-row">
-                        <div class="setting-check">✓</div>
-                        <div>
-                          <h3>皮肤检测</h3>
+                        <div class="setting-copy">
+                          <h3>您是否要进行皮肤检测？</h3>
+                          <p class="setting-help">通过专业设备了解肤色、毛孔、敏感度等皮肤状态，帮助医生在面诊时更准确地判断本次治疗方案。</p>
+                          <div class="choice-row">
+                            <div class="flow-choice active"><span class="choice-check">✓</span>需要</div>
+                            <div class="flow-choice">暂不需要</div>
+                          </div>
                         </div>
                         <div class="time-cost"><span>预计额外</span><b>+10 分钟</b></div>
                       </div>
                       <div class="setting-row">
-                        <div class="setting-check">✓</div>
-                        <div>
-                          <h3>术前术后对比照</h3>
+                        <div class="setting-copy">
+                          <h3>您是否要拍摄术前术后对比照？</h3>
+                          <p class="setting-help">记录本次治疗前的皮肤状态，便于后续复诊时对照观察变化。照片仅用于您的治疗档案。</p>
+                          <div class="choice-row">
+                            <div class="flow-choice active"><span class="choice-check">✓</span>需要</div>
+                            <div class="flow-choice">暂不需要</div>
+                          </div>
                         </div>
                         <div class="time-cost"><span>预计额外</span><b>+5 分钟</b></div>
                       </div>
                       <div class="setting-row">
-                        <div class="setting-check">✓</div>
-                        <div>
-                          <h3>饮品零食</h3>
+                        <div class="setting-copy">
+                          <h3>等待期间，您是否需要饮品或小食？</h3>
+                          <p class="setting-help">门店可提前为您准备，您可以选择多项；如有过敏或饮食禁忌，请现场告知工作人员。</p>
                           <div class="snack-grid">
                             <div class="snack active">温水</div>
                             <div class="snack">无糖茶</div>

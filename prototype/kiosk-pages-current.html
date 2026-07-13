@@ -255,6 +255,12 @@
       background: #fff;
     }
 
+    .return-zone {
+      padding: 34px 56px 34px;
+      grid-template-rows: auto 1fr auto;
+      gap: 20px;
+    }
+
     .welcome {
       display: flex;
       align-items: flex-start;
@@ -306,22 +312,7 @@
       white-space: nowrap;
     }
 
-    .appointment-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 56px;
-      padding: 0 24px;
-      border-radius: 0;
-      background: #fff;
-      color: #397400;
-      border: 1px solid rgba(101,181,0,.38);
-      font-size: 17px;
-      font-weight: 600;
-    }
-
-    .qr-grid,
-    .return-actions {
+    .qr-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0;
@@ -330,8 +321,7 @@
       border-top: 1px solid var(--line);
     }
 
-    .qr-card,
-    .return-action {
+    .qr-card {
       display: grid;
       justify-items: center;
       text-align: center;
@@ -344,8 +334,7 @@
       padding: 48px 44px 12px;
     }
 
-    .qr-card + .qr-card,
-    .return-action + .return-action {
+    .qr-card + .qr-card {
       border-left: 1px solid var(--line);
     }
 
@@ -381,38 +370,104 @@
       font-weight: 400;
     }
 
-    .return-action {
-      align-content: center;
-      gap: 24px;
-      padding: 48px 36px;
-      color: #111;
+    .service-status-strip {
+      display: grid;
+      grid-template-rows: 1.18fr 1fr 1fr;
+      min-height: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: #fff;
     }
 
-    .action-icon {
-      width: 116px;
-      height: 116px;
+    .service-status-item {
+      min-width: 0;
       display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .service-status-item + .service-status-item {
+      border-top: 1px solid var(--line);
+    }
+
+    .service-status-index {
+      color: #9aa1aa;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .service-status-copy {
+      min-width: 0;
+    }
+
+    .service-status-copy b {
+      display: block;
+      color: #111;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .service-status-copy p {
+      margin: 9px 0 0;
+      color: #6b7280;
+      font-size: 15px;
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    .service-status-state {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #777f89;
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .service-status-item.done .service-status-state::before {
+      content: "✓";
+      width: 23px;
+      height: 23px;
+      display: inline-grid;
       place-items: center;
-      border-radius: 999px;
+      background: var(--green);
+      color: #111;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .return-bottom-bar {
+      display: grid;
+      grid-template-columns: .72fr 1.28fr;
+      gap: 12px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .return-btn {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #111;
+      border-radius: 0;
+      background: #fff;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .return-btn.primary {
       background: #111;
       color: var(--green);
-      font-size: 42px;
-      font-weight: 700;
-    }
-
-    .return-action h3 {
-      margin: 0;
-      font-size: 30px;
-      line-height: 1.1;
-      font-weight: 700;
-    }
-
-    .return-action p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 20px;
-      line-height: 1.4;
-      font-weight: 400;
     }
 
     .spec-panel {
@@ -660,31 +715,48 @@
                   </div>
                 </section>
 
-                <section class="checkin-zone" aria-label="已签到返回首页操作区">
+                <section class="checkin-zone return-zone" aria-label="已签到返回首页操作区">
                   <div class="welcome">
                     <div>
                       <h1>欢迎 沙大爷</h1>
-                      <p>请选择您接下来需要查看或安排的服务</p>
+                      <p>本次到店服务信息</p>
                     </div>
                     <div class="welcome-side">
                       <span class="status-text">已签到</span>
-                      <span class="appointment-btn">查看已约项目</span>
                     </div>
                   </div>
 
-                  <div class="return-actions">
-                    <div class="return-action">
-                      <div class="action-icon">品</div>
-                      <h3>品相菜单</h3>
-                      <p>查看项目与门店热推服务</p>
+                  <div class="service-status-strip" aria-label="本次到店服务确认状态">
+                    <div class="service-status-item done">
+                      <span class="service-status-index">01</span>
+                      <div class="service-status-copy">
+                        <b>今日项目</b>
+                        <p>光子嫩肤年卡 · 第2次<br />舒敏修护护理</p>
+                      </div>
+                      <span class="service-status-state">已确认</span>
                     </div>
-
-                    <div class="return-action">
-                      <div class="action-icon">医</div>
-                      <h3>医生团队</h3>
-                      <p>查看在店医生与咨询团队</p>
+                    <div class="service-status-item pending">
+                      <span class="service-status-index">02</span>
+                      <div class="service-status-copy">
+                        <b>服务人员</b>
+                        <p>尚未选择本次面诊医生</p>
+                      </div>
+                      <span class="service-status-state">待确认</span>
+                    </div>
+                    <div class="service-status-item pending">
+                      <span class="service-status-index">03</span>
+                      <div class="service-status-copy">
+                        <b>流程定制</b>
+                        <p>皮肤检测、拍照及到店服务安排</p>
+                      </div>
+                      <span class="service-status-state">待确认</span>
                     </div>
                   </div>
+
+                  <footer class="return-bottom-bar">
+                    <div class="return-btn">退出登录</div>
+                    <div class="return-btn primary">继续确认服务信息</div>
+                  </footer>
                 </section>
               </article>
             </div>
@@ -698,7 +770,7 @@
 
         <div class="spec-section">
           <b>页面目标</b>
-          <p>让客户在前台无需前台代操作，快速识别门店和品牌，并选择小程序或 App 扫码签到；客户签到成功后回到首页时，转为服务入口态。</p>
+          <p>让客户在前台无需前台代操作，快速识别门店和品牌，并选择小程序或 App 扫码签到；客户在签到流程中途返回首页时，清晰看到三项核心服务信息的确认状态并继续办理。</p>
         </div>
 
         <div class="spec-section">
@@ -716,7 +788,7 @@
           <b>页面状态</b>
           <ul>
             <li>未签到扫码态：欢迎来到门店，下方左侧小程序码，右侧 App 二维码。</li>
-            <li>已签到返回态：欢迎 xxx女士，右上角弱提示“已签到”，右侧提供轻量“查看已约项目”按钮；下方左侧为品相菜单，右侧为医生团队。</li>
+            <li>已签到返回态：用于客户中途返回首页时恢复签到流程。欢迎语下方纵向展示今日项目、服务人员、流程定制三项确认状态，已确认项直接列出结果；页面不再提供旁路浏览入口，底部只保留“退出登录 / 继续确认服务信息”两个主流程按钮。</li>
           </ul>
         </div>
 
