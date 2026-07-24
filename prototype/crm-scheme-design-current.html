@@ -1,0 +1,1595 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CRM 方案设计交互原型</title>
+  <style>
+    :root {
+      --green: #08b88a;
+      --green-dark: #079b75;
+      --green-soft: #e9f8f3;
+      --ink: #24313f;
+      --muted: #7b8796;
+      --line: #dfe5e8;
+      --panel: #ffffff;
+      --soft: #f5f7f8;
+      --canvas: #eceff1;
+      --danger: #f45d5d;
+      --warning: #f39b37;
+      --blue: #1478eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { width: 100%; height: 100%; }
+
+    body {
+      margin: 0;
+      min-width: 1240px;
+      overflow: hidden;
+      color: var(--ink);
+      background: #2a2e33;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    button, input { font: inherit; letter-spacing: 0; }
+
+    button { cursor: pointer; }
+
+    .review-bar {
+      height: 48px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #dbe1e5;
+      background: #202429;
+      border-bottom: 1px solid #3a4046;
+    }
+
+    .review-title {
+      margin-right: 8px;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .review-state {
+      height: 30px;
+      padding: 0 13px;
+      color: #c7d0d6;
+      background: #30353b;
+      border: 1px solid #454c53;
+      border-radius: 4px;
+    }
+
+    .review-state.active {
+      color: #ffffff;
+      background: var(--green-dark);
+      border-color: var(--green);
+    }
+
+    .review-spacer { flex: 1; }
+
+    .review-action {
+      height: 30px;
+      padding: 0 13px;
+      color: #dfe8e5;
+      background: transparent;
+      border: 1px solid #566168;
+      border-radius: 4px;
+    }
+
+    .crm-frame {
+      width: calc(100% - 24px);
+      height: calc(100% - 64px);
+      margin: 12px;
+      display: grid;
+      grid-template-columns: 250px minmax(620px, 1fr) 390px;
+      grid-template-rows: 56px minmax(0, 1fr);
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid #cfd5d8;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .22);
+    }
+
+    .customer-panel {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      min-width: 0;
+      overflow: hidden;
+      background: #f4f8f7;
+      border-right: 1px solid var(--line);
+    }
+
+    .customer-heading {
+      height: 56px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      font-size: 17px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .customer-card { padding: 18px 20px 12px; }
+
+    .identity {
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      background: #788a99;
+      border-radius: 50%;
+      font-size: 18px;
+    }
+
+    .customer-name { font-size: 16px; font-weight: 600; }
+    .customer-meta { margin-top: 4px; color: #536170; font-size: 12px; }
+    .edit-button { color: #5f6d78; background: transparent; border: 0; font-size: 18px; }
+
+    .member-tags { margin: 12px 0 16px 58px; display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .member-tag {
+      padding: 3px 5px;
+      color: var(--green-dark);
+      background: #ffffff;
+      border: 1px solid var(--green);
+      font-size: 11px;
+    }
+
+    .customer-expand {
+      margin: 0 0 14px 58px;
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .customer-section {
+      padding: 12px 20px;
+      border-top: 1px solid #e4e9eb;
+    }
+
+    .customer-section-title {
+      margin-bottom: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .customer-row {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #495866;
+      font-size: 13px;
+    }
+
+    .customer-row span:last-child { color: #7c8997; text-align: right; }
+    .money { color: var(--danger) !important; }
+    .link { color: var(--green-dark) !important; }
+
+    .business-tabs {
+      grid-column: 2 / 4;
+      grid-row: 1;
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .business-tab {
+      min-width: 78px;
+      padding: 0 15px;
+      display: grid;
+      place-items: center;
+      color: #27313a;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      font-size: 13px;
+    }
+
+    .business-tab.active { color: var(--green-dark); border-color: var(--green); font-weight: 600; }
+    .business-close { margin-left: auto; min-width: 56px; font-size: 28px; color: #1f2931; }
+
+    .workspace {
+      grid-column: 2;
+      grid-row: 2;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .summary-panel {
+      grid-column: 3;
+      grid-row: 2;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #ffffff;
+      border-left: 1px solid var(--line);
+    }
+
+    .crm-frame.report-mode .workspace { grid-column: 2 / 4; }
+    .crm-frame.report-mode .summary-panel { display: none; }
+
+    .page-head {
+      min-height: 58px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .page-title { font-size: 17px; font-weight: 600; white-space: nowrap; }
+
+    .flow-steps { display: flex; align-items: center; color: #88939e; font-size: 12px; }
+    .flow-step { display: flex; align-items: center; gap: 6px; }
+    .flow-step::after { content: ">"; margin: 0 9px; color: #bdc5ca; }
+    .flow-step:last-child::after { display: none; }
+    .step-dot { width: 20px; height: 20px; display: grid; place-items: center; border: 1px solid #c8d0d5; }
+    .flow-step.active { color: var(--green-dark); font-weight: 600; }
+    .flow-step.active .step-dot { color: #ffffff; background: var(--green); border-color: var(--green); }
+    .head-spacer { flex: 1; }
+
+    .status-pill {
+      padding: 5px 9px;
+      color: #8a650e;
+      background: #fff7df;
+      border: 1px solid #efd693;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+
+    .status-pill.confirmed { color: #087c5f; background: var(--green-soft); border-color: #a5ddcc; }
+
+    .ghost-button, .secondary-button, .primary-button, .danger-button {
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: 3px;
+      border: 1px solid var(--line);
+    }
+
+    .ghost-button { color: #485663; background: #ffffff; }
+    .secondary-button { color: var(--green-dark); background: #effaf6; border-color: #9adbc8; }
+    .primary-button { color: #ffffff; background: var(--green); border-color: var(--green); }
+    .primary-button:hover { background: var(--green-dark); }
+    .danger-button { color: #c54e4e; background: #fff5f5; border-color: #f1b9b9; }
+
+    .workspace-scroll {
+      min-height: 0;
+      flex: 1;
+      overflow: auto;
+      background: #f7f8f9;
+    }
+
+    .scheme-layout {
+      min-height: 100%;
+      display: grid;
+      grid-template-columns: minmax(270px, .8fr) minmax(420px, 1.35fr);
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .plain-panel {
+      min-width: 0;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+
+    .panel-head {
+      min-height: 47px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 600;
+    }
+
+    .panel-head::before { content: ""; width: 3px; height: 17px; background: var(--green); }
+    .panel-head .panel-action { margin-left: auto; color: var(--green-dark); background: transparent; border: 0; font-size: 12px; }
+
+    .evidence-list { padding: 12px; display: grid; gap: 10px; }
+
+    .evidence-card {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      min-height: 92px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .evidence-image { width: 92px; height: 100%; object-fit: cover; object-position: center; background: #101010; }
+    .evidence-body { min-width: 0; padding: 10px; }
+    .evidence-meta { color: #87929b; font-size: 11px; }
+    .diagnosis-tags { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .diagnosis-tag {
+      padding: 3px 7px;
+      color: #18725c;
+      background: #eef9f5;
+      border: 1px solid #b9e3d7;
+      border-radius: 2px;
+      font-size: 11px;
+    }
+
+    .empty-evidence {
+      min-height: 82px;
+      width: 100%;
+      display: grid;
+      place-items: center;
+      color: #8b959d;
+      border: 1px dashed #ccd4d8;
+      background: #fafbfb;
+    }
+
+    .diagnosis-menu-entry {
+      min-height: 58px;
+      width: 100%;
+      color: var(--green-dark);
+      background: #f3fbf8;
+      border: 1px solid #a9ddce;
+      font-weight: 600;
+    }
+
+    .manual-diagnosis-card {
+      padding: 11px;
+      border: 1px solid #cfe1da;
+      background: #f8fcfa;
+    }
+
+    .manual-diagnosis-title { color: #56636d; font-size: 12px; font-weight: 600; }
+
+    .design-content { padding: 14px; }
+
+    .field-block + .field-block { margin-top: 18px; padding-top: 18px; border-top: 1px solid #edf0f1; }
+    .field-title { margin-bottom: 9px; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+    .field-hint { color: #8b959e; font-size: 12px; font-weight: 400; }
+
+    .tag-choices { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .choice-tag {
+      min-height: 31px;
+      padding: 0 12px;
+      color: #45525f;
+      background: #ffffff;
+      border: 1px solid #ccd4d9;
+      border-radius: 2px;
+    }
+
+    .choice-tag.selected { color: #087b5e; background: var(--green-soft); border-color: var(--green); }
+
+    .severity-control {
+      width: min(100%, 420px);
+      display: grid;
+      grid-template-columns: repeat(var(--severity-count, 2), 1fr);
+      border: 1px solid #ccd4d9;
+    }
+
+    .severity-button {
+      height: 38px;
+      color: #54616d;
+      background: #ffffff;
+      border: 0;
+      border-right: 1px solid #ccd4d9;
+    }
+
+    .severity-button:last-child { border-right: 0; }
+    .severity-button.selected { color: #ffffff; background: var(--green); }
+
+    .scheme-cards { display: grid; gap: 9px; }
+
+    .diagnosis-scheme-group + .diagnosis-scheme-group {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid #e6ebed;
+    }
+
+    .diagnosis-scheme-head {
+      margin-bottom: 8px;
+      padding-left: 9px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-left: 3px solid var(--green);
+    }
+
+    .diagnosis-scheme-name { font-size: 14px; font-weight: 600; }
+    .diagnosis-scheme-meta { color: #8b959e; font-size: 11px; }
+
+    .diagnosis-severity {
+      margin: 10px 0 12px;
+      padding: 10px 12px;
+      display: grid;
+      grid-template-columns: auto minmax(220px, 330px);
+      align-items: center;
+      gap: 12px;
+      background: #f7f9f9;
+      border: 1px solid #e4e9eb;
+    }
+
+    .diagnosis-severity-label {
+      flex: 0 0 auto;
+      color: #53606c;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .diagnosis-severity .severity-control {
+      width: 100%;
+      background: #ffffff;
+    }
+
+    .diagnosis-severity .severity-button { height: 32px; }
+
+    .severity-criteria {
+      grid-column: 1 / -1;
+      color: #6b7782;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .severity-criteria strong { color: #46535e; }
+
+    .scheme-card {
+      min-height: 164px;
+      padding: 13px;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) 128px;
+      gap: 10px;
+      align-items: start;
+      border: 1px solid #d9e0e3;
+      background: #ffffff;
+    }
+
+    .scheme-card.selected { border-color: var(--green); box-shadow: inset 3px 0 0 var(--green); }
+    .scheme-check { width: 17px; height: 17px; accent-color: var(--green); }
+    .scheme-name { font-size: 15px; font-weight: 600; }
+    .scheme-desc { margin: 6px 0 8px; color: #6d7985; font-size: 12px; line-height: 1.6; }
+    .scheme-facts { margin-top: 9px; display: flex; flex-wrap: wrap; gap: 6px; color: #697683; font-size: 11px; }
+    .scheme-fact { padding: 3px 6px; background: #f2f4f5; border: 1px solid #e2e7e9; }
+    .scheme-course { margin-top: 9px; padding: 7px 9px; color: #3e5e54; background: #f0f8f5; border-left: 3px solid var(--green); font-size: 11px; line-height: 1.55; }
+    .scheme-course strong { margin-right: 5px; color: #087b5e; }
+    .scheme-side { text-align: right; }
+    .scheme-price { color: var(--danger); font-size: 13px; white-space: nowrap; }
+    .scheme-price strong { font-size: 19px; }
+    .scheme-outcome { margin-top: 18px; color: #7b8790; font-size: 11px; line-height: 1.5; }
+    .scheme-outcome strong { display: block; color: #4c5964; font-weight: 600; }
+
+    .summary-head {
+      min-height: 58px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      border-bottom: 1px solid var(--line);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .summary-head::before { content: ""; width: 3px; height: 18px; background: var(--green); }
+    .summary-count { color: #8b959e; font-size: 12px; font-weight: 400; }
+    .summary-body { min-height: 0; flex: 1; overflow: auto; }
+
+    .search-box { padding: 12px 14px; border-bottom: 1px solid var(--line); background: #fafbfb; }
+    .search-row { display: grid; grid-template-columns: 1fr auto; gap: 7px; }
+    .search-input { min-width: 0; height: 34px; padding: 0 10px; border: 1px solid #cdd5da; outline: none; }
+    .search-input:focus { border-color: var(--green); }
+    .search-result { margin-top: 7px; padding: 8px 9px; display: flex; align-items: center; gap: 8px; border: 1px solid #e0e5e7; background: #ffffff; }
+    .search-result span:first-child { flex: 1; font-size: 12px; }
+    .mini-add { width: 26px; height: 26px; color: #ffffff; background: var(--green); border: 0; border-radius: 50%; font-size: 18px; }
+
+    .summary-card { padding: 14px; border-bottom: 1px solid #e6eaec; }
+    .summary-card-row { display: grid; grid-template-columns: 20px 1fr auto; gap: 8px; align-items: start; }
+    .summary-checkbox { width: 16px; height: 16px; accent-color: var(--green); }
+    .summary-name { font-size: 14px; font-weight: 600; line-height: 1.4; }
+    .summary-meta { margin-top: 5px; color: #89939b; font-size: 11px; }
+    .summary-remove { color: #8e98a0; background: transparent; border: 0; font-size: 12px; }
+    .summary-price { margin-top: 7px; color: var(--danger); font-size: 12px; }
+    .summary-price strong { font-size: 17px; }
+
+    .summary-empty { min-height: 260px; display: grid; place-items: center; color: #8b959e; text-align: center; line-height: 1.8; }
+
+    .summary-footer { padding: 13px 14px; border-top: 1px solid var(--line); background: #ffffff; }
+    .summary-total { margin-bottom: 10px; display: flex; align-items: baseline; justify-content: space-between; }
+    .total-label { color: #53606c; }
+    .total-price { color: var(--danger); font-size: 15px; }
+    .total-price strong { font-size: 24px; }
+    .footer-actions { display: grid; grid-template-columns: 1fr 1.35fr; gap: 8px; }
+    .footer-actions button { height: 42px; }
+
+    .report-view {
+      min-height: 0;
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: #000000 url("assets/references/crm-skin-report-example.png") center center / contain no-repeat;
+    }
+
+    .report-overlay-head {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .capture-button {
+      height: 38px;
+      padding: 0 17px;
+      color: #ffffff;
+      background: var(--blue);
+      border: 1px solid #3d92ef;
+      border-radius: 3px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.28);
+    }
+
+    .report-back {
+      height: 38px;
+      padding: 0 14px;
+      color: #e9eef1;
+      background: rgba(39, 44, 50, .86);
+      border: 1px solid #5f6870;
+      border-radius: 3px;
+    }
+
+    .capture-drawer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 380px;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      border-left: 1px solid #cfd7db;
+      box-shadow: -12px 0 30px rgba(0,0,0,.34);
+    }
+
+    .drawer-head { min-height: 58px; padding: 0 16px; display: flex; align-items: center; border-bottom: 1px solid var(--line); font-size: 16px; font-weight: 600; }
+    .drawer-close { margin-left: auto; color: #64707b; background: transparent; border: 0; font-size: 24px; }
+    .drawer-body { min-height: 0; flex: 1; padding: 15px; overflow: auto; }
+    .capture-preview { width: 100%; height: 210px; object-fit: contain; object-position: center; background: #000000; border: 1px solid #20252a; }
+    .capture-meta { margin: 8px 0 17px; color: #7e8992; font-size: 12px; }
+    .drawer-section-title { margin-bottom: 9px; font-weight: 600; }
+    .drawer-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .drawer-tag { min-height: 32px; padding: 0 11px; color: #4b5864; background: #ffffff; border: 1px solid #cfd6da; border-radius: 2px; }
+    .drawer-tag.selected { color: #087c5f; background: var(--green-soft); border-color: var(--green); }
+    .drawer-footer { padding: 13px 15px; display: grid; grid-template-columns: 1fr 1.35fr; gap: 8px; border-top: 1px solid var(--line); }
+    .drawer-footer button { height: 42px; }
+
+    .product-toolbar {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--line);
+      background: #fafbfb;
+    }
+
+    .product-filter {
+      height: 32px;
+      padding: 0 12px;
+      color: #54616c;
+      background: #ffffff;
+      border: 1px solid #d5dce0;
+    }
+
+    .product-filter.active { color: #087c5f; background: var(--green-soft); border-color: var(--green); }
+    .product-toolbar .search-input { margin-left: auto; width: 260px; }
+
+    .product-context {
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .product-context-card {
+      min-width: 0;
+      padding: 10px 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px 12px;
+      align-items: center;
+      background: #f7faf9;
+      border: 1px solid #dce7e2;
+      border-left: 3px solid var(--green);
+    }
+
+    .product-context-name { font-size: 14px; font-weight: 600; }
+    .product-context-meta { color: #7b878f; font-size: 11px; }
+    .product-context-count { grid-row: 1 / 3; grid-column: 2; color: var(--green-dark); font-size: 12px; white-space: nowrap; }
+
+    .product-list { padding: 12px 16px 28px; }
+    .family-block { margin-bottom: 12px; background: #ffffff; border: 1px solid var(--line); }
+    .family-head { min-height: 64px; padding: 10px 12px; display: grid; grid-template-columns: 46px 1fr auto; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); }
+    .product-thumb { width: 46px; height: 46px; object-fit: cover; border: 1px solid #e0e5e7; }
+    .family-name { font-size: 15px; font-weight: 600; }
+    .family-meta { margin-top: 5px; display: flex; flex-wrap: wrap; gap: 5px; }
+    .family-badge { padding: 2px 5px; color: #527061; background: #edf7f0; border: 1px solid #cce5d3; font-size: 10px; }
+    .family-toggle { color: #7a858f; background: transparent; border: 0; }
+
+    .sku-row {
+      min-height: 54px;
+      padding: 8px 12px 8px 68px;
+      display: grid;
+      grid-template-columns: 1fr auto 30px;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid #edf0f1;
+    }
+
+    .sku-row:last-child { border-bottom: 0; }
+    .sku-name { color: #394652; }
+    .sku-note { margin-top: 3px; color: #929ba3; font-size: 11px; }
+    .sku-tag { margin-right: 5px; padding: 1px 4px; color: #617068; background: #f1f5f3; border: 1px solid #dce5e0; }
+    .sku-tag.recommended { color: #087c5f; background: #eaf7f1; border-color: #c9e5d8; }
+    .sku-tag.asset { color: #865d16; background: #fff7e8; border-color: #f1ddb4; }
+    .sku-price { color: var(--danger); white-space: nowrap; }
+    .sku-price strong { font-size: 18px; }
+    .sku-add { width: 26px; height: 26px; display: grid; place-items: center; color: #ffffff; background: var(--green); border: 0; border-radius: 50%; font-size: 20px; line-height: 1; }
+    .sku-add.added { color: #728079; background: #e6ece9; }
+
+    .catalog-layout { min-height: 100%; display: grid; grid-template-columns: 150px 1fr; }
+    .catalog-rail { background: #f3f5f6; border-right: 1px solid var(--line); }
+    .catalog-item { min-height: 52px; padding: 0 16px; display: flex; align-items: center; color: #697683; border-left: 3px solid transparent; }
+    .catalog-item.active { color: var(--green-dark); background: #e9f8f3; border-left-color: var(--green); font-weight: 600; }
+    .catalog-main { min-width: 0; }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      background: rgba(18, 24, 29, .48);
+    }
+
+    .modal {
+      width: 420px;
+      background: #ffffff;
+      border: 1px solid #ccd4d8;
+      box-shadow: 0 18px 50px rgba(0,0,0,.28);
+    }
+
+    .diagnosis-modal { width: min(780px, calc(100vw - 80px)); }
+    .diagnosis-modal .modal-body { padding: 0; }
+
+    .diagnosis-menu-toolbar {
+      padding: 0 20px 14px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .diagnosis-menu-toolbar .search-input { flex: 1; }
+
+    .diagnosis-menu-layout {
+      min-height: 390px;
+      max-height: 500px;
+      display: grid;
+      grid-template-columns: 138px 1fr;
+      border-top: 1px solid var(--line);
+    }
+
+    .diagnosis-menu-categories { background: #f4f6f7; border-right: 1px solid var(--line); }
+
+    .diagnosis-category {
+      min-height: 48px;
+      width: 100%;
+      padding: 0 15px;
+      color: #64717c;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      border-left: 3px solid transparent;
+    }
+
+    .diagnosis-category.active { color: var(--green-dark); background: #e9f8f3; border-left-color: var(--green); font-weight: 600; }
+    .diagnosis-menu-options { padding: 16px 18px; overflow-y: auto; }
+    .diagnosis-menu-heading { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+
+    .diagnosis-group { padding: 12px 0; display: grid; grid-template-columns: 120px 1fr; gap: 12px; border-top: 1px solid #edf0f1; }
+    .diagnosis-group:first-of-type { padding-top: 0; border-top: 0; }
+    .diagnosis-group-name { color: #34424d; font-weight: 600; }
+    .diagnosis-group-desc { margin-top: 4px; color: #929ba3; font-size: 10px; line-height: 1.45; }
+    .diagnosis-option-grid { display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+
+    .diagnosis-option {
+      min-height: 34px;
+      padding: 0 11px;
+      color: #4f5c67;
+      background: #ffffff;
+      border: 1px solid #ccd5da;
+    }
+
+    .diagnosis-option.selected { color: #087c5f; background: var(--green-soft); border-color: var(--green); }
+    .diagnosis-menu-empty { min-height: 260px; display: grid; place-items: center; color: #929ba3; text-align: center; line-height: 1.7; }
+    .diagnosis-selected-summary { margin-right: auto; color: #68747f; font-size: 12px; }
+
+    .modal-title { padding: 18px 20px 10px; font-size: 17px; font-weight: 600; }
+    .modal-body { padding: 0 20px 18px; color: #68747f; line-height: 1.7; }
+    .modal-actions { padding: 12px 16px; display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--line); background: #fafbfb; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 30;
+      transform: translateX(-50%);
+      padding: 9px 14px;
+      color: #ffffff;
+      background: rgba(32, 39, 45, .94);
+      border-radius: 3px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.22);
+    }
+
+    @media (max-width: 1500px) {
+      .crm-frame { grid-template-columns: 220px minmax(580px, 1fr) 350px; }
+      .customer-card, .customer-section { padding-left: 15px; padding-right: 15px; }
+      .business-tab { min-width: 66px; padding: 0 10px; }
+      .scheme-layout { grid-template-columns: 280px minmax(380px, 1fr); }
+      .summary-panel { font-size: 13px; }
+      .flow-steps { display: none; }
+      .page-head { gap: 9px; }
+      .page-head button { padding-left: 10px; padding-right: 10px; font-size: 12px; }
+    }
+
+    @media (max-width: 1250px) {
+      body { min-width: 1080px; }
+      .crm-frame { grid-template-columns: 200px minmax(500px, 1fr) 300px; }
+      .scheme-layout { grid-template-columns: 230px minmax(260px, 1fr); gap: 10px; padding: 10px; }
+      .scheme-card { grid-template-columns: 20px minmax(0, 1fr); }
+      .scheme-side { grid-column: 2; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; text-align: left; }
+      .scheme-outcome { margin-top: 0; text-align: right; }
+      .diagnosis-severity { grid-template-columns: 1fr; gap: 8px; }
+      .severity-criteria { grid-column: 1; }
+      .review-state { padding: 0 9px; font-size: 12px; }
+      .review-title { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="review-bar" aria-label="原型状态切换">
+    <span class="review-title">CRM方案设计 · PC交互原型</span>
+    <button class="review-state active" data-view="scheme">01 默认方案设计</button>
+    <button class="review-state" data-view="report">02 查看皮肤报告</button>
+    <button class="review-state" data-view="capture">03 截图选择诊断</button>
+    <button class="review-state" data-view="products">04 品相确认</button>
+    <button class="review-state" data-view="catalog">05 添加品相</button>
+    <span class="review-spacer"></span>
+    <button class="review-action" id="simulate-confirm">模拟用户确认</button>
+  </header>
+
+  <section class="crm-frame" id="crm-frame">
+    <aside class="customer-panel">
+      <div class="customer-heading">客户详情</div>
+      <div class="customer-card">
+        <div class="identity">
+          <div class="avatar">沙</div>
+          <div>
+            <div class="customer-name">沙磊</div>
+            <div class="customer-meta">男　44岁</div>
+            <div class="customer-meta">240221000044</div>
+          </div>
+          <button class="edit-button" title="编辑客户信息">✎</button>
+        </div>
+        <div class="member-tags">
+          <span class="member-tag">L1会员</span><span class="member-tag">当月生日</span>
+          <span class="member-tag">到院未核销</span><span class="member-tag">活跃老客</span>
+        </div>
+        <div class="customer-expand">展开⌃</div>
+      </div>
+      <div class="customer-section">
+        <div class="customer-section-title">核销概览 <span>⌄</span></div>
+        <div class="customer-row"><span>消费红包余额</span><span class="money">¥0.00 ›</span></div>
+        <div class="customer-row"><span>可用积分</span><span class="link">0 ›</span></div>
+      </div>
+      <div class="customer-section">
+        <div class="customer-row"><span>绑定手机号</span><span>+0086 138****7321</span></div>
+        <div class="customer-row"><span>其他手机号</span><span class="link">添加</span></div>
+        <div class="customer-row"><span>出生年月</span><span>1982-07-05</span></div>
+        <div class="customer-row"><span>病历号</span><span>暂无</span></div>
+        <div class="customer-row"><span>咨询师</span><span>沙磊</span></div>
+        <div class="customer-row"><span>主诊医生</span><span>郭煜娜</span></div>
+      </div>
+      <div class="customer-section">
+        <div class="customer-section-title">最近到访</div>
+        <div class="customer-row"><span>上次到店</span><span>2026-06-18</span></div>
+        <div class="customer-row"><span>累计消费</span><span>¥18,960</span></div>
+      </div>
+    </aside>
+
+    <nav class="business-tabs" aria-label="客户业务导航">
+      <span class="business-tab">预约(36)</span><span class="business-tab">到访(10)</span>
+      <span class="business-tab">咨询(3)</span><span class="business-tab active">开单</span>
+      <span class="business-tab">订单(29)</span><span class="business-tab">大师团订单(0)</span>
+      <span class="business-tab">参与活动</span><span class="business-tab">资产(45)</span>
+      <span class="business-tab">执行单(16)</span><span class="business-tab">影像记录</span>
+      <span class="business-tab">病历</span><span class="business-tab business-close">×</span>
+    </nav>
+
+    <main class="workspace" id="workspace"></main>
+    <aside class="summary-panel" id="summary-panel"></aside>
+  </section>
+
+  <div id="overlay-root"></div>
+
+  <script>
+    const skinImage = 'assets/references/crm-skin-report-example.png';
+    const captureImage = 'assets/references/crm-skin-capture-example.png';
+    const productImage = 'assets/product-covers/default-treatment-project.jpg';
+
+    const diagnosisOptions = ['单纯性出油', '动态纹', '静态纹', '面部松弛', '换季敏感'];
+
+    const diagnosisCatalog = {
+      '护肤': [
+        { name: '油', description: '皮脂腺油脂分泌旺盛', diagnoses: ['单纯性出油', '脂质氧化', '脂溢性皮炎', '毛囊角化异常'] },
+        { name: '干', description: '皮肤干燥缺水', diagnoses: ['季节性干皮', '屏障受损性干皮', '老年性干皮'] },
+        { name: '黄', description: '肤色暗黄', diagnoses: ['肤色暗黄'] },
+        { name: '黑', description: '色素沉着', diagnoses: ['炎症后色素沉着', '紫外线诱导色素沉着'] },
+        { name: '糙', description: '皮肤粗糙', diagnoses: ['皮肤粗糙'] }
+      ],
+      '抗衰': [
+        { name: '皱', description: '皱纹', diagnoses: ['动态纹', '静态纹', '颈纹'] },
+        { name: '松', description: '松弛下垂', diagnoses: ['面部松弛', '颈部松弛', '眼周松弛'] },
+        { name: '凹', description: '面部凹陷', diagnoses: ['面部凹陷'] },
+        { name: '馒', description: '馒化', diagnoses: ['馒化'] },
+        { name: '脂', description: '面部脂肪堆积', diagnoses: ['面部脂肪堆积'] }
+      ],
+      '问题肌': [
+        { name: '敏', description: '敏感性皮肤', diagnoses: ['先天敏感', '换季敏感', '屏障受损'] },
+        { name: '痘', description: '痤疮', diagnoses: ['痤疮'] },
+        { name: '疤', description: '疤痕', diagnoses: ['疤痕'] },
+        { name: '斑', description: '色素性疾病', diagnoses: ['色素斑'] },
+        { name: '红', description: '红血丝/玫瑰痤疮', diagnoses: ['红血丝', '玫瑰痤疮'] }
+      ],
+      '美学设计': []
+    };
+
+    const diagnosisConfig = {
+      '单纯性出油': {
+        severityOptions: {
+          '轻度': { criteria: '仅T区出油明显，无毛孔粗大。', schemes: ['水杨酸治疗', '光子嫩肤'] },
+          '重度': { criteria: '全面部出油，伴随毛孔粗大。', schemes: ['光子嫩肤', '肉毒微滴注射'] }
+        }
+      },
+      '动态纹': {
+        severityOptions: {
+          '轻度': { criteria: '仅做大幅度表情时出现，静止状态下完全消失。', schemes: ['肉毒素注射'] },
+          '重度': { criteria: '轻微表情即可出现，静止状态下仍隐约可见。', schemes: ['肉毒素注射', '黄金微针'] }
+        }
+      },
+      '静态纹': {
+        severityOptions: {
+          '轻度': { criteria: '以细纹及细小静态纹为主，无明显凹陷。', schemes: ['胶原再生'] },
+          '重度': { criteria: '皱纹凹陷明显，并可能伴随皮肤松弛。', schemes: ['玻尿酸注射', '胶原再生'] }
+        }
+      },
+      '面部松弛': {
+        severityOptions: {
+          '轻度': { criteria: '软组织轻度下移，下颌缘轻度模糊。', schemes: ['超声炮'] },
+          '重度': { criteria: '软组织明显下移，下颌缘模糊且弹性下降。', schemes: ['热玛吉', '超声炮'] }
+        }
+      },
+      '换季敏感': {
+        severityOptions: {
+          '轻度': { criteria: '偶尔泛红、刺痛，刺激去除后可较快缓解。', schemes: ['舒敏修护'] },
+          '重度': { criteria: '频繁泛红、灼热或刺痛，持续时间较长。', schemes: ['舒敏修护', '屏障修护'] }
+        }
+      },
+      '季节性干皮': {
+        criteria: '季节变化时出现干燥紧绷，以补水和屏障维护为主。',
+        schemes: ['基础补水修护']
+      }
+    };
+
+    const schemeData = {
+      '水杨酸治疗': {
+        description: '改善油脂分泌旺盛与毛孔堵塞，帮助疏通角质并稳定皮肤状态。',
+        diagnoses: ['单纯性出油'],
+        price: '699-1,299',
+        comfort: '较舒适', duration: '约30分钟', recovery: '约1-2天',
+        outcome: '控油、疏通毛孔', onset: '约1周观察改善',
+        course: '每2-4周治疗1次，连续3次为1个疗程；完成后根据皮肤状态复评。'
+      },
+      '光子嫩肤': {
+        description: '综合改善油脂、毛孔与肤色问题，适合作为阶段性皮肤管理方案。',
+        diagnoses: ['单纯性出油', '换季敏感'],
+        price: '499-2,999',
+        comfort: '舒适', duration: '约40分钟', recovery: '基本无恢复期',
+        outcome: '改善油脂、毛孔与肤色', onset: '约2-4周逐步显现',
+        course: '每4周治疗1次，连续3次为1个疗程；疗程完成后根据复评安排维护。'
+      },
+      '肉毒微滴注射': {
+        description: '针对油脂分泌与毛孔问题的进阶改善方向，需由医生进一步评估。',
+        diagnoses: ['单纯性出油'],
+        price: '1,999-3,999',
+        comfort: '一般', duration: '约45分钟', recovery: '约1-3天',
+        outcome: '抑制油脂分泌、细致毛孔', onset: '约1-2周起效',
+        course: '首次治疗后2周复评；后续是否追加或维护由医生结合出油改善情况确认。'
+      },
+      '肉毒素注射': {
+        description: '放松过度活跃的表情肌，针对抬头纹、眉间纹与眼周动态纹进行改善。',
+        diagnoses: ['动态纹'],
+        price: '1,299-3,999',
+        comfort: '一般', duration: '约30分钟', recovery: '约1天',
+        outcome: '减轻动态纹、保留自然表情', onset: '约3-7天起效',
+        course: '单次治疗后2周复评；效果稳定后按3-6个月周期评估维护。'
+      },
+      '黄金微针': {
+        description: '通过微针与射频协同改善皮肤纹理，为动态纹管理提供辅助方向。',
+        diagnoses: ['动态纹'],
+        price: '2,999-6,999',
+        comfort: '一般', duration: '约60分钟', recovery: '约3-5天',
+        outcome: '改善纹理、促进胶原重塑', onset: '约4周逐步显现',
+        course: '每4-6周治疗1次，连续3次为1个疗程；疗程后根据纹理改善程度复评。'
+      },
+      '玻尿酸注射': {
+        description: '针对已经形成的静态凹陷纹路进行容量补充与轮廓衔接。',
+        diagnoses: ['静态纹'],
+        price: '1,999-8,999',
+        comfort: '一般', duration: '约45分钟', recovery: '约1-3天',
+        outcome: '填充凹陷、改善静态纹', onset: '治疗后即可观察',
+        course: '单次治疗后2周复评；后续根据吸收情况和纹路变化安排维护。'
+      },
+      '胶原再生': {
+        description: '促进胶原支撑，逐步改善静态纹路与局部皮肤质感。',
+        diagnoses: ['静态纹', '面部松弛'],
+        price: '3,999-12,999',
+        comfort: '一般', duration: '约60分钟', recovery: '约2-5天',
+        outcome: '改善细纹、提升皮肤支撑', onset: '约4-8周逐步显现',
+        course: '按月治疗1次，连续3次为1个疗程；疗程完成后3个月复评。'
+      },
+      '热玛吉': {
+        description: '聚焦面部紧致与轮廓提升，改善松弛及下颌线模糊问题。',
+        diagnoses: ['面部松弛'],
+        price: '9,999-29,999',
+        comfort: '一般', duration: '约90分钟', recovery: '基本无恢复期',
+        outcome: '紧致轮廓、改善松弛', onset: '约1-3个月逐步显现',
+        course: '单次治疗后3个月复评；通常按年度评估是否需要维护治疗。'
+      },
+      '超声炮': {
+        description: '通过不同深度能量作用改善面部松弛，强化轮廓支撑感。',
+        diagnoses: ['面部松弛'],
+        price: '6,999-19,999',
+        comfort: '一般', duration: '约75分钟', recovery: '约1-3天',
+        outcome: '提升紧致度、强化下颌线', onset: '约1个月逐步显现',
+        course: '单次治疗后1-3个月复评；通常按6-12个月周期评估维护。'
+      },
+      '舒敏修护': {
+        description: '针对换季泛红、干痒和不稳定状态进行温和舒缓与补水修护。',
+        diagnoses: ['换季敏感'],
+        price: '399-999',
+        comfort: '舒适', duration: '约40分钟', recovery: '无恢复期',
+        outcome: '缓解泛红、灼热与刺痛', onset: '治疗后逐步缓解',
+        course: '每周治疗1-2次，连续4周后复评；稳定后转为阶段性维护。'
+      },
+      '屏障修护': {
+        description: '通过阶段性修护管理改善屏障受损，降低反复敏感概率。',
+        diagnoses: ['换季敏感'],
+        price: '599-1,599',
+        comfort: '舒适', duration: '约45分钟', recovery: '无恢复期',
+        outcome: '修护屏障、提高皮肤耐受', onset: '约2-4周逐步稳定',
+        course: '每周治疗1次，连续4-6次为1个疗程；疗程后根据屏障状态安排维护。'
+      },
+      '基础补水修护': {
+        description: '针对季节变化出现的干燥紧绷，进行温和补水与基础屏障维护。',
+        diagnoses: ['季节性干皮'],
+        price: '299-699',
+        comfort: '舒适', duration: '约40分钟', recovery: '无恢复期',
+        outcome: '缓解干燥紧绷、提升含水状态', onset: '治疗后逐步改善',
+        course: '每周治疗1次，连续3次为1个疗程；疗程后根据季节和皮肤含水状态复评。'
+      }
+    };
+
+    const products = [
+      { id: 'bbl-1', family: 'BBL HERO 不老光', sku: '面部综合模式 1次', price: 999, oldPrice: 1999, schemes: ['光子嫩肤'], diagnoses: ['单纯性出油', '换季敏感'], note: '单次体验', recommended: true, asset: true },
+      { id: 'bbl-3', family: 'BBL HERO 不老光', sku: '面部综合模式 3次', price: 2799, oldPrice: 5997, schemes: ['光子嫩肤'], diagnoses: ['单纯性出油', '换季敏感'], note: '阶段管理', recommended: true },
+      { id: 'bbl-5', family: 'BBL HERO 不老光', sku: '面部综合模式 5次', price: 4099, oldPrice: 9995, schemes: ['光子嫩肤'], diagnoses: ['单纯性出油', '换季敏感'], note: '完整疗程' },
+      { id: 'aopt-1', family: 'M22 AOPT 超光子', sku: '定制模式面部 1次', price: 1299, oldPrice: 1999, schemes: ['光子嫩肤'], diagnoses: ['单纯性出油'], note: '单次体验', recommended: true },
+      { id: 'aopt-3', family: 'M22 AOPT 超光子', sku: '定制模式面部 3次', price: 3499, oldPrice: 5997, schemes: ['光子嫩肤'], diagnoses: ['单纯性出油'], note: '完整疗程' },
+      { id: 'milk-1', family: '牛奶注射光 2.0', sku: '全模式面部 1次', price: 1299, oldPrice: 1999, schemes: ['光子嫩肤'], diagnoses: ['单纯性出油', '换季敏感'], note: '单次体验', asset: true },
+      { id: 'milk-3', family: '牛奶注射光 2.0', sku: '全模式面部 3次', price: 3599, oldPrice: 5997, schemes: ['光子嫩肤'], diagnoses: ['单纯性出油', '换季敏感'], note: '完整疗程' },
+      { id: 'sal-1', family: '博乐达超分子水杨酸', sku: '面部控油焕肤 1次', price: 699, oldPrice: 999, schemes: ['水杨酸治疗'], diagnoses: ['单纯性出油'], note: '单次体验', recommended: true, asset: true },
+      { id: 'sal-3', family: '博乐达超分子水杨酸', sku: '面部控油焕肤 3次', price: 1799, oldPrice: 2997, schemes: ['水杨酸治疗'], diagnoses: ['单纯性出油'], note: '完整疗程', recommended: true },
+      { id: 'sal-care-1', family: '芯丝翠水杨酸焕肤', sku: '面部温和焕肤 1次', price: 599, oldPrice: 899, schemes: ['水杨酸治疗'], diagnoses: ['单纯性出油'], note: '单次体验' },
+      { id: 'sal-care-3', family: '芯丝翠水杨酸焕肤', sku: '面部温和焕肤 3次', price: 1499, oldPrice: 2697, schemes: ['水杨酸治疗'], diagnoses: ['单纯性出油'], note: '完整疗程' },
+      { id: 'sal-combo-1', family: '水杨酸联合修护管理', sku: '焕肤+舒缓修护 1次', price: 899, oldPrice: 1299, schemes: ['水杨酸治疗'], diagnoses: ['单纯性出油'], note: '单次联合管理' },
+      { id: 'sal-combo-3', family: '水杨酸联合修护管理', sku: '焕肤+舒缓修护 3次', price: 2399, oldPrice: 3897, schemes: ['水杨酸治疗'], diagnoses: ['单纯性出油'], note: '完整疗程' },
+      { id: 'botox-expression', family: '精准肉毒素注射', sku: '面部动态纹管理1次', price: 2399, oldPrice: 3299, schemes: ['肉毒素注射'], diagnoses: ['动态纹'] },
+      { id: 'filler-1', family: '玻尿酸精细注射', sku: '静态纹管理1ml', price: 3999, oldPrice: 5999, schemes: ['玻尿酸注射'], diagnoses: ['静态纹'] },
+      { id: 'thermage-1', family: '热玛吉FLX', sku: '面部紧致1次', price: 16999, oldPrice: 23999, schemes: ['热玛吉'], diagnoses: ['面部松弛'] },
+      { id: 'soothing-3', family: '舒敏修护管理', sku: '完整疗程3次', price: 1799, oldPrice: 2399, schemes: ['舒敏修护'], diagnoses: ['换季敏感'] }
+    ];
+
+    const state = {
+      view: 'scheme',
+      diagnoses: new Set(diagnosisOptions),
+      skinDiagnoses: new Set(['单纯性出油', '换季敏感']),
+      captureDiagnoses: new Set(['单纯性出油', '换季敏感']),
+      manualDiagnoses: new Set(['动态纹', '静态纹', '面部松弛']),
+      menuDiagnoses: new Set(['动态纹', '静态纹', '面部松弛']),
+      diagnosisChapter: '抗衰',
+      diagnosisSearch: '',
+      severityByDiagnosis: {
+        '单纯性出油': '轻度',
+        '动态纹': '轻度',
+        '静态纹': '轻度',
+        '面部松弛': '轻度',
+        '换季敏感': '轻度'
+      },
+      selectedSchemes: new Set(['水杨酸治疗', '光子嫩肤']),
+      selectedProducts: new Map(),
+      productSchemeFilter: 'all',
+      productSearch: '',
+      userConfirmed: false,
+      evidenceCount: 1
+    };
+
+    const workspace = document.getElementById('workspace');
+    const summary = document.getElementById('summary-panel');
+    const frame = document.getElementById('crm-frame');
+    const overlay = document.getElementById('overlay-root');
+
+    function money(value) {
+      return Number(value).toLocaleString('zh-CN');
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[character]);
+    }
+
+    function invalidateConfirmation() {
+      if (state.userConfirmed) {
+        state.userConfirmed = false;
+        toast('内容已调整，用户确认状态已失效');
+      }
+    }
+
+    function setView(view) {
+      state.view = view;
+      document.querySelectorAll('.review-state').forEach(button => {
+        button.classList.toggle('active', button.dataset.view === view);
+      });
+      render();
+    }
+
+    function confirmationPill() {
+      return state.userConfirmed
+        ? '<span class="status-pill confirmed">Pad用户已确认</span>'
+        : '<span class="status-pill">Pad待用户确认</span>';
+    }
+
+    function flowSteps(active) {
+      return `<div class="flow-steps">
+        <span class="flow-step ${active === 1 ? 'active' : ''}"><span class="step-dot">1</span>方案设计</span>
+        <span class="flow-step ${active === 2 ? 'active' : ''}"><span class="step-dot">2</span>品相确认</span>
+        <span class="flow-step ${active === 3 ? 'active' : ''}"><span class="step-dot">3</span>开单</span>
+      </div>`;
+    }
+
+    function render() {
+      const reportMode = state.view === 'report' || state.view === 'capture';
+      frame.classList.toggle('report-mode', reportMode);
+      if (state.view === 'scheme') renderScheme();
+      if (state.view === 'report') renderReport(false);
+      if (state.view === 'capture') renderReport(true);
+      if (state.view === 'products') renderProducts(false);
+      if (state.view === 'catalog') renderProducts(true);
+    }
+
+    function renderScheme() {
+      workspace.innerHTML = `
+        <div class="page-head">
+          <div class="page-title">方案设计</div>
+          ${flowSteps(1)}
+          <span class="head-spacer"></span>
+          ${confirmationPill()}
+          <button class="ghost-button" data-action="open-report">查看皮肤检测报告</button>
+        </div>
+        <div class="workspace-scroll">
+          <div class="scheme-layout">
+            <section class="plain-panel">
+              <div class="panel-head">测肤诊断<button class="panel-action" data-action="open-report">+ 从皮肤检测报告添加</button></div>
+              <div class="evidence-list">
+                <article class="evidence-card">
+                  <img class="evidence-image" src="${captureImage}" alt="皮肤检测问题表现截图">
+                  <div class="evidence-body">
+                    <div class="evidence-meta">冷光 · 正面视角　2026-07-24</div>
+                    <div class="diagnosis-tags">${[...state.skinDiagnoses].map(tag => `<span class="diagnosis-tag">${tag}</span>`).join('')}</div>
+                  </div>
+                </article>
+                ${state.evidenceCount > 1 ? `<article class="evidence-card">
+                  <img class="evidence-image" src="${captureImage}" alt="新增皮肤检测问题表现截图">
+                  <div class="evidence-body"><div class="evidence-meta">毛孔图谱 · 正面视角　刚刚保存</div>
+                  <div class="diagnosis-tags">${[...state.captureDiagnoses].map(tag => `<span class="diagnosis-tag">${tag}</span>`).join('')}</div></div>
+                </article>` : '<button class="empty-evidence" data-action="open-report">继续添加测肤截图</button>'}
+                ${state.manualDiagnoses.size ? `<article class="manual-diagnosis-card">
+                  <div class="manual-diagnosis-title">诊断菜单录入</div>
+                  <div class="diagnosis-tags">${[...state.manualDiagnoses].map(tag => `<span class="diagnosis-tag">${tag}</span>`).join('')}</div>
+                </article>` : ''}
+                <button class="diagnosis-menu-entry" data-action="open-diagnosis-menu">+ 从诊断菜单添加</button>
+              </div>
+            </section>
+
+            <section class="plain-panel">
+              <div class="panel-head">诊断与方案</div>
+              <div class="design-content">
+                <div class="field-block">
+                  <div class="field-title">本次诊断 <span class="field-hint">来自测肤报告与诊断菜单</span></div>
+                  <div class="tag-choices">
+                    ${orderedSelectedDiagnoses().map(tag => `<button class="choice-tag selected" data-diagnosis="${tag}">${tag}</button>`).join('')}
+                  </div>
+                </div>
+                <div class="field-block">
+                  <div class="field-title">诊断对应方案 <span class="field-hint">程度归属各诊断；无分级诊断直接展示方案</span></div>
+                  ${renderDiagnosisSchemeGroups()}
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>`;
+      summary.innerHTML = schemeSummary();
+      bindSchemeEvents();
+    }
+
+    function orderedSelectedDiagnoses() {
+      const primary = diagnosisOptions.filter(name => state.diagnoses.has(name));
+      const remaining = [...state.diagnoses].filter(name => !diagnosisOptions.includes(name));
+      return [...primary, ...remaining];
+    }
+
+    function renderDiagnosisSchemeGroups() {
+      const selectedDiagnoses = orderedSelectedDiagnoses();
+      if (!selectedDiagnoses.length) return '<div class="summary-empty">请先选择诊断</div>';
+      return selectedDiagnoses.map(diagnosis => {
+        const config = diagnosisConfig[diagnosis] || { criteria: '该诊断的方案规则待配置。', schemes: [] };
+        const severityLevels = config.severityOptions ? Object.keys(config.severityOptions) : [];
+        const selectedSeverity = severityLevels.length ? (state.severityByDiagnosis[diagnosis] || severityLevels[0]) : '';
+        const severityOption = selectedSeverity ? config.severityOptions[selectedSeverity] : null;
+        const schemes = severityOption ? severityOption.schemes : (config.schemes || []);
+        const criteria = severityOption ? severityOption.criteria : config.criteria;
+        const severityControl = severityLevels.length ? `<div class="diagnosis-severity">
+          <span class="diagnosis-severity-label">${diagnosis}程度</span>
+          <div class="severity-control" style="--severity-count:${severityLevels.length}">
+            ${severityLevels.map(level => `<button class="severity-button ${selectedSeverity === level ? 'selected' : ''}" data-severity-diagnosis="${diagnosis}" data-severity="${level}">${level}</button>`).join('')}
+          </div>
+          <div class="severity-criteria"><strong>判断标准：</strong>${criteria}</div>
+        </div>` : `<div class="severity-criteria"><strong>判断标准：</strong>${criteria}</div>`;
+        return `<section class="diagnosis-scheme-group">
+          <div class="diagnosis-scheme-head">
+            <span class="diagnosis-scheme-name">${diagnosis}</span>
+            <span class="diagnosis-scheme-meta">${selectedSeverity ? `${selectedSeverity} · ` : ''}${schemes.length}个匹配方案</span>
+          </div>
+          ${severityControl}
+          <div class="scheme-cards">${schemes.length ? schemes.map(name => schemeCard(name)).join('') : '<div class="summary-empty">该诊断的方案数据待配置</div>'}</div>
+        </section>`;
+      }).join('');
+    }
+
+    function schemeCard(name) {
+      const item = schemeData[name];
+      const selected = state.selectedSchemes.has(name);
+      return `<article class="scheme-card ${selected ? 'selected' : ''}">
+        <input class="scheme-check" type="checkbox" data-scheme="${name}" ${selected ? 'checked' : ''} aria-label="选择${name}">
+        <div>
+          <div class="scheme-name">${name}</div>
+          <div class="scheme-desc">${item.description}</div>
+          <div class="diagnosis-tags">${item.diagnoses.map(tag => `<span class="diagnosis-tag">${tag}</span>`).join('')}</div>
+          <div class="scheme-facts">
+            <span class="scheme-fact">舒适度：${item.comfort}</span>
+            <span class="scheme-fact">治疗时长：${item.duration}</span>
+            <span class="scheme-fact">恢复期：${item.recovery}</span>
+          </div>
+          <div class="scheme-course"><strong>疗程建议</strong>${item.course}</div>
+        </div>
+        <div class="scheme-side">
+          <div class="scheme-price">单次参考<br><strong>¥${item.price}</strong></div>
+          <div class="scheme-outcome"><strong>预期改善</strong>${item.outcome}<br>${item.onset}</div>
+        </div>
+      </article>`;
+    }
+
+    function schemeSummary() {
+      const cards = [...state.selectedSchemes].map(name => {
+        const item = schemeData[name];
+        return `<article class="summary-card">
+          <div class="summary-card-row">
+            <input class="summary-checkbox" type="checkbox" checked data-summary-scheme="${name}" aria-label="是否采用${name}">
+            <div><div class="summary-name">${name}</div><div class="summary-meta">主要解决：${item.diagnoses.join('、')}</div></div>
+            <button class="summary-remove" data-remove-scheme="${name}">移除</button>
+          </div>
+        </article>`;
+      }).join('');
+      return `<div class="summary-head">已选方案 <span class="summary-count">${state.selectedSchemes.size}项</span></div>
+        <div class="search-box">
+          <div class="search-row"><input class="search-input" id="scheme-search" value="肉毒" aria-label="搜索方案"><button class="secondary-button" id="search-scheme-button">搜索</button></div>
+          <div class="search-result"><span>肉毒素注射<br><small>主要解决：动态纹</small></span><button class="mini-add" data-add-scheme="肉毒素注射" title="添加方案">+</button></div>
+        </div>
+        <div class="summary-body">${cards || '<div class="summary-empty">尚未选择方案<br>请从中间推荐结果勾选</div>'}</div>
+        <div class="summary-footer">
+          <div class="summary-total"><span class="total-label">已选 ${state.selectedSchemes.size} 个方案</span><span class="total-price">用户端同步展示</span></div>
+          <div class="footer-actions"><button class="ghost-button" data-action="save-draft">保存草稿</button><button class="primary-button" data-action="confirm-scheme">确认方案，选择品相</button></div>
+        </div>`;
+    }
+
+    function bindSchemeEvents() {
+      document.querySelectorAll('[data-action="open-report"]').forEach(button => button.addEventListener('click', () => setView('report')));
+      document.querySelectorAll('[data-action="open-diagnosis-menu"]').forEach(button => button.addEventListener('click', openDiagnosisMenu));
+      document.querySelectorAll('[data-diagnosis]').forEach(button => button.addEventListener('click', () => {
+        const name = button.dataset.diagnosis;
+        state.diagnoses.has(name) ? state.diagnoses.delete(name) : state.diagnoses.add(name);
+        invalidateConfirmation(); renderScheme();
+      }));
+      document.querySelectorAll('[data-severity-diagnosis]').forEach(button => button.addEventListener('click', () => {
+        state.severityByDiagnosis[button.dataset.severityDiagnosis] = button.dataset.severity;
+        invalidateConfirmation(); renderScheme();
+      }));
+      document.querySelectorAll('[data-scheme]').forEach(input => input.addEventListener('change', () => toggleScheme(input.dataset.scheme, input.checked)));
+      document.querySelectorAll('[data-summary-scheme]').forEach(input => input.addEventListener('change', () => toggleScheme(input.dataset.summaryScheme, input.checked)));
+      document.querySelectorAll('[data-remove-scheme]').forEach(button => button.addEventListener('click', () => toggleScheme(button.dataset.removeScheme, false)));
+      document.querySelectorAll('[data-add-scheme]').forEach(button => button.addEventListener('click', () => toggleScheme(button.dataset.addScheme, true)));
+      document.querySelector('[data-action="save-draft"]')?.addEventListener('click', () => toast('方案草稿已保存'));
+      document.querySelector('[data-action="confirm-scheme"]')?.addEventListener('click', confirmScheme);
+    }
+
+    function toggleScheme(name, selected) {
+      selected ? state.selectedSchemes.add(name) : state.selectedSchemes.delete(name);
+      invalidateConfirmation(); renderScheme();
+    }
+
+    function confirmScheme() {
+      if (!state.selectedSchemes.size) { toast('请至少选择一个方案'); return; }
+      if (!state.userConfirmed) {
+        showModal('用户尚未确认方案', '当前Pad端仍为待确认状态。咨询师可以继续收口，确认后将进入品相选择。', () => setView('products'));
+      } else {
+        setView('products');
+      }
+    }
+
+    function renderReport(showDrawer) {
+      workspace.innerHTML = `<div class="report-view">
+        <div class="report-overlay-head">
+          <button class="report-back" data-action="back-scheme">返回方案设计</button>
+          ${showDrawer ? '' : '<button class="capture-button" data-action="capture">截取问题表现</button>'}
+        </div>
+        ${showDrawer ? captureDrawer() : ''}
+      </div>`;
+      workspace.querySelector('[data-action="back-scheme"]')?.addEventListener('click', () => setView('scheme'));
+      workspace.querySelector('[data-action="capture"]')?.addEventListener('click', () => setView('capture'));
+      if (showDrawer) bindCaptureEvents();
+    }
+
+    function captureDrawer() {
+      const choices = diagnosisOptions;
+      return `<aside class="capture-drawer">
+        <div class="drawer-head">保存测肤诊断<button class="drawer-close" data-action="close-capture" title="关闭">×</button></div>
+        <div class="drawer-body">
+          <img class="capture-preview" src="${captureImage}" alt="当前皮肤状态截图">
+          <div class="capture-meta">毛孔图谱 · 正面视角　2026-07-24 14:38</div>
+          <div class="drawer-section-title">选择诊断</div>
+          <div class="drawer-tags">${choices.map(tag => `<button class="drawer-tag ${state.captureDiagnoses.has(tag) ? 'selected' : ''}" data-capture-diagnosis="${tag}">${tag}</button>`).join('')}</div>
+        </div>
+        <div class="drawer-footer"><button class="ghost-button" data-action="close-capture">取消</button><button class="primary-button" data-action="save-capture">保存问题表现</button></div>
+      </aside>`;
+    }
+
+    function bindCaptureEvents() {
+      document.querySelectorAll('[data-action="close-capture"]').forEach(button => button.addEventListener('click', () => setView('report')));
+      document.querySelectorAll('[data-capture-diagnosis]').forEach(button => button.addEventListener('click', () => {
+        const name = button.dataset.captureDiagnosis;
+        state.captureDiagnoses.has(name) ? state.captureDiagnoses.delete(name) : state.captureDiagnoses.add(name);
+        renderReport(true);
+      }));
+      document.querySelector('[data-action="save-capture"]')?.addEventListener('click', () => {
+        if (!state.captureDiagnoses.size) { toast('请至少选择一个诊断'); return; }
+        state.captureDiagnoses.forEach(tag => {
+          state.skinDiagnoses.add(tag);
+          state.diagnoses.add(tag);
+        });
+        state.evidenceCount = 2;
+        invalidateConfirmation();
+        toast('测肤诊断已保存');
+        setView('scheme');
+      });
+    }
+
+    function renderProducts(catalogMode) {
+      workspace.innerHTML = `
+        <div class="page-head">
+          <div class="page-title">${catalogMode ? '添加品相' : '品相选择确认'}</div>
+          ${flowSteps(2)}
+          <span class="head-spacer"></span>
+          ${confirmationPill()}
+          ${catalogMode ? '<button class="ghost-button" data-action="back-products">返回品相确认</button>' : '<button class="ghost-button" data-action="back-scheme">返回修改方案</button><button class="secondary-button" data-action="open-catalog">+ 添加品相</button>'}
+        </div>
+        <div class="workspace-scroll">
+          ${catalogMode ? catalogView() : recommendedProductsView()}
+        </div>`;
+      summary.innerHTML = productSummary(catalogMode);
+      bindProductEvents();
+    }
+
+    function recommendedProductsView() {
+      const schemeNames = [...state.selectedSchemes];
+      const allAvailable = products.filter(item => item.schemes.some(name => state.selectedSchemes.has(name)));
+      const search = state.productSearch.trim().toLowerCase();
+      const filtered = allAvailable.filter(item => {
+        const inScheme = state.productSchemeFilter === 'all' || item.schemes.includes(state.productSchemeFilter);
+        const text = [item.family, item.sku, ...item.schemes, ...item.diagnoses].join(' ').toLowerCase();
+        return inScheme && (!search || text.includes(search));
+      });
+      const familyQueues = schemeNames.map(name => [...new Set(filtered.filter(item => item.schemes.includes(name)).map(item => item.family))]);
+      const familyOrder = [];
+      const longestQueue = Math.max(0, ...familyQueues.map(queue => queue.length));
+      for (let index = 0; index < longestQueue; index += 1) {
+        familyQueues.forEach(queue => {
+          if (queue[index] && !familyOrder.includes(queue[index])) familyOrder.push(queue[index]);
+        });
+      }
+      const available = [...filtered].sort((left, right) => familyOrder.indexOf(left.family) - familyOrder.indexOf(right.family));
+      const contextCards = schemeNames.map(name => {
+        const schemeProducts = allAvailable.filter(item => item.schemes.includes(name));
+        const familyCount = new Set(schemeProducts.map(item => item.family)).size;
+        const diagnoses = schemeData[name]?.diagnoses?.join('、') || '已确认诊断';
+        return `<article class="product-context-card">
+          <div class="product-context-name">${name}</div>
+          <div class="product-context-meta">对应诊断：${diagnoses}</div>
+          <div class="product-context-count">${familyCount}个品相族 · ${schemeProducts.length}个规格</div>
+        </article>`;
+      }).join('');
+      return `<div class="product-context">${contextCards}</div>
+      <div class="product-toolbar">
+        <button class="product-filter ${state.productSchemeFilter === 'all' ? 'active' : ''}" data-product-filter="all">全部品相 ${allAvailable.length}</button>
+        ${schemeNames.map(name => `<button class="product-filter ${state.productSchemeFilter === name ? 'active' : ''}" data-product-filter="${name}">${name}</button>`).join('')}
+        <input class="search-input" value="${escapeHtml(state.productSearch)}" placeholder="搜索当前方案品相或规格" aria-label="搜索当前方案品相">
+      </div>
+      <div class="product-list">${productFamilies(available)}</div>`;
+    }
+
+    function catalogView() {
+      return `<div class="catalog-layout">
+        <nav class="catalog-rail">
+          <div class="catalog-item">今日主推</div><div class="catalog-item">明星单品</div>
+          <div class="catalog-item">水光抗衰</div><div class="catalog-item active">光电抗衰</div>
+          <div class="catalog-item">注射抗衰</div><div class="catalog-item">皮肤管理</div>
+          <div class="catalog-item">大健康</div><div class="catalog-item">实物商品</div>
+        </nav>
+        <div class="catalog-main">
+          <div class="product-toolbar">
+            <button class="product-filter active">光子嫩肤</button><button class="product-filter">紧致提升</button>
+            <button class="product-filter">胶原激活</button><button class="product-filter">光电祛脂</button>
+            <input class="search-input" value="" placeholder="搜索品相或商品规格" aria-label="搜索全部品相">
+          </div>
+          <div class="product-list">${productFamilies(products)}</div>
+        </div>
+      </div>`;
+    }
+
+    function productFamilies(items) {
+      const groups = new Map();
+      items.forEach(item => {
+        if (!groups.has(item.family)) groups.set(item.family, []);
+        groups.get(item.family).push(item);
+      });
+      return [...groups.entries()].map(([family, entries]) => `<section class="family-block">
+        <div class="family-head">
+          <img class="product-thumb" src="${productImage}" alt="${family}商品头图">
+          <div><div class="family-name">${family}</div><div class="family-meta">${[...new Set(entries.flatMap(item => item.schemes))].map(tag => `<span class="family-badge">${tag}</span>`).join('')}${[...new Set(entries.flatMap(item => item.diagnoses))].map(tag => `<span class="family-badge">${tag}</span>`).join('')}</div></div>
+          <button class="family-toggle">收起⌃</button>
+        </div>
+        ${entries.map(item => skuRow(item)).join('')}
+      </section>`).join('') || '<div class="summary-empty">当前方案暂无可用品相</div>';
+    }
+
+    function skuRow(item) {
+      const added = state.selectedProducts.has(item.id);
+      return `<div class="sku-row">
+        <div><div class="sku-name">${item.family} · ${item.sku}</div><div class="sku-note">${item.recommended ? '<span class="sku-tag recommended">方案推荐</span>' : ''}${item.asset ? '<span class="sku-tag asset">资产可用</span>' : ''}${item.note || '支持Pad同步确认'}</div></div>
+        <div class="sku-price">优惠后 <strong>¥${money(item.price)}</strong> <s>¥${money(item.oldPrice)}</s></div>
+        <button class="sku-add ${added ? 'added' : ''}" data-add-product="${item.id}" title="${added ? '已加入' : '加入清单'}">${added ? '✓' : '+'}</button>
+      </div>`;
+    }
+
+    function productSummary(catalogMode) {
+      const selected = [...state.selectedProducts.values()];
+      const checked = selected.filter(item => item.checked);
+      const total = checked.reduce((sum, item) => sum + item.price, 0);
+      const cards = selected.map(item => `<article class="summary-card">
+        <div class="summary-card-row">
+          <input class="summary-checkbox" type="checkbox" data-check-product="${item.id}" ${item.checked ? 'checked' : ''} aria-label="选择${item.family}${item.sku}">
+          <div><div class="summary-name">${item.family} · ${item.sku}</div><div class="summary-meta">${item.diagnoses.join('、')}</div><div class="summary-price">小计 <strong>¥${money(item.price)}</strong>　<s>¥${money(item.oldPrice)}</s></div></div>
+          <button class="summary-remove" data-remove-product="${item.id}">移除</button>
+        </div>
+      </article>`).join('');
+      return `<div class="summary-head">品相清单 <span class="summary-count">${selected.length}项</span></div>
+        <div class="summary-body">${cards || '<div class="summary-empty">尚未添加具体品相<br>请点击商品规格后的加号</div>'}</div>
+        <div class="summary-footer">
+          <div class="summary-total"><span class="total-label">${checked.length}个项目</span><span class="total-price">总计 <strong>¥${money(total)}</strong></span></div>
+          <div class="footer-actions"><button class="ghost-button" data-action="${catalogMode ? 'back-products' : 'open-catalog'}">${catalogMode ? '返回品相确认' : '添加品相'}</button><button class="primary-button" data-action="final-order">确认品相，进入开单</button></div>
+        </div>`;
+    }
+
+    function bindProductEvents() {
+      document.querySelectorAll('[data-action="back-scheme"]').forEach(button => button.addEventListener('click', () => setView('scheme')));
+      document.querySelectorAll('[data-action="open-catalog"]').forEach(button => button.addEventListener('click', () => setView('catalog')));
+      document.querySelectorAll('[data-action="back-products"]').forEach(button => button.addEventListener('click', () => setView('products')));
+      document.querySelectorAll('[data-product-filter]').forEach(button => button.addEventListener('click', () => {
+        state.productSchemeFilter = button.dataset.productFilter;
+        renderProducts(false);
+      }));
+      if (state.view === 'products') {
+        document.querySelector('.product-toolbar .search-input')?.addEventListener('input', event => {
+          state.productSearch = event.target.value;
+          renderProducts(false);
+          const searchInput = document.querySelector('.product-toolbar .search-input');
+          if (searchInput) {
+            searchInput.focus();
+            searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+          }
+        });
+      }
+      document.querySelectorAll('[data-add-product]').forEach(button => button.addEventListener('click', () => addProduct(button.dataset.addProduct)));
+      document.querySelectorAll('[data-check-product]').forEach(input => input.addEventListener('change', () => {
+        const item = state.selectedProducts.get(input.dataset.checkProduct);
+        if (item) item.checked = input.checked;
+        invalidateConfirmation(); renderProducts(state.view === 'catalog');
+      }));
+      document.querySelectorAll('[data-remove-product]').forEach(button => button.addEventListener('click', () => {
+        state.selectedProducts.delete(button.dataset.removeProduct);
+        invalidateConfirmation(); renderProducts(state.view === 'catalog');
+      }));
+      document.querySelector('[data-action="final-order"]')?.addEventListener('click', () => {
+        const checked = [...state.selectedProducts.values()].filter(item => item.checked);
+        if (!checked.length) { toast('请至少勾选一个品相'); return; }
+        if (!state.userConfirmed) showModal('用户尚未确认品相', '当前Pad端仍为待确认状态。咨询师确认后可以继续进入开单。', () => toast('已确认品相，进入开单'));
+        else toast('已确认品相，进入开单');
+      });
+    }
+
+    function addProduct(id) {
+      if (state.selectedProducts.has(id)) { toast('该商品已在品相清单中'); return; }
+      const source = products.find(item => item.id === id);
+      if (!source) return;
+      state.selectedProducts.set(id, { ...source, checked: true });
+      invalidateConfirmation();
+      toast('已加入品相清单并默认勾选');
+      renderProducts(state.view === 'catalog');
+    }
+
+    function openDiagnosisMenu() {
+      state.menuDiagnoses = new Set(state.manualDiagnoses);
+      state.diagnosisSearch = '';
+      renderDiagnosisMenu();
+    }
+
+    function renderDiagnosisMenu() {
+      const chapters = Object.keys(diagnosisCatalog);
+      const search = state.diagnosisSearch.trim();
+      const sourceGroups = search
+        ? chapters.flatMap(chapter => diagnosisCatalog[chapter].map(group => ({ ...group, chapter })))
+        : diagnosisCatalog[state.diagnosisChapter].map(group => ({ ...group, chapter: state.diagnosisChapter }));
+      const groups = sourceGroups.filter(group => !search || [group.name, group.description, ...group.diagnoses].join(' ').includes(search));
+      const selectedNames = [...state.menuDiagnoses];
+      overlay.innerHTML = `<div class="modal-backdrop"><section class="modal diagnosis-modal">
+        <div class="modal-title">从诊断菜单添加 <span class="field-hint">按诊疗体系快速定位</span></div>
+        <div class="diagnosis-menu-toolbar">
+          <input class="search-input" data-diagnosis-search value="${escapeHtml(search)}" placeholder="搜索诊断名称或症状关键词" aria-label="搜索诊断">
+          <button class="secondary-button" data-diagnosis-search-button>搜索</button>
+          ${search ? '<button class="ghost-button" data-diagnosis-search-clear>清除</button>' : ''}
+        </div>
+        <div class="modal-body">
+          <div class="diagnosis-menu-layout">
+            <nav class="diagnosis-menu-categories">
+              ${chapters.map(chapter => `<button class="diagnosis-category ${!search && state.diagnosisChapter === chapter ? 'active' : ''}" data-diagnosis-chapter="${chapter}">${chapter}${chapter === '美学设计' ? '<br><small>待配置</small>' : ''}</button>`).join('')}
+            </nav>
+            <div class="diagnosis-menu-options">
+              <div class="diagnosis-menu-heading">${search ? `搜索结果 · ${groups.length}组` : state.diagnosisChapter}</div>
+              ${groups.map(group => `<section class="diagnosis-group">
+                <div>
+                  <div class="diagnosis-group-name">${search ? `${group.chapter} · ` : ''}${group.name}</div>
+                  <div class="diagnosis-group-desc">${group.description}</div>
+                </div>
+                <div class="diagnosis-option-grid">
+                  ${group.diagnoses.map(name => `<button class="diagnosis-option ${state.menuDiagnoses.has(name) ? 'selected' : ''}" data-menu-diagnosis="${name}">${name}</button>`).join('')}
+                </div>
+              </section>`).join('') || `<div class="diagnosis-menu-empty">${state.diagnosisChapter === '美学设计' && !search ? '美学设计体系待补充<br>后续可在这里配置轮廓、比例与部位诊断' : '未找到匹配诊断'}</div>`}
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <span class="diagnosis-selected-summary">已选 ${selectedNames.length} 项${selectedNames.length ? `：${selectedNames.slice(0, 3).join('、')}${selectedNames.length > 3 ? '…' : ''}` : ''}</span>
+          <button class="ghost-button" data-diagnosis-menu-cancel>取消</button>
+          <button class="primary-button" data-diagnosis-menu-save>保存诊断</button>
+        </div>
+      </section></div>`;
+      overlay.querySelectorAll('[data-diagnosis-chapter]').forEach(button => button.addEventListener('click', () => {
+        state.diagnosisChapter = button.dataset.diagnosisChapter;
+        state.diagnosisSearch = '';
+        renderDiagnosisMenu();
+      }));
+      overlay.querySelectorAll('[data-menu-diagnosis]').forEach(button => button.addEventListener('click', () => {
+        const name = button.dataset.menuDiagnosis;
+        state.menuDiagnoses.has(name) ? state.menuDiagnoses.delete(name) : state.menuDiagnoses.add(name);
+        renderDiagnosisMenu();
+      }));
+      const applySearch = () => {
+        state.diagnosisSearch = overlay.querySelector('[data-diagnosis-search]').value.trim();
+        renderDiagnosisMenu();
+      };
+      overlay.querySelector('[data-diagnosis-search-button]').addEventListener('click', applySearch);
+      overlay.querySelector('[data-diagnosis-search]').addEventListener('keydown', event => {
+        if (event.key === 'Enter') applySearch();
+      });
+      overlay.querySelector('[data-diagnosis-search-clear]')?.addEventListener('click', () => {
+        state.diagnosisSearch = '';
+        renderDiagnosisMenu();
+      });
+      overlay.querySelector('[data-diagnosis-menu-cancel]').addEventListener('click', () => { overlay.innerHTML = ''; });
+      overlay.querySelector('[data-diagnosis-menu-save]').addEventListener('click', () => {
+        state.manualDiagnoses = new Set(state.menuDiagnoses);
+        state.diagnoses = new Set([...state.skinDiagnoses, ...state.manualDiagnoses]);
+        overlay.innerHTML = '';
+        invalidateConfirmation();
+        renderScheme();
+        toast('诊断菜单已更新');
+      });
+    }
+
+    function showModal(title, body, onConfirm) {
+      overlay.innerHTML = `<div class="modal-backdrop"><section class="modal">
+        <div class="modal-title">${title}</div><div class="modal-body">${body}</div>
+        <div class="modal-actions"><button class="ghost-button" data-modal-cancel>取消</button><button class="primary-button" data-modal-confirm>仍然继续</button></div>
+      </section></div>`;
+      overlay.querySelector('[data-modal-cancel]').addEventListener('click', () => { overlay.innerHTML = ''; });
+      overlay.querySelector('[data-modal-confirm]').addEventListener('click', () => { overlay.innerHTML = ''; onConfirm(); });
+    }
+
+    function toast(message) {
+      document.querySelector('.toast')?.remove();
+      const node = document.createElement('div');
+      node.className = 'toast'; node.textContent = message; document.body.appendChild(node);
+      setTimeout(() => node.remove(), 1800);
+    }
+
+    document.querySelectorAll('.review-state').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
+    document.getElementById('simulate-confirm').addEventListener('click', () => {
+      state.userConfirmed = true;
+      toast('已模拟用户在Pad确认');
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

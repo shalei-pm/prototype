@@ -44,6 +44,9 @@
       align-self: start;
       height: calc(100vh - 48px);
       padding: 20px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #41484d transparent;
       border-radius: 18px;
       background: #151515;
       color: #f8fafc;
@@ -89,6 +92,26 @@
       font-weight: 700;
       letter-spacing: .08em;
     }
+
+    .crm-nav-link {
+      min-height: 58px;
+      margin-bottom: 20px;
+      padding: 11px 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      color: #f4fff9;
+      text-decoration: none;
+      background: rgba(65, 225, 141, .12);
+      border: 1px solid rgba(65, 225, 141, .46);
+      border-radius: 8px;
+    }
+
+    .crm-nav-link:hover { background: rgba(65, 225, 141, .18); border-color: var(--green); }
+    .crm-nav-link b { display: block; font-size: 14px; line-height: 1.25; }
+    .crm-nav-link small { display: block; margin-top: 4px; color: #aab7b0; font-size: 11px; }
+    .crm-nav-arrow { color: var(--green); font-size: 18px; }
 
     .nav-list {
       display: grid;
@@ -285,7 +308,12 @@
         </div>
       </div>
 
-      <p class="nav-title">页面索引</p>
+      <a class="crm-nav-link" href="crm-scheme-design-current.html" target="_blank" rel="noopener">
+        <span><b>CRM 方案设计</b><small>PC 端独立交互原型</small></span>
+        <span class="crm-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <p class="nav-title">Pad 页面索引</p>
       <nav class="nav-list" aria-label="整合画布导航">
         <a href="#home-checkin">01 首页/扫码签到页</a>
         <a href="#profile-identity-verify">01-A 建档页/身份信息核验</a>
