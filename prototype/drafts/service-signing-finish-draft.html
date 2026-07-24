@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>面诊医生确认 + 治疗签署 + 结束闭环草案</title>
+  <title>治疗签署 + 咨询与治疗分诊结果草案</title>
   <style>
     :root {
       --green: #9cff00;
@@ -307,6 +307,21 @@
       font-size: 14px;
       line-height: 1.25;
       font-weight: 400;
+    }
+
+    .service-user-actions {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-identity {
+      color: #111;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .service-logout-icon {
@@ -1425,6 +1440,42 @@
       box-shadow: 0 0 0 18px rgba(156,255,0,.16);
     }
 
+    .completion-mark.result-mark {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .completion-mark.result-mark strong {
+      color: #111;
+      font-size: 52px;
+      line-height: .92;
+      font-weight: 700;
+    }
+
+    .completion-mark.result-mark span {
+      color: #111;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .completion-mark.waiting-mark {
+      background: #111;
+      color: #fff;
+      box-shadow: 0 0 0 18px #eef0f3;
+    }
+
+    .completion-mark.waiting-mark strong {
+      color: #fff;
+    }
+
+    .completion-mark.waiting-mark span {
+      color: var(--green);
+    }
+
     .completion-state h1 {
       margin: 42px 0 0;
       color: #111;
@@ -1499,6 +1550,10 @@
       box-shadow: inset 0 -12px 0 var(--green);
     }
 
+    .room-direction.waiting-direction strong {
+      font-size: 34px;
+    }
+
     .app-progress-note {
       width: 100%;
       min-height: 68px;
@@ -1539,6 +1594,57 @@
       line-height: 1.4;
     }
 
+    .pre-consult-plan {
+      width: 100%;
+      margin-top: 24px;
+      padding: 18px 10px 0;
+      border-top: 1px dashed #bfc5cc;
+      text-align: left;
+    }
+
+    .pre-consult-plan h2 {
+      margin: 0 0 8px;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .pre-consult-row {
+      min-height: 52px;
+      display: grid;
+      grid-template-columns: 36px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px dashed #d9dde2;
+    }
+
+    .pre-consult-row:last-child {
+      border-bottom: 0;
+    }
+
+    .pre-consult-row .step-no {
+      color: #69707c;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .pre-consult-row b {
+      color: #111;
+      font-size: 15px;
+      line-height: 1.3;
+      font-weight: 600;
+    }
+
+    .pre-consult-row em {
+      color: #4f5661;
+      font-size: 12px;
+      line-height: 1.2;
+      font-style: normal;
+      font-weight: 500;
+    }
+
     .completion-actions {
       display: grid;
       grid-template-columns: 1fr 1.4fr;
@@ -1546,6 +1652,132 @@
       padding: 20px 40px 28px;
       border-top: 1px solid var(--line);
       background: #fff;
+    }
+
+    .completion-actions.consult-actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .completion-actions.single-action {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .review-wait-page {
+      grid-template-rows: auto 1fr;
+    }
+
+    .review-wait-page .content {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      padding: 52px 48px 76px;
+      background: #fff;
+    }
+
+    .review-wait-state {
+      width: 100%;
+      max-width: 700px;
+      display: grid;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .review-wait-state h1 {
+      margin: 0;
+      color: #111;
+      font-size: 40px;
+      line-height: 1.18;
+      font-weight: 700;
+    }
+
+    .review-wait-state > p {
+      max-width: 620px;
+      margin: 16px 0 0;
+      color: #69707c;
+      font-size: 18px;
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    .review-steps {
+      display: grid;
+      grid-template-columns: auto 142px auto;
+      align-items: start;
+      gap: 14px;
+      margin-top: 48px;
+    }
+
+    .review-step {
+      min-width: 112px;
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+      color: #9aa1aa;
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .review-step-dot {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #aab0b8;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .review-step.active {
+      color: #111;
+      font-weight: 700;
+    }
+
+    .review-step.active .review-step-dot {
+      border-color: #111;
+      background: #111;
+      box-shadow: 0 0 0 7px rgba(156,255,0,.24);
+    }
+
+    .review-step-line {
+      margin-top: 11px;
+      border-top: 1px dashed #aeb4bc;
+    }
+
+    .review-code-card {
+      width: 500px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 136px;
+      align-items: center;
+      gap: 24px;
+      margin-top: 46px;
+      padding: 22px 22px 22px 28px;
+      background: #111;
+      color: #fff;
+      text-align: left;
+    }
+
+    .review-code-card b {
+      display: block;
+      font-size: 18px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .review-code-card span {
+      display: block;
+      margin-top: 7px;
+      color: #d7dbe0;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .review-code-card img {
+      width: 136px;
+      height: 136px;
+      display: block;
+      padding: 7px;
+      background: #fff;
+      image-rendering: pixelated;
     }
 
     .finish-page .content {
@@ -1805,10 +2037,12 @@
 
       <p class="nav-title">本草案范围</p>
       <ul class="nav-list">
-        <li class="nav-item">流程确认页之后</li>
-        <li class="nav-item active">面诊医生确认</li>
+        <li class="nav-item">服务要求确认页之后</li>
+        <li class="nav-item active">治疗方案待确认页</li>
+        <li class="nav-item">历史原型：面诊医生确认（已移出流程）</li>
         <li class="nav-item active">治疗签署文书流程</li>
-        <li class="nav-item active">自助签到完成</li>
+        <li class="nav-item active">咨询分诊结果页</li>
+        <li class="nav-item active">治疗分诊结果页</li>
         <li class="nav-item">返回起始默认签到页</li>
       </ul>
     </aside>
@@ -1816,7 +2050,7 @@
     <section class="stage">
       <div class="pad-grid">
         <div>
-          <p class="variant-label">状态 A：面诊医生确认</p>
+          <p class="variant-label">历史保留：面诊医生确认（已从当前流程删除）</p>
           <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：面诊医生确认">
             <div class="pad-screen">
               <article class="kiosk-page service-page">
@@ -1826,7 +2060,10 @@
                     <h1>面诊医生确认</h1>
                     <p>请选择本次为您面诊的医生</p>
                   </div>
-                  <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  <div class="service-user-actions">
+                    <span class="user-identity">沙先生（7321）</span>
+                    <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  </div>
                 </header>
 
                 <section class="content">
@@ -1950,7 +2187,10 @@
                     <h1>治疗文书签署</h1>
                     <p>本次共 2 份待签署文书，请阅读后选择签署方式</p>
                   </div>
-                  <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  <div class="service-user-actions">
+                    <span class="user-identity">沙先生（7321）</span>
+                    <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  </div>
                 </header>
 
                 <section class="content">
@@ -2025,7 +2265,10 @@
                     <h1>治疗文书签署</h1>
                     <p>光电治疗知情同意书 · 第1份 / 共2份</p>
                   </div>
-                  <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  <div class="service-user-actions">
+                    <span class="user-identity">沙先生（7321）</span>
+                    <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  </div>
                 </header>
 
                 <section class="content">
@@ -2068,37 +2311,173 @@
         </div>
 
         <div>
-          <p class="variant-label">状态 D：自助签到完成</p>
-          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：自助签到完成">
+          <p class="variant-label">咨询分诊结果页 A：已分配咨询室</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：咨询室已分配">
             <div class="pad-screen">
               <article class="kiosk-page completion-page">
                 <header class="completion-topbar">
                   <span class="store">新氧青春北京保利店</span>
-                  <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  <div class="service-user-actions">
+                    <span class="user-identity">沙先生（7321）</span>
+                    <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  </div>
                 </header>
 
                 <section class="content">
                   <div class="completion-state">
-                    <div class="completion-mark">✓</div>
-                    <h1>已完成自助签到</h1>
-                    <p>您的服务要求我们已经收到。</p>
-                    <div class="completion-receipt" aria-label="本次服务确认摘要">
-                      <div class="receipt-row"><span>就诊项目</span><b>光子嫩肤年卡 · 第 2 次、舒敏修护护理</b></div>
-                      <div class="receipt-row"><span>面诊医生</span><b>李婧 医生</b></div>
-                      <div class="receipt-row"><span>服务流程</span><b>皮肤检测、术前术后对比照、温水与坚果</b></div>
-                    </div>
-                    <div class="room-direction">请您到<strong>2号面诊室</strong>进行面诊。</div>
-                    <div class="app-progress-note">
-                      <div class="app-progress-icon">氧</div>
-                      <div><b>打开新氧青春App可查看服务进度</b><span>排队进度、面诊提醒和房间变化会同步更新。</span></div>
+                    <div class="completion-mark result-mark"><strong>2</strong><span>号咨询室</span></div>
+                    <h1>咨询已安排</h1>
+                    <div class="pre-consult-plan" aria-label="咨询前安排">
+                      <h2>咨询前我们会引领您完成</h2>
+                      <div class="pre-consult-row"><span class="step-no">01</span><b>洁面</b><em>预计5分钟</em></div>
+                      <div class="pre-consult-row"><span class="step-no">02</span><b>皮肤检测</b><em>预计10分钟</em></div>
+                      <div class="pre-consult-row"><span class="step-no">03</span><b>拍摄术前术后对比照</b><em>预计5分钟</em></div>
                     </div>
                   </div>
                 </section>
 
-                <footer class="completion-actions">
-                  <div class="btn">再逛逛</div>
-                  <div class="btn primary">退出登录（10）秒后自动登出</div>
+                <footer class="completion-actions consult-actions">
+                  <div class="btn primary">了解下项目</div>
+                  <div class="btn disabled" aria-disabled="true">进入咨询室后继续</div>
                 </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">咨询分诊结果页 B：排队等候</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：咨询排队中">
+            <div class="pad-screen">
+              <article class="kiosk-page completion-page">
+                <header class="completion-topbar">
+                  <span class="store">新氧青春北京保利店</span>
+                  <div class="service-user-actions">
+                    <span class="user-identity">沙先生（7321）</span>
+                    <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  </div>
+                </header>
+
+                <section class="content">
+                  <div class="completion-state">
+                    <div class="completion-mark result-mark waiting-mark"><strong>3</strong><span>人等待</span></div>
+                    <h1>咨询排队中</h1>
+                    <div class="pre-consult-plan" aria-label="咨询前安排">
+                      <h2>咨询前我们会引领您完成</h2>
+                      <div class="pre-consult-row"><span class="step-no">01</span><b>洁面</b><em>预计5分钟</em></div>
+                      <div class="pre-consult-row"><span class="step-no">02</span><b>皮肤检测</b><em>预计10分钟</em></div>
+                      <div class="pre-consult-row"><span class="step-no">03</span><b>拍摄术前术后对比照</b><em>预计5分钟</em></div>
+                    </div>
+                    <div class="room-direction waiting-direction">请在休息区等候，预计<strong>约18分钟</strong>后安排咨询。</div>
+                  </div>
+                </section>
+
+                <footer class="completion-actions consult-actions">
+                  <div class="btn primary">了解下项目</div>
+                  <div class="btn disabled" aria-disabled="true">进入咨询室后继续</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">治疗分诊结果页 A：已分配治疗室</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：治疗室已分配">
+            <div class="pad-screen">
+              <article class="kiosk-page completion-page">
+                <header class="completion-topbar">
+                  <span class="store">新氧青春北京保利店</span>
+                  <div class="service-user-actions">
+                    <span class="user-identity">沙先生（7321）</span>
+                    <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  </div>
+                </header>
+
+                <section class="content">
+                  <div class="completion-state">
+                    <div class="completion-mark result-mark"><strong>5</strong><span>号治疗室</span></div>
+                    <h1>治疗已安排</h1>
+                    <div class="completion-receipt" aria-label="治疗分诊结果">
+                      <div class="receipt-row"><span>本次项目</span><b>玻尿酸注射、光子嫩肤</b></div>
+                      <div class="receipt-row"><span>治疗室</span><b>5号治疗室</b></div>
+                      <div class="receipt-row"><span>医生</span><b>郭煜娜</b></div>
+                    </div>
+                    <div class="room-direction">请您前往<strong>5号治疗室</strong>准备治疗。</div>
+                  </div>
+                </section>
+
+                <footer class="completion-actions single-action">
+                  <div class="btn primary">退出登录（180秒后自动登出）</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">治疗分诊结果页 B：排队等候</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：治疗排队中">
+            <div class="pad-screen">
+              <article class="kiosk-page completion-page">
+                <header class="completion-topbar">
+                  <span class="store">新氧青春北京保利店</span>
+                  <div class="service-user-actions">
+                    <span class="user-identity">沙先生（7321）</span>
+                    <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  </div>
+                </header>
+
+                <section class="content">
+                  <div class="completion-state">
+                    <div class="completion-mark result-mark waiting-mark"><strong>2</strong><span>人等待</span></div>
+                    <h1>治疗排队中</h1>
+                    <div class="completion-receipt" aria-label="治疗排队结果">
+                      <div class="receipt-row"><span>本次项目</span><b>玻尿酸注射、光子嫩肤</b></div>
+                      <div class="receipt-row"><span>医生</span><b>正在为您匹配最快接诊人员</b></div>
+                    </div>
+                    <div class="room-direction waiting-direction">请在休息区等候，预计<strong>约25分钟</strong>后安排治疗。</div>
+                  </div>
+                </section>
+
+                <footer class="completion-actions single-action">
+                  <div class="btn primary">退出登录（180秒后自动登出）</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">治疗方案待确认页：值班医生复核中</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：治疗方案待确认">
+            <div class="pad-screen">
+              <article class="kiosk-page review-wait-page">
+                <header class="completion-topbar">
+                  <span class="store">新氧青春北京保利店</span>
+                  <div class="service-user-actions">
+                    <span class="user-identity">沙先生（7321）</span>
+                    <div class="service-logout" aria-label="登出"><span class="service-logout-icon"></span></div>
+                  </div>
+                </header>
+
+                <section class="content">
+                  <div class="review-wait-state">
+                    <h1>治疗方案待确认</h1>
+                    <p>您已完成本次服务项目以及流程确认，我们会安排值班医生复核您的项目，请您在指定区域耐心等待。</p>
+
+                    <div class="review-steps" aria-label="治疗前确认进度">
+                      <div class="review-step active"><span class="review-step-dot"></span><span>方案复核</span></div>
+                      <div class="review-step-line"></div>
+                      <div class="review-step"><span class="review-step-dot"></span><span>治疗文书签署</span></div>
+                    </div>
+
+                    <div class="review-code-card" aria-label="治疗方案识别码">
+                      <div><b>治疗方案识别码</b><span>由工作人员扫码复核治疗方案</span></div>
+                      <img src="../assets/payment-qr-demo.png" alt="不可支付的演示方案识别码">
+                    </div>
+                  </div>
+                </section>
               </article>
             </div>
           </div>
@@ -2107,15 +2486,14 @@
 
       <aside class="spec-panel">
         <h1>后段业务会话草案</h1>
-        <p class="meta">独立草案文件，不改主原型。本版已切换为 900 x 1440 源画布，并用 scale(0.58) 在浏览器中缩略展示；按 Pad 原生任务界面处理：单列人员选择、固定底部操作、触控热区稳定。</p>
+        <p class="meta">独立草案文件。本版按 900 x 1440 源画布展示；面诊医生确认页已从当前流程删除，仅保留作历史参考。当前流程由系统自动分配服务人员，不向用户提供指定入口。</p>
 
         <div class="spec-section">
           <b>设计假设</b>
           <ul>
-            <li>系统根据业务流程决定展示面诊医生或面诊咨询师；当前原型只绘制医生场景。</li>
-            <li>用户可先点选具体医生，也可通过底部主按钮让系统按最快等待时间自动安排。</li>
-            <li>本页不混入治疗师或纯生美判断，面诊医生确认后进入统一结束页。</li>
-            <li>结束页只有一个：面诊路径从面诊人员确认后进入；直接治疗路径从签署完成后进入。</li>
+            <li>门店效率优先：当前流程不向用户提供指定服务人员选项，由系统按项目适配、门店排班和排队情况自动分配。</li>
+            <li>面诊医生确认页已移出当前流程，现有医生列表仅用于回溯历史设计。</li>
+            <li>咨询与治疗使用独立分诊结果页，每类页面都包含“已分配房间”和“排队等候”两种状态。</li>
             <li>字号以 900 x 1440 源画布为准：主标题 24px，模块标题 18px，人员名 / 步骤名 15-16px，正文 13-14px，按钮 16px。</li>
             <li>中文字重已降档：正文 500，模块标题 700，页面主标题 700；业务页不再使用 800 / 900 / 950。</li>
           </ul>
@@ -2125,20 +2503,19 @@
           <b>页面信息层级</b>
           <ul>
             <li>顶部：门店识别、登出、当前页面任务和一句短提示。</li>
-            <li>中部：面诊人员页为单列人员选择；文书阅读页为左侧文件列表 + 右侧完整预览；签名页承载当前文件的签署动作。</li>
+            <li>中部：历史面诊人员页保留单列人员选择作为参考；当前有效页面中，文书阅读页为左侧文件列表 + 右侧完整预览，签名页承载当前文件的签署动作。</li>
             <li>底部：低风险返回 / 终止操作放左侧，继续或提交放右侧主按钮。</li>
-            <li>结束页：保留轻微完成感，但完成图标和标题降级，重点仍是手机端继续指引和倒计时登出。</li>
+            <li>分诊结果页：优先突出房间编号或排队人数，并继续提供App进度提示与倒计时登出。</li>
           </ul>
         </div>
 
         <div class="spec-section">
           <b>本版效率调整</b>
           <ul>
-            <li>面诊人员页使用紧凑单列横向卡片，一屏完整展示 6 位医生；原型头像采用统一灰阶示意，中部承载资质与擅长方向，右侧突出等待信息。</li>
+            <li>历史面诊人员页使用紧凑单列横向卡片，一屏完整展示 6 位医生；该设计不再属于当前流程。</li>
             <li>文书阅读页左侧只区分不同文件，右侧专注当前文书；底部提供合并签署和逐份签署。</li>
             <li>按钮、登出、人员卡和签署操作维持 44-56px 稳定热区，相邻操作至少 8px 间距。</li>
-            <li>签名页展示当前文书名称与份数进度，并支持空白禁用、已签可提交和终止确认状态；结束页集中突出完成状态与面诊室指引。</li>
-            <li>系统推荐卡从黑色展示块改为浅绿提示条，减少视觉停留，让用户更快进入人员对比。</li>
+            <li>签名页展示当前文书名称与份数进度，并支持空白禁用、已签可提交和终止确认状态；分诊结果页集中突出房间或等待信息。</li>
           </ul>
         </div>
 
@@ -2146,10 +2523,10 @@
           <b>关键交互</b>
           <ul>
             <li>点击“登出”：任何业务页都结束当前客户会话，并返回起始默认签到页。</li>
-            <li>面诊人员确认：默认系统分配，可切换具体医生；确认后进入统一结束页。</li>
+            <li>服务人员与房间由系统自动分配，结果在咨询或治疗分诊页以及App服务进度中告知用户。</li>
             <li>文书签署：特殊文件需要抄写指定文案时禁用合并签署，并引导用户逐份完成。</li>
             <li>终止签署：回到“安排面诊 / 无需面诊直接治疗”的选择状态。</li>
-            <li>提交签署：第三方签名提交完成后进入统一结束节点。</li>
+            <li>提交签署：第三方签名提交完成后进入治疗分诊结果页。</li>
             <li>退出登录倒计时结束：自动登出并返回起始默认签到页。</li>
           </ul>
         </div>
@@ -2157,9 +2534,8 @@
         <div class="spec-section">
           <b>需要用户确认的问题</b>
           <ul>
-            <li>服务人员排序：优先按等待时间、擅长项目、客户历史偏好，还是门店运营规则？</li>
-            <li>治疗签署终止后回退到哪里：本次治疗项目确认页，还是服务人员确认页？</li>
-            <li>面诊室编号由门店排班系统实时返回，还是由现场人员确认后写入？</li>
+            <li>治疗签署终止后回退到哪里：本次治疗项目确认页，还是服务要求确认页？</li>
+            <li>咨询室与治疗室编号由门店排班系统实时返回，还是由现场人员确认后写入？</li>
           </ul>
         </div>
       </aside>

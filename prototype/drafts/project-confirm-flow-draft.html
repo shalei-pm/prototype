@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>项目菜单 / 治疗项目确认 / 流程确认 - Pad 任务界面草案</title>
+  <title>方案选择 / 项目选择 / 治疗项目确认 - Pad 任务界面草案</title>
   <style>
     :root {
       --green: #9cff00;
@@ -166,6 +166,10 @@
       display: grid;
       grid-template-rows: auto auto 1fr auto;
       background: #fff;
+    }
+
+    .service-requirements-page {
+      grid-template-rows: auto 1fr auto;
     }
 
     .menu-page {
@@ -1070,7 +1074,38 @@
       min-width: 0;
       min-height: 0;
       display: grid;
-      grid-template-rows: auto auto 1fr;
+      grid-template-rows: auto auto auto 1fr;
+    }
+
+    .condition-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .condition-tab {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 14px;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      background: #eef1f4;
+      color: #59616c;
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .condition-tab.active {
+      border-color: #111;
+      background: var(--green);
+      color: #111;
+      font-weight: 700;
     }
 
     .scheme-hero {
@@ -1111,6 +1146,34 @@
       color: #58616d;
       font-size: 13px;
       line-height: 1.5;
+    }
+
+    .scheme-copy .scheme-desc b {
+      color: #111;
+      font-weight: 700;
+    }
+
+    .condition-keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 0;
+      margin: 0 0 9px;
+      color: #111;
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .condition-keywords span {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .condition-keywords span + span::before {
+      content: "·";
+      margin: 0 8px;
+      color: #9aa1aa;
+      font-weight: 500;
     }
 
     .scheme-copy .scheme-desc + .scheme-desc {
@@ -1240,27 +1303,57 @@
 
     .solution-list {
       display: grid;
-      gap: 10px;
+      gap: 16px;
     }
 
     .severity-group {
       display: grid;
-      gap: 8px;
+      gap: 0;
+    }
+
+    .severity-header {
+      display: grid;
+      gap: 2px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: -8px;
+      padding: 0 3px;
     }
 
     .severity-heading {
       display: flex;
       align-items: baseline;
       gap: 8px;
+      margin: 0;
+      padding: 0;
       color: #111;
-      font-size: 14px;
+      font-size: 13px;
+      line-height: 1;
       font-weight: 700;
     }
 
     .severity-heading span {
       color: #69707c;
-      font-size: 12px;
+      font-size: 11px;
+      line-height: 1;
       font-weight: 500;
+    }
+
+    .severity-plan-note {
+      margin: 0;
+      color: #59616c;
+      font-size: 11px;
+      line-height: 1.25;
+      font-weight: 500;
+    }
+
+    .severity-plan-note b {
+      color: #111;
+      font-weight: 700;
+    }
+
+    .severity-group > .solution-row + .solution-row {
+      margin-top: 2px;
     }
 
     .solution-row {
@@ -1526,6 +1619,15 @@
       font-weight: 400;
     }
 
+    .user-identity {
+      flex: 0 0 auto;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
     .logout {
       flex: 0 0 auto;
       width: 56px;
@@ -1580,13 +1682,19 @@
       padding: 0 6px;
     }
 
+    .scheme-menu .top-switch {
+      margin-right: auto;
+      padding: 0;
+    }
+
     .top-link {
       position: relative;
       display: inline-flex;
       align-items: center;
       min-height: 56px;
       color: #69707c;
-      font-size: 16px;
+      font-size: 26px;
+      line-height: 1.12;
       font-weight: 500;
       white-space: nowrap;
     }
@@ -1829,6 +1937,287 @@
       white-space: nowrap;
     }
 
+    .self-shop-row {
+      min-height: 112px;
+      grid-template-columns: minmax(0, 1fr) 150px 92px;
+      gap: 18px;
+      border-radius: 0;
+    }
+
+    .self-shop-price {
+      display: grid;
+      justify-items: end;
+      gap: 3px;
+      padding-right: 6px;
+      white-space: nowrap;
+    }
+
+    .self-shop-price span {
+      color: #69707c;
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .self-shop-price strong {
+      color: #111;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .self-shop-price del {
+      color: #8a929d;
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .self-shop-row .row-action {
+      min-width: 92px;
+      border-radius: 0;
+    }
+
+    .self-shop-row.selected .row-action {
+      background: #111;
+      color: var(--green);
+    }
+
+    .self-shop-page .top-switch {
+      margin-right: auto;
+    }
+
+    .self-shop-page .task-content {
+      padding: 18px 28px 0;
+    }
+
+    .self-shop-page .split-menu {
+      grid-template-columns: 184px minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .self-shop-page .side-filter {
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: #f5f6f7;
+    }
+
+    .self-shop-page .filter-title {
+      margin: 0;
+      padding: 20px 18px 12px;
+      font-size: 15px;
+      color: #727b86;
+    }
+
+    .self-shop-page .filter-list {
+      gap: 0;
+    }
+
+    .self-shop-page .filter-item {
+      min-height: 76px;
+      position: relative;
+      padding: 0 18px 0 20px;
+      border: 0;
+      border-left: 5px solid transparent;
+      border-radius: 0;
+      background: transparent;
+      color: #343b45;
+      font-size: 18px;
+      line-height: 1.25;
+      font-weight: 600;
+    }
+
+    .self-shop-page .filter-item.active {
+      border-left-color: #62b735;
+      background: #fff;
+      color: #111;
+      font-weight: 700;
+    }
+
+    .hot-badge {
+      position: absolute;
+      right: 8px;
+      top: -9px;
+      padding: 4px 7px;
+      background: #111;
+      color: #fff;
+      font-size: 9px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .shop-toolbar {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+
+    .shop-toolbar b {
+      color: #111;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .shop-filter-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #4f5762;
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .shop-switch-track {
+      width: 42px;
+      height: 24px;
+      position: relative;
+      border-radius: 999px;
+      background: #c9ced5;
+    }
+
+    .shop-switch-track::after {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .shop-section-title {
+      margin: 0 0 8px;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .shop-product-list {
+      display: grid;
+      gap: 0;
+      border-top: 1px solid #e2e5e9;
+    }
+
+    .shop-product-row {
+      min-height: 166px;
+      display: grid;
+      grid-template-columns: 142px minmax(0, 1fr) 145px 84px;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 12px;
+      border: 0;
+      border-bottom: 1px solid #e2e5e9;
+      background: #fff;
+    }
+
+    .shop-product-row.selected {
+      background: rgba(156, 255, 0, .08);
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+
+    .shop-product-image {
+      width: 142px;
+      height: 128px;
+      display: block;
+      object-fit: cover;
+      object-position: 50% 28%;
+      background: #eceff2;
+    }
+
+    .shop-product-copy {
+      min-width: 0;
+      display: grid;
+      gap: 7px;
+    }
+
+    .shop-product-copy h3 {
+      margin: 0;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .shop-product-copy p {
+      margin: 0;
+      color: #747d88;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .shop-product-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .shop-product-meta span {
+      min-height: 25px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      background: #eef1f3;
+      color: #59616c;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .shop-product-meta .consult-free {
+      background: rgba(156, 255, 0, .18);
+      color: #315c00;
+    }
+
+    .shop-product-price {
+      display: grid;
+      justify-items: start;
+      gap: 5px;
+    }
+
+    .shop-product-price span {
+      color: #747d88;
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .shop-product-price strong {
+      color: #55a92f;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .shop-discount {
+      padding: 5px 7px;
+      border: 1px solid #63b83a;
+      color: #4e952d;
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .shop-product-row .row-action {
+      min-width: 84px;
+      height: 52px;
+      border-radius: 0;
+    }
+
+    .shop-product-row.selected .row-action {
+      background: #111;
+      color: var(--green);
+    }
+
     .intent-panel,
     .flow-side {
       padding: 16px;
@@ -1961,6 +2350,12 @@
       font-size: 26px;
       line-height: 1;
       font-weight: 800;
+    }
+
+    .summary-price del {
+      color: #8a929d;
+      font-size: 10px;
+      line-height: 1.2;
     }
 
     .scheme-menu .bottom-summary,
@@ -2508,6 +2903,415 @@
       background: rgba(156,255,0,.22);
     }
 
+    .sku-confirm-page {
+      grid-template-rows: auto auto 1fr auto;
+    }
+
+    .sku-confirm-page .task-content {
+      min-height: 0;
+      overflow: auto;
+      padding: 18px 32px 20px;
+    }
+
+    .sku-progress {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 12px 32px;
+      border-bottom: 1px solid var(--line);
+      background: #f7f8fa;
+    }
+
+    .sku-progress b {
+      display: block;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .sku-progress span {
+      display: block;
+      margin-top: 3px;
+      color: #69707c;
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .sku-progress-count {
+      color: #111;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .sku-groups {
+      display: grid;
+      gap: 18px;
+    }
+
+    .sku-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .sku-group-head {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #dfe3e7;
+    }
+
+    .sku-group-check {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: #111;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .sku-group-title {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .sku-group-title b {
+      color: #111;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .sku-group-title span {
+      color: #69707c;
+      font-size: 12px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .sku-course-toggle {
+      min-height: 34px;
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #111;
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .sku-course-toggle input {
+      width: 22px;
+      height: 22px;
+      margin: 0;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+
+    .sku-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .sku-card {
+      min-height: 112px;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) 142px 174px;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid #dfe3e7;
+      border-radius: 0;
+      background: #fff;
+    }
+
+    .sku-card.selected {
+      border-color: var(--green);
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+
+    .sku-card-copy {
+      min-width: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .sku-card h3 {
+      margin: 0;
+      color: #111;
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .sku-card p {
+      margin: 0;
+      color: #69707c;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .sku-card-facts {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #69707c;
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .sku-card-facts b {
+      color: #3f6212;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .sku-check {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #cbd0d7;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .sku-card.selected .sku-check {
+      border-color: #111;
+    }
+
+    .sku-card.selected .sku-check::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .sku-session-options {
+      align-self: stretch;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-content: center;
+      gap: 6px;
+      padding-left: 12px;
+      border-left: 1px solid #e5e7eb;
+    }
+
+    .sku-session-option {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .sku-session-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .sku-session-option span {
+      min-height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #cbd0d7;
+      background: #fff;
+      color: #4f5661;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .sku-session-option input:checked + span {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .sku-price {
+      align-self: stretch;
+      display: grid;
+      align-content: center;
+      justify-items: end;
+      gap: 3px;
+      padding-left: 16px;
+      border-left: 1px solid #e5e7eb;
+    }
+
+    .sku-price-label {
+      color: #69707c;
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .sku-price strong {
+      color: #111;
+      font-size: 22px;
+      line-height: 1.05;
+      font-weight: 700;
+    }
+
+    .sku-original-price {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #8a929d;
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    .sku-original-price del {
+      font-size: 11px;
+    }
+
+    .sku-coupon {
+      margin-top: 3px;
+      color: #3f6212;
+      font-size: 10px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .sku-confirm-page .bottom-summary,
+    .sku-confirm-page .primary {
+      border-radius: 0;
+    }
+
+    .addon-recommendations {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+      padding-top: 18px;
+      border-top: 1px solid #111;
+    }
+
+    .addon-recommendations-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .addon-recommendations-head h2 {
+      margin: 0;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .addon-recommendations-head span {
+      color: #69707c;
+      font-size: 12px;
+      line-height: 1.3;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .addon-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .addon-option {
+      min-height: 68px;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
+      border: 1px solid #dfe3e7;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .addon-option:has(input:checked) {
+      border-color: var(--green);
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+
+    .addon-option input {
+      width: 22px;
+      height: 22px;
+      margin: 0;
+      appearance: none;
+      border: 1px solid #aeb5bf;
+      border-radius: 0;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .addon-option input:checked {
+      display: grid;
+      place-items: center;
+      border-color: #111;
+      background: var(--green);
+    }
+
+    .addon-option input:checked::after {
+      content: "✓";
+      color: #111;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .addon-option-copy {
+      min-width: 0;
+    }
+
+    .addon-option-copy b {
+      display: block;
+      color: #111;
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .addon-option-copy span {
+      display: block;
+      margin-top: 4px;
+      color: #69707c;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .addon-option-price {
+      display: grid;
+      justify-items: end;
+      gap: 2px;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .addon-option-price del {
+      color: #8a929d;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
     .payment-confirm-state {
       position: relative;
       overflow: hidden;
@@ -2515,12 +3319,6 @@
 
     .payment-confirm-state .task-content {
       padding-bottom: 160px;
-    }
-
-    .payment-preview-list {
-      display: grid;
-      gap: 12px;
-      margin-top: 18px;
     }
 
     .payment-scrim {
@@ -2847,6 +3645,536 @@
       font-size: 15px;
     }
 
+    .scheme-design-page {
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .scheme-design-page .task-content {
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      align-content: start;
+      gap: 22px;
+      padding: 26px 36px 20px;
+      background: #fff;
+    }
+
+    .design-section {
+      display: grid;
+      gap: 12px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e4e7eb;
+    }
+
+    .design-section-title {
+      margin: 0;
+      color: #111;
+      font-size: 17px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .indication-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .indication-tag {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 13px;
+      border: 1px solid rgba(96, 150, 20, .55);
+      border-radius: 4px;
+      background: rgba(156, 255, 0, .16);
+      color: #263d08;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .indication-tag.primary {
+      border-color: rgba(96, 150, 20, .55);
+      background: rgba(156, 255, 0, .16);
+      color: #263d08;
+    }
+
+    .problem-result {
+      display: grid;
+      grid-template-columns: 188px 1fr;
+      gap: 24px;
+      padding: 18px 20px;
+      border-left: 5px solid var(--green);
+      background: #f6f7f8;
+    }
+
+    .problem-result.has-examples {
+      grid-template-columns: 154px minmax(0, 1fr) 224px;
+      gap: 20px;
+    }
+
+    .problem-result h2 {
+      margin: 0 0 7px;
+      color: #111;
+      font-size: 24px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .problem-result .problem-type {
+      margin: 0;
+      color: #68717d;
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .problem-copy {
+      display: grid;
+      gap: 10px;
+    }
+
+    .problem-copy p {
+      margin: 0;
+      color: #525b67;
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 400;
+    }
+
+    .cause-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .cause-list span {
+      padding: 6px 10px;
+      border: 1px solid #dfe3e8;
+      background: #fff;
+      color: #505965;
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .indication-examples {
+      display: block;
+      align-self: stretch;
+    }
+
+    .indication-example {
+      position: relative;
+      min-width: 0;
+      min-height: 150px;
+      margin: 0;
+      overflow: hidden;
+      background: #e9ebee;
+    }
+
+    .indication-example img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: 50% 32%;
+    }
+
+    .indication-example figcaption {
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      padding: 6px 7px;
+      background: rgba(17, 17, 17, .78);
+      color: #fff;
+      font-size: 10px;
+      line-height: 1.25;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .indication-example.abstract {
+      width: 100%;
+      height: 130px;
+      min-height: 0;
+      background: transparent;
+    }
+
+    .indication-example.abstract img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .plan-result-section {
+      display: grid;
+      gap: 10px;
+    }
+
+    .plan-section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .plan-section-head span {
+      color: #747d88;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .plan-options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .plan-option {
+      min-height: 150px;
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr) 190px 106px 34px;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid #dfe3e8;
+      background: #fff;
+    }
+
+    .plan-option.selected {
+      border-color: var(--green);
+      box-shadow: inset 5px 0 0 var(--green);
+    }
+
+    .plan-level {
+      display: grid;
+      gap: 5px;
+      color: #111;
+    }
+
+    .plan-level b {
+      font-size: 20px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .plan-level span {
+      color: #68717d;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .plan-treatment {
+      display: grid;
+      gap: 6px;
+    }
+
+    .plan-treatment b {
+      color: #111;
+      font-size: 15px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .plan-treatment p {
+      margin: 0;
+      color: #68717d;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    .plan-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .plan-metric {
+      min-height: 52px;
+      display: grid;
+      align-content: center;
+      gap: 3px;
+      padding: 7px 9px;
+      background: #f6f7f8;
+    }
+
+    .plan-metric span {
+      color: #7a828d;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .plan-metric b {
+      color: #111;
+      font-size: 11px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .plan-effect {
+      position: relative;
+      min-height: 118px;
+      overflow: hidden;
+      background: #e9ebee;
+    }
+
+    .plan-effect img {
+      width: 100%;
+      height: 118px;
+      display: block;
+      object-fit: cover;
+      object-position: 50% 30%;
+    }
+
+    .plan-effect span {
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      padding: 5px 6px;
+      background: rgba(17, 17, 17, .76);
+      color: #fff;
+      font-size: 9px;
+      line-height: 1.2;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .plan-check {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #cfd5dc;
+      color: transparent;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .plan-option.selected .plan-check {
+      border-color: var(--green);
+      background: var(--green);
+      color: #111;
+    }
+
+    .severity-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .severity-choice {
+      min-height: 66px;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 13px;
+      border: 1px solid #dfe3e8;
+      background: #f6f7f8;
+    }
+
+    .severity-choice.selected {
+      border-color: #111;
+      background: #111;
+      color: #fff;
+    }
+
+    .severity-radio {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #aeb5bf;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .severity-choice.selected .severity-radio {
+      border: 6px solid var(--green);
+      background: #111;
+    }
+
+    .severity-choice b,
+    .severity-choice span {
+      display: block;
+    }
+
+    .severity-choice b {
+      font-size: 15px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .severity-choice span {
+      margin-top: 3px;
+      color: #747d88;
+      font-size: 11px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .severity-choice.selected span {
+      color: #c9d0d8;
+    }
+
+    .direction-panel {
+      display: grid;
+      gap: 9px;
+      padding-top: 4px;
+    }
+
+    .direction-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .direction-head b {
+      color: #111;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .direction-head span {
+      color: #59616c;
+      font-size: 12px;
+      line-height: 1.3;
+      font-weight: 600;
+    }
+
+    .treatment-direction-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .treatment-direction-card {
+      min-height: 150px;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) 150px 102px;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid #dfe3e8;
+      background: #fff;
+    }
+
+    .treatment-direction-card.selected {
+      border-color: var(--green);
+      box-shadow: inset 5px 0 0 var(--green);
+    }
+
+    .direction-check {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #bdc4cd;
+      background: #fff;
+      color: transparent;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .treatment-direction-card.selected .direction-check {
+      border-color: var(--green);
+      background: var(--green);
+      color: #111;
+    }
+
+    .direction-copy {
+      display: grid;
+      gap: 7px;
+    }
+
+    .direction-copy h3 {
+      margin: 0;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .direction-copy p {
+      margin: 0;
+      color: #68717d;
+      font-size: 12px;
+      line-height: 1.48;
+      font-weight: 400;
+    }
+
+    .direction-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 3px;
+    }
+
+    .direction-tag {
+      min-height: 27px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 9px;
+      border: 1px solid #d9dee4;
+      background: #f6f7f8;
+      color: #4f5864;
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .direction-commerce {
+      display: grid;
+      gap: 8px;
+      align-self: stretch;
+    }
+
+    .direction-commerce-item {
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      padding: 10px 12px;
+      background: #f6f7f8;
+    }
+
+    .direction-commerce-item span {
+      color: #777f8a;
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .direction-commerce-item strong {
+      color: #111;
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .effect-comparison {
+      width: 102px;
+      height: 128px;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .effect-comparison img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
     .spec-panel {
       position: sticky;
       top: 24px;
@@ -2953,6 +4281,91 @@
           if (index !== unit) el.remove();
         });
       }
+
+      const skuPage = document.querySelector(".sku-confirm-page:not(.payment-confirm-state)");
+      if (!skuPage) return;
+
+      const formatPrice = (value) => `¥${new Intl.NumberFormat("zh-CN").format(value)}`;
+      const groups = Array.from(skuPage.querySelectorAll(".sku-group"));
+
+      const selectedCard = (group) => group.querySelector(".sku-card.selected");
+      const selectedCount = (card) => Number(card.querySelector(".sku-session-option input:checked")?.value || 1);
+
+      const updateCardPrice = (card) => {
+        const count = selectedCount(card);
+        const price = Number(card.dataset[`price${count}`]);
+        const original = Number(card.dataset[`original${count}`]);
+        card.querySelector(".sku-price-label").textContent = count === 1 ? "券后实付" : "3次疗程价";
+        card.querySelector(".sku-price strong").textContent = formatPrice(price);
+        card.querySelector(".sku-original-price del").textContent = formatPrice(original);
+        card.querySelector(".sku-coupon").textContent = card.dataset[`coupon${count}`];
+      };
+
+      const setCardCount = (card, count) => {
+        const input = card.querySelector(`.sku-session-option input[value="${count}"]`);
+        if (input) input.checked = true;
+        updateCardPrice(card);
+      };
+
+      const updateCourseToggle = (group) => {
+        const toggle = group.querySelector(".sku-course-toggle input");
+        const card = selectedCard(group);
+        toggle.checked = Boolean(card && selectedCount(card) === Number(group.dataset.courseCount));
+      };
+
+      const updateSummary = () => {
+        const cards = groups.map(selectedCard).filter(Boolean);
+        const total = cards.reduce((sum, card) => sum + Number(card.dataset[`price${selectedCount(card)}`]), 0);
+        const original = cards.reduce((sum, card) => sum + Number(card.dataset[`original${selectedCount(card)}`]), 0);
+        const names = cards.map((card) => `${card.dataset.name}${selectedCount(card) > 1 ? ` · ${selectedCount(card)}次` : ""}`);
+        skuPage.querySelector(".sku-progress-count").textContent = `已选 ${cards.length} 个品相`;
+        skuPage.querySelector(".bottom-summary b").textContent = `已选 ${cards.length} 个具体品相`;
+        skuPage.querySelector(".bottom-summary > div > span").textContent = `${names.join(" + ")} · 预计耗时 45 分钟`;
+        skuPage.querySelector(".summary-price span").textContent = `预计实付 · 已优惠 ${formatPrice(original - total)}`;
+        skuPage.querySelector(".summary-price strong").textContent = formatPrice(total);
+        skuPage.querySelector(".summary-price del").textContent = `优惠前 ${formatPrice(original)}`;
+      };
+
+      const selectCard = (group, card) => {
+        group.querySelectorAll(".sku-card").forEach((item) => {
+          const isSelected = item === card;
+          item.classList.toggle("selected", isSelected);
+          item.querySelector(".sku-check").setAttribute("aria-label", isSelected ? "已选" : "未选择");
+        });
+        updateCourseToggle(group);
+        updateSummary();
+      };
+
+      groups.forEach((group) => {
+        group.querySelectorAll(".sku-card").forEach((card) => {
+          updateCardPrice(card);
+          card.addEventListener("click", (event) => {
+            if (event.target.closest(".sku-session-option")) return;
+            selectCard(group, card);
+          });
+
+          card.querySelectorAll(".sku-session-option input").forEach((input) => {
+            input.addEventListener("change", () => {
+              selectCard(group, card);
+              updateCardPrice(card);
+              updateCourseToggle(group);
+              updateSummary();
+            });
+          });
+        });
+
+        group.querySelector(".sku-course-toggle input").addEventListener("change", (event) => {
+          const card = selectedCard(group);
+          if (!card) return;
+          setCardCount(card, event.target.checked ? Number(group.dataset.courseCount) : 1);
+          updateCourseToggle(group);
+          updateSummary();
+        });
+
+        updateCourseToggle(group);
+      });
+
+      updateSummary();
     });
   </script>
   <main class="workspace">
@@ -2967,34 +4380,34 @@
 
       <p class="nav-title">本草案页面</p>
       <ul class="nav-list">
-        <li class="nav-item active">项目菜单：新购项目</li>
-        <li class="nav-item active">项目购买：支付确认</li>
+        <li class="nav-item active">04 方案设计</li>
+        <li class="nav-item">历史保留：方案选择/确认页（CRM 操作参考）</li>
+        <li class="nav-item active">项目选择/确认页</li>
+        <li class="nav-item">历史保留：支付确认（已移出流程）</li>
         <li class="nav-item active">项目购买：扫码支付</li>
         <li class="nav-item active">项目购买：支付结果</li>
-        <li class="nav-item active">项目菜单：我的资产</li>
-        <li class="nav-item active">治疗项目确认：有项目</li>
-        <li class="nav-item active">治疗项目确认：无项目</li>
-        <li class="nav-item active">流程确认页</li>
+        <li class="nav-item active">05-A 项目菜单：自助选购</li>
+        <li class="nav-item active">05-B 我的资产</li>
+        <li class="nav-item active">本次治疗确认页</li>
+        <li class="nav-item">历史保留：本次治疗确认 · 无项目</li>
+        <li class="nav-item active">服务要求确认页</li>
       </ul>
     </aside>
 
     <section class="stage">
       <div class="pad-stack">
         <div>
-          <p class="variant-label">项目菜单 A：方案型项目选择 · 新购项目</p>
-          <div class="pad-shell" aria-label="项目菜单新购项目 Pad 原型">
+          <p class="variant-label">原04 方案选择/确认页 · CRM 操作参考</p>
+          <div class="pad-shell" aria-label="方案选择确认 Pad 原型">
             <div class="pad-screen">
               <article class="task-page scheme-menu">
                 <header class="topbar">
                   <div class="back">‹</div>
-                  <div class="title-wrap">
-                    <h1>项目菜单</h1>
-                    <p>项目菜单 · 沙大爷 · 新氧青春北京保利店</p>
-                  </div>
-                  <div class="top-switch" aria-label="项目菜单切换">
-                    <span class="top-link active">新购项目</span>
+                  <div class="top-switch" aria-label="方案与资产切换">
+                    <span class="top-link active">方案选择</span>
                     <span class="top-link">我的资产</span>
                   </div>
+                  <span class="user-identity">沙先生（7321）</span>
                   <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
                 </header>
 
@@ -3015,12 +4428,19 @@
                     </aside>
 
                     <section class="scheme-detail">
+                      <nav class="condition-tabs" aria-label="油性肌肤问题类型">
+                        <div class="condition-tab active">单纯性出油</div>
+                        <div class="condition-tab">脂质氧化</div>
+                        <div class="condition-tab">脂溢性皮炎</div>
+                        <div class="condition-tab">毛囊角化异常</div>
+                      </nav>
+
                       <div class="scheme-hero">
                         <div class="scheme-copy">
-                          <p class="scheme-eyebrow">护肤 / 油性肌肤解决方案</p>
+                          <p class="scheme-eyebrow">护肤 / 油 / 单纯性出油</p>
                           <h2>单纯性出油</h2>
-                          <p class="scheme-desc">面部容易泛油光，早上起床满脸油、化妆容易脱妆，T 区比 U 区更明显。部分顾客可能伴随毛孔粗大，但无明显粉刺、丘疹等痤疮表现。</p>
-                          <p class="scheme-desc">这类肤况通常先从控油、疏通角质和稳定皮脂分泌入手。若只是轻度出油，可选择温和酸类管理；如果同时伴随毛孔粗大、肤色粗糙，则更适合叠加光电类项目。</p>
+                          <p class="condition-keywords"><span>晨起油光明显</span><span>T区更重</span><span>容易脱妆</span><span>可伴毛孔粗大</span><span>无明显红斑鳞屑</span></p>
+                          <p class="scheme-desc"><b>常见成因：</b>皮脂腺分泌较活跃，也可能受到温度、作息、压力、过度清洁及护肤习惯影响，使油脂分泌与水油平衡发生变化。</p>
                         </div>
                         <div class="scheme-case-strip" aria-label="适应症示例图">
                           <div class="skin-photo"></div>
@@ -3030,16 +4450,18 @@
 
                       <p class="scheme-section-title">按肤况程度查看可选方案 <span>程度用于组织解决方案，不是筛选导航</span></p>
                       <div class="solution-list">
-                        <section class="severity-group">
-                          <div class="severity-heading">轻度 <span>仅 T 区出油，无毛孔粗大</span></div>
+                        <section class="severity-group light">
+                          <div class="severity-header">
+                            <div class="severity-heading">轻度 <span>仅 T 区出油，无毛孔粗大</span></div>
+                          </div>
                           <article class="solution-row selected">
                             <div class="solution-main">
                               <h3>水杨酸治疗</h3>
                               <p>轻度出油、闭口倾向，适合首次控油和角质管理。</p>
                             </div>
                             <div class="solution-metrics">
-                              <div class="solution-metric"><span>价格/规格</span><b>XXX元/次</b></div>
-                              <div class="solution-metric"><span>套餐</span><b>XXX元/3次</b></div>
+                              <div class="solution-metric"><span>参考价格</span><b>XXX–XXX元/次</b></div>
+                              <div class="solution-metric"><span>套餐区间</span><b>XXX–XXX元/3次</b></div>
                               <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
                               <div class="solution-metric"><span>疼痛度</span><b class="pain-level"><i class="on"></i><i></i><i></i></b></div>
                             </div>
@@ -3051,14 +4473,14 @@
                           </article>
                           <article class="solution-row selected">
                             <div class="solution-main">
-                              <h3>博乐达</h3>
-                              <p>适合油脂分泌旺盛、反复闭口，强调温和刷酸护理。</p>
+                              <h3>光子嫩肤</h3>
+                              <p>适合轻度出油同时伴随毛孔粗大、肤色不均，希望综合改善肤质。</p>
                             </div>
                             <div class="solution-metrics">
-                              <div class="solution-metric"><span>价格/规格</span><b>XXX元/次</b></div>
-                              <div class="solution-metric"><span>套餐</span><b>XXX元/3次</b></div>
-                              <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
-                              <div class="solution-metric"><span>疼痛度</span><b class="pain-level"><i class="on"></i><i></i><i></i></b></div>
+                              <div class="solution-metric"><span>参考价格</span><b>XXX–XXX元/次</b></div>
+                              <div class="solution-metric"><span>套餐区间</span><b>XXX–XXX元/3次</b></div>
+                              <div class="solution-metric"><span>治疗时长</span><b>30分钟左右</b></div>
+                              <div class="solution-metric"><span>疼痛度</span><b class="pain-level"><i class="on"></i><i class="on"></i><i></i></b></div>
                             </div>
                             <div class="solution-cases">
                               <div class="case-thumb">治疗前</div>
@@ -3068,17 +4490,20 @@
                           </article>
                         </section>
 
-                        <section class="severity-group">
-                          <div class="severity-heading">中重度 <span>全面出油，伴随毛孔粗大</span></div>
+                        <section class="severity-group heavy">
+                          <div class="severity-header">
+                            <div class="severity-heading">重度 <span>全面明显出油，常伴毛孔粗大或肤质粗糙</span></div>
+                            <p class="severity-plan-note"><b>主要方案：</b>肉毒微滴注射、光子嫩肤 · <b>辅助方案：</b>水杨酸治疗与药物治疗（需医生评估）</p>
+                          </div>
                           <article class="solution-row">
                             <div class="solution-main">
-                              <h3>元气超光子</h3>
-                              <p>出油伴随肤色不均、毛孔粗大，可同步改善肤质光泽。</p>
+                              <h3>肉毒微滴注射</h3>
+                              <p>针对皮脂分泌旺盛的重度出油，以减少油脂分泌、细腻毛孔为主要目标。</p>
                             </div>
                             <div class="solution-metrics">
-                              <div class="solution-metric"><span>价格/规格</span><b>XXX元/次</b></div>
-                              <div class="solution-metric"><span>套餐</span><b>XXX元/3次</b></div>
-                              <div class="solution-metric"><span>治疗时长</span><b>25分钟左右</b></div>
+                              <div class="solution-metric"><span>参考价格</span><b>XXX–XXX元/次</b></div>
+                              <div class="solution-metric"><span>治疗属性</span><b>主要方案</b></div>
+                              <div class="solution-metric"><span>治疗时长</span><b>30分钟左右</b></div>
                               <div class="solution-metric"><span>疼痛度</span><b class="pain-level"><i class="on"></i><i class="on"></i><i></i></b></div>
                             </div>
                             <div class="solution-cases">
@@ -3089,12 +4514,12 @@
                           </article>
                           <article class="solution-row">
                             <div class="solution-main">
-                              <h3>BBL Hero</h3>
-                              <p>适合希望综合改善出油、粗糙和肤色状态的进阶项目。</p>
+                              <h3>光子嫩肤</h3>
+                              <p>作为重度出油的主要联合方案，同步改善毛孔粗大、粗糙与肤色不均。</p>
                             </div>
                             <div class="solution-metrics">
-                              <div class="solution-metric"><span>价格/规格</span><b>XXX元/次</b></div>
-                              <div class="solution-metric"><span>套餐</span><b>XXX元/6次</b></div>
+                              <div class="solution-metric"><span>参考价格</span><b>XXX–XXX元/次</b></div>
+                              <div class="solution-metric"><span>治疗属性</span><b>主要方案</b></div>
                               <div class="solution-metric"><span>治疗时长</span><b>30分钟左右</b></div>
                               <div class="solution-metric"><span>疼痛度</span><b class="pain-level"><i class="on"></i><i class="on"></i><i></i></b></div>
                             </div>
@@ -3115,14 +4540,14 @@
                     <div class="bottom-summary summary-pricing">
                       <div>
                         <b>已选 2 个治疗项目</b>
-                        <span>预计耗时 30 分钟 · 实际治疗时间以院内实际情况为准</span>
+                        <span>预计耗时 45 分钟 · 实际治疗时间以院内实际情况为准</span>
                       </div>
                       <div class="summary-price">
                         <span>总价</span>
                         <strong>XXX元</strong>
                       </div>
                     </div>
-                    <div class="primary">去购买</div>
+                    <div class="primary">选择具体品相</div>
                   </div>
                 </footer>
               </article>
@@ -3131,61 +4556,263 @@
         </div>
 
         <div>
-          <p class="variant-label">项目菜单 04-A：支付确认半弹窗</p>
-          <div class="pad-shell" aria-label="项目购买支付确认 Pad 原型">
+          <p class="variant-label">04-A 项目选择/确认页</p>
+          <div class="pad-shell" aria-label="治疗项目选择确认 Pad 原型">
             <div class="pad-screen">
-              <article class="task-page scheme-menu payment-confirm-state">
+              <article class="task-page sku-confirm-page">
                 <header class="topbar">
                   <div class="back">‹</div>
                   <div class="title-wrap">
-                    <h1>项目菜单</h1>
-                    <p>项目菜单 · 沙大爷 · 新氧青春北京保利店</p>
+                    <h1>项目选择/确认</h1>
+                    <p>轻度单纯性出油方案</p>
                   </div>
-                  <div class="top-switch" aria-label="项目菜单切换">
-                    <span class="top-link active">新购项目</span>
-                    <span class="top-link">我的资产</span>
-                  </div>
-                  <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
+                  <span class="user-identity">沙先生（7321）</span>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
                 </header>
 
+                <section class="sku-progress">
+                  <div>
+                    <b>请选择具体治疗品相</b>
+                    <span>每个方案组内最多选择 1 项；全页至少选择 1 个品相后才能继续</span>
+                  </div>
+                  <div class="sku-progress-count">已选 2 个品相</div>
+                </section>
+
                 <section class="task-content">
-                  <nav class="scheme-tabs" aria-label="项目赛道">
-                    <div class="scheme-tab active">护肤</div>
-                    <div class="scheme-tab">抗衰</div>
-                    <div class="scheme-tab">问题肌</div>
-                    <div class="scheme-tab">美学</div>
-                  </nav>
-                  <div class="payment-preview-list" aria-hidden="true">
-                    <article class="solution-row selected">
-                      <div class="solution-main">
-                        <h3>水杨酸治疗</h3>
-                        <p>轻度出油、闭口倾向，适合首次控油和角质管理。</p>
+                  <div class="sku-groups">
+                    <section class="sku-group" data-course-count="3" aria-label="水杨酸治疗品相">
+                      <div class="sku-group-head">
+                        <div class="sku-group-check" aria-label="已选择水杨酸治疗">✓</div>
+                        <div class="sku-group-title"><b>水杨酸治疗</b><span>组内单选</span></div>
+                        <label class="sku-course-toggle"><input type="checkbox" /><span>完整疗程（3次）</span></label>
                       </div>
-                      <div class="solution-metrics">
-                        <div class="solution-metric"><span>价格/规格</span><b>680元/次</b></div>
-                        <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                      <div class="sku-grid">
+                        <article class="sku-card selected" data-name="博乐达水杨酸治疗" data-price1="580" data-original1="680" data-coupon1="已自动匹配 ¥100 新客券" data-price3="1680" data-original3="2040" data-coupon3="完整疗程已优惠 ¥360">
+                          <div class="sku-check" aria-label="已选"></div>
+                          <div class="sku-card-copy">
+                            <h3>博乐达水杨酸治疗</h3>
+                            <p>超分子水杨酸院线护理，适合油脂分泌旺盛、闭口及角质堆积。</p>
+                            <div class="sku-card-facts"><span>约 15 分钟</span><b>近30天 68% 顾客选择</b></div>
+                          </div>
+                          <div class="sku-session-options" aria-label="博乐达水杨酸治疗次数">
+                            <label class="sku-session-option"><input type="radio" name="broda-count" value="1" checked /><span>1次</span></label>
+                            <label class="sku-session-option"><input type="radio" name="broda-count" value="3" /><span>3次</span></label>
+                          </div>
+                          <div class="sku-price">
+                            <span class="sku-price-label">券后实付</span>
+                            <strong>¥580</strong>
+                            <div class="sku-original-price"><span>优惠前</span><del>¥680</del></div>
+                            <div class="sku-coupon">已自动匹配 ¥100 新客券</div>
+                          </div>
+                        </article>
+                        <article class="sku-card" data-name="院线复配水杨酸治疗" data-price1="420" data-original1="520" data-coupon1="已自动匹配 ¥100 新客券" data-price3="1200" data-original3="1560" data-coupon3="完整疗程已优惠 ¥360">
+                          <div class="sku-check" aria-label="未选择"></div>
+                          <div class="sku-card-copy">
+                            <h3>院线复配水杨酸治疗</h3>
+                            <p>复配型角质管理方案，适合初次尝试或希望更温和控制出油的人群。</p>
+                            <div class="sku-card-facts"><span>约 15 分钟</span><b>近30天 32% 顾客选择</b></div>
+                          </div>
+                          <div class="sku-session-options" aria-label="院线复配水杨酸治疗次数">
+                            <label class="sku-session-option"><input type="radio" name="compound-count" value="1" checked /><span>1次</span></label>
+                            <label class="sku-session-option"><input type="radio" name="compound-count" value="3" /><span>3次</span></label>
+                          </div>
+                          <div class="sku-price">
+                            <span class="sku-price-label">券后实付</span>
+                            <strong>¥420</strong>
+                            <div class="sku-original-price"><span>优惠前</span><del>¥520</del></div>
+                            <div class="sku-coupon">已自动匹配 ¥100 新客券</div>
+                          </div>
+                        </article>
                       </div>
-                      <div class="solution-cases">
-                        <div class="case-thumb">治疗前</div>
-                        <div class="case-thumb after">治疗后</div>
+                    </section>
+
+                    <section class="sku-group" data-course-count="3" aria-label="光子嫩肤品相">
+                      <div class="sku-group-head">
+                        <div class="sku-group-check" aria-label="已选择光子嫩肤">✓</div>
+                        <div class="sku-group-title"><b>光子嫩肤</b><span>组内单选</span></div>
+                        <label class="sku-course-toggle"><input type="checkbox" /><span>完整疗程（3次）</span></label>
                       </div>
-                      <div class="solution-action" aria-label="已选"></div>
-                    </article>
-                    <article class="solution-row selected">
-                      <div class="solution-main">
-                        <h3>博乐达</h3>
-                        <p>适合油脂分泌旺盛、反复闭口，强调温和刷酸护理。</p>
+                      <div class="sku-grid">
+                        <article class="sku-card selected" data-name="CC光治疗" data-price1="1100" data-original1="1280" data-coupon1="已自动匹配 ¥180 光电券" data-price3="3180" data-original3="3840" data-coupon3="完整疗程已优惠 ¥660">
+                          <div class="sku-check" aria-label="已选"></div>
+                          <div class="sku-card-copy">
+                            <h3>CC光治疗</h3>
+                            <p>针对轻度出油伴毛孔粗大、肤色不均，兼顾提亮与肤质细腻度。</p>
+                            <div class="sku-card-facts"><span>约 30 分钟</span><b>近30天 73% 顾客选择</b></div>
+                          </div>
+                          <div class="sku-session-options" aria-label="CC光治疗次数">
+                            <label class="sku-session-option"><input type="radio" name="cc-count" value="1" checked /><span>1次</span></label>
+                            <label class="sku-session-option"><input type="radio" name="cc-count" value="3" /><span>3次</span></label>
+                          </div>
+                          <div class="sku-price">
+                            <span class="sku-price-label">券后实付</span>
+                            <strong>¥1,100</strong>
+                            <div class="sku-original-price"><span>优惠前</span><del>¥1,280</del></div>
+                            <div class="sku-coupon">已自动匹配 ¥180 光电券</div>
+                          </div>
+                        </article>
+                        <article class="sku-card" data-name="BBL Hero治疗" data-price1="1400" data-original1="1580" data-coupon1="已自动匹配 ¥180 光电券" data-price3="4080" data-original3="4740" data-coupon3="完整疗程已优惠 ¥660">
+                          <div class="sku-check" aria-label="未选择"></div>
+                          <div class="sku-card-copy">
+                            <h3>BBL Hero治疗</h3>
+                            <p>覆盖肤色、泛红与毛孔等综合问题，适合希望进行进阶光电管理的人群。</p>
+                            <div class="sku-card-facts"><span>约 30 分钟</span><b>近30天 27% 顾客选择</b></div>
+                          </div>
+                          <div class="sku-session-options" aria-label="BBL Hero治疗次数">
+                            <label class="sku-session-option"><input type="radio" name="bbl-count" value="1" checked /><span>1次</span></label>
+                            <label class="sku-session-option"><input type="radio" name="bbl-count" value="3" /><span>3次</span></label>
+                          </div>
+                          <div class="sku-price">
+                            <span class="sku-price-label">券后实付</span>
+                            <strong>¥1,400</strong>
+                            <div class="sku-original-price"><span>优惠前</span><del>¥1,580</del></div>
+                            <div class="sku-coupon">已自动匹配 ¥180 光电券</div>
+                          </div>
+                        </article>
                       </div>
-                      <div class="solution-metrics">
-                        <div class="solution-metric"><span>价格/规格</span><b>1,280元/3次</b></div>
-                        <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                    </section>
+
+                    <section class="addon-recommendations" aria-label="建议搭配购买项目">
+                      <div class="addon-recommendations-head">
+                        <h2>以下项目建议搭配购买</h2>
+                        <span>可多选，非必选</span>
                       </div>
-                      <div class="solution-cases">
-                        <div class="case-thumb">治疗前</div>
-                        <div class="case-thumb after">治疗后</div>
+                      <div class="addon-list">
+                        <label class="addon-option">
+                          <input type="checkbox" name="addon-care" />
+                          <span class="addon-option-copy"><b>舒敏修护护理</b><span>适合酸类或光电项目后进行舒缓与保湿管理</span></span>
+                          <span class="addon-option-price">¥299<del>¥399</del></span>
+                        </label>
+                        <label class="addon-option">
+                          <input type="checkbox" name="addon-red-light" />
+                          <span class="addon-option-copy"><b>红光修护</b><span>用于治疗后的舒缓修护，预计增加 20 分钟</span></span>
+                          <span class="addon-option-price">¥199<del>¥269</del></span>
+                        </label>
+                        <label class="addon-option">
+                          <input type="checkbox" name="addon-hydration" />
+                          <span class="addon-option-copy"><b>术后补水护理</b><span>补充水分并加强屏障护理，预计增加 30 分钟</span></span>
+                          <span class="addon-option-price">¥399<del>¥499</del></span>
+                        </label>
                       </div>
-                      <div class="solution-action" aria-label="已选"></div>
-                    </article>
+                    </section>
+                  </div>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="bottom-with-summary">
+                    <div class="bottom-summary summary-pricing">
+                      <div>
+                        <b>已选 2 个具体品相</b>
+                        <span>博乐达水杨酸治疗 + CC光治疗 · 预计耗时 45 分钟</span>
+                      </div>
+                      <div class="summary-price"><span>预计实付 · 已优惠 ¥280</span><strong>¥1,680</strong><del>优惠前 ¥1,960</del></div>
+                    </div>
+                    <div class="primary">确认项目并扫码支付</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">历史保留 04-B：支付确认半弹窗（已移出流程）</p>
+          <div class="pad-shell" aria-label="项目购买支付确认 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page sku-confirm-page payment-confirm-state">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>项目选择/确认</h1>
+                    <p>轻度单纯性出油方案</p>
+                  </div>
+                  <span class="user-identity">沙先生（7321）</span>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+
+                <section class="sku-progress">
+                  <div>
+                    <b>请选择具体治疗品相</b>
+                    <span>每个方案组内最多选择 1 项；全页至少选择 1 个品相后才能继续</span>
+                  </div>
+                  <div class="sku-progress-count">已选 2 个品相</div>
+                </section>
+
+                <section class="task-content">
+                  <div class="sku-groups">
+                    <section class="sku-group" aria-label="水杨酸治疗品相">
+                      <div class="sku-group-head">
+                        <div class="sku-group-check" aria-label="已选择水杨酸治疗">✓</div>
+                        <div class="sku-group-title"><b>水杨酸治疗</b><span>组内单选</span></div>
+                      </div>
+                      <div class="sku-grid">
+                        <article class="sku-card selected">
+                          <div class="sku-check" aria-label="已选"></div>
+                          <div class="sku-card-copy">
+                            <h3>博乐达水杨酸治疗</h3>
+                            <p>超分子水杨酸院线护理，适合油脂分泌旺盛、闭口及角质堆积。</p>
+                            <div class="sku-card-facts"><span>约 15 分钟</span><b>近30天 68% 顾客选择</b></div>
+                          </div>
+                          <div class="sku-price">
+                            <span class="sku-price-label">券后实付</span>
+                            <strong>¥580</strong>
+                            <div class="sku-original-price"><span>优惠前</span><del>¥680</del></div>
+                            <div class="sku-coupon">已自动匹配 ¥100 新客券</div>
+                          </div>
+                        </article>
+                        <article class="sku-card">
+                          <div class="sku-check" aria-label="未选择"></div>
+                          <div class="sku-card-copy">
+                            <h3>院线复配水杨酸治疗</h3>
+                            <p>复配型角质管理方案，适合初次尝试或希望更温和控制出油的人群。</p>
+                            <div class="sku-card-facts"><span>约 15 分钟</span><b>近30天 32% 顾客选择</b></div>
+                          </div>
+                          <div class="sku-price">
+                            <span class="sku-price-label">券后实付</span>
+                            <strong>¥420</strong>
+                            <div class="sku-original-price"><span>优惠前</span><del>¥520</del></div>
+                            <div class="sku-coupon">已自动匹配 ¥100 新客券</div>
+                          </div>
+                        </article>
+                      </div>
+                    </section>
+
+                    <section class="sku-group" aria-label="光子嫩肤品相">
+                      <div class="sku-group-head">
+                        <div class="sku-group-check" aria-label="已选择光子嫩肤">✓</div>
+                        <div class="sku-group-title"><b>光子嫩肤</b><span>组内单选</span></div>
+                      </div>
+                      <div class="sku-grid">
+                        <article class="sku-card selected">
+                          <div class="sku-check" aria-label="已选"></div>
+                          <div class="sku-card-copy">
+                            <h3>CC光治疗</h3>
+                            <p>针对轻度出油伴毛孔粗大、肤色不均，兼顾提亮与肤质细腻度。</p>
+                            <div class="sku-card-facts"><span>约 30 分钟</span><b>近30天 73% 顾客选择</b></div>
+                          </div>
+                          <div class="sku-price">
+                            <span class="sku-price-label">券后实付</span>
+                            <strong>¥1,100</strong>
+                            <div class="sku-original-price"><span>优惠前</span><del>¥1,280</del></div>
+                            <div class="sku-coupon">已自动匹配 ¥180 光电券</div>
+                          </div>
+                        </article>
+                        <article class="sku-card">
+                          <div class="sku-check" aria-label="未选择"></div>
+                          <div class="sku-card-copy">
+                            <h3>BBL Hero治疗</h3>
+                            <p>覆盖肤色、泛红与毛孔等综合问题，适合希望进行进阶光电管理的人群。</p>
+                            <div class="sku-card-facts"><span>约 30 分钟</span><b>近30天 27% 顾客选择</b></div>
+                          </div>
+                          <div class="sku-price">
+                            <span class="sku-price-label">券后实付</span>
+                            <strong>¥1,400</strong>
+                            <div class="sku-original-price"><span>优惠前</span><del>¥1,580</del></div>
+                            <div class="sku-coupon">已自动匹配 ¥180 光电券</div>
+                          </div>
+                        </article>
+                      </div>
+                    </section>
                   </div>
                 </section>
 
@@ -3194,16 +4821,16 @@
                   <div class="payment-sheet-head">
                     <div>
                       <h2>支付确认</h2>
-                      <p>请确认本次购买项目、优惠和应付金额</p>
+                      <p>请确认本次购买品相、优惠和应付金额</p>
                     </div>
-                    <div class="payment-order-id">待支付订单 · 2 个项目</div>
+                    <div class="payment-order-id">待支付订单 · 2 个品相</div>
                   </div>
                   <div class="payment-items">
-                    <div class="payment-item"><div>水杨酸治疗 <span>单次</span></div><b>¥680.00</b></div>
-                    <div class="payment-item"><div>博乐达 <span>3次套餐</span></div><b>¥1,280.00</b></div>
+                    <div class="payment-item"><div>博乐达水杨酸治疗 <span>单次</span></div><b>¥680.00</b></div>
+                    <div class="payment-item"><div>CC光治疗 <span>全模式单次</span></div><b>¥1,280.00</b></div>
                   </div>
                   <div class="payment-pricing">
-                    <div class="payment-price-row"><span>项目合计</span><b>¥1,960.00</b></div>
+                    <div class="payment-price-row"><span>品相合计</span><b>¥1,960.00</b></div>
                     <div class="payment-price-row discount"><span>优惠合计 · 新客券与门店活动</span><b>-¥280.00</b></div>
                     <div class="payment-price-row total"><span>应付金额</span><strong>¥1,680.00</strong></div>
                   </div>
@@ -3218,7 +4845,7 @@
         </div>
 
         <div>
-          <p class="variant-label">项目菜单 04-B：扫码支付</p>
+          <p class="variant-label">项目菜单 04-C：扫码支付</p>
           <div class="pad-shell" aria-label="扫码支付 Pad 原型">
             <div class="pad-screen">
               <article class="task-page payment-page">
@@ -3226,8 +4853,9 @@
                   <div class="back">‹</div>
                   <div class="title-wrap">
                     <h1>扫码支付</h1>
-                    <p>订单号 SOYQ202607130419 · 2 个项目</p>
+                    <p>订单号 SOYQ202607130419 · 2 个品相</p>
                   </div>
+                  <span class="user-identity">沙先生（7321）</span>
                   <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
                 </header>
 
@@ -3253,7 +4881,7 @@
         </div>
 
         <div>
-          <p class="variant-label">项目菜单 04-C：支付成功</p>
+          <p class="variant-label">项目菜单 04-D：支付成功</p>
           <div class="pad-shell" aria-label="支付成功 Pad 原型">
             <div class="pad-screen">
               <article class="task-page payment-result-page">
@@ -3263,6 +4891,7 @@
                     <h1>支付结果</h1>
                     <p>订单号 SOYQ202607130419</p>
                   </div>
+                  <span class="user-identity">沙先生（7321）</span>
                   <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
                 </header>
 
@@ -3273,21 +4902,18 @@
                     </div>
                     <h2>支付成功</h2>
                     <div class="payment-result-amount">¥1,680.00</div>
-                    <p class="payment-result-copy">水杨酸治疗与博乐达已加入“我的资产”，并已<b>自动选入今日治疗</b>。您可以在资产列表中继续调整本次治疗项目。</p>
+                    <p class="payment-result-copy">博乐达水杨酸治疗与CC光治疗已加入“我的资产”，并已<b>自动选入今日治疗</b>。您可以在资产列表中继续调整本次治疗项目。</p>
                     <div class="payment-result-timer"><b>5</b> 秒后自动进入我的资产</div>
                   </div>
                 </section>
 
-                <footer class="bottom-bar">
-                  <div class="primary">查看我的资产</div>
-                </footer>
               </article>
             </div>
           </div>
         </div>
 
         <div>
-          <p class="variant-label">项目菜单 04-D：支付未完成</p>
+          <p class="variant-label">项目菜单 04-E：支付未完成</p>
           <div class="pad-shell" aria-label="支付未完成 Pad 原型">
             <div class="pad-screen">
               <article class="task-page payment-result-page">
@@ -3297,6 +4923,7 @@
                     <h1>支付结果</h1>
                     <p>订单号 SOYQ202607130419</p>
                   </div>
+                  <span class="user-identity">沙先生（7321）</span>
                   <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
                 </header>
 
@@ -3306,13 +4933,13 @@
                       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
                     </div>
                     <h2>支付未完成</h2>
-                    <p class="payment-result-copy">支付二维码已超过 60 秒有效期，本次待支付订单已取消，未产生扣款。您可以返回项目菜单重新选择或再次发起购买。</p>
-                    <div class="payment-result-timer"><b>3</b> 秒后返回项目菜单</div>
+                    <p class="payment-result-copy">支付二维码已超过 60 秒有效期，本次待支付订单已取消，未产生扣款。您可以返回方案选择页重新选择或再次发起购买。</p>
+                    <div class="payment-result-timer"><b>3</b> 秒后返回方案选择页</div>
                   </div>
                 </section>
 
                 <footer class="bottom-bar">
-                  <div class="primary">返回项目菜单</div>
+                  <div class="primary">返回方案选择页</div>
                 </footer>
               </article>
             </div>
@@ -3320,85 +4947,79 @@
         </div>
 
         <div>
-          <p class="variant-label">项目菜单 B：我的资产</p>
-          <div class="pad-shell" aria-label="项目菜单我的资产 Pad 原型">
+          <p class="variant-label">05-B 我的资产</p>
+          <div class="pad-shell" aria-label="我的资产 Pad 原型">
             <div class="pad-screen">
               <article class="task-page scheme-menu asset-menu">
                 <header class="topbar">
                   <div class="back">‹</div>
-                  <div class="title-wrap">
-                    <h1>项目菜单</h1>
-                    <p>我的资产 · 沙大爷 · 可用资产 3 个</p>
-                  </div>
-                  <div class="top-switch" aria-label="项目菜单切换">
-                    <span class="top-link">新购项目</span>
+                  <div class="top-switch" aria-label="自助项目与资产切换">
+                    <span class="top-link">项目菜单</span>
                     <span class="top-link active">我的资产</span>
                   </div>
+                  <span class="user-identity">沙先生（7321）</span>
                   <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
                 </header>
 
                 <section class="task-content">
                   <div class="asset-intro">
                     <div>
-                      <b>已购未消耗项目</b>
-                      <span>刚刚购买的项目已自动选入今日治疗；您仍可取消选择或继续加入其他资产。</span>
+                      <b>可用于本次治疗的项目</b>
+                      <span>从已有资产中选择项目，确认后加入本次治疗项目列表。</span>
                     </div>
                     <div class="asset-count">3 个可用资产</div>
                   </div>
 
                   <section class="asset-list" aria-label="我的资产项目列表">
-                    <article class="solution-row asset-row selected just-purchased">
+                    <article class="solution-row asset-row selected">
                       <div class="solution-main">
-                        <h3>水杨酸治疗</h3>
-                        <p>刚刚购买，已自动加入今日治疗；适合轻度出油、闭口倾向和角质管理。</p>
-                        <div class="asset-order">订单 ID：SOYQ202607130419</div>
+                        <h3>光子嫩肤年卡 · 第 2 次</h3>
+                        <p>历史可用资产，适合肤色暗沉、毛孔粗大与轻度泛红。</p>
                       </div>
                       <div class="solution-metrics">
-                        <div class="solution-metric"><span>剩余次数</span><b>1 次</b></div>
-                        <div class="solution-metric"><span>规格</span><b>单次治疗</b></div>
-                        <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
-                        <div class="solution-metric"><span>流程要求</span><b>无需面诊</b></div>
+                        <div class="solution-metric"><span>剩余次数</span><b>4 次</b></div>
+                        <div class="solution-metric"><span>适用门店</span><b>北京保利店</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>60分钟左右</b></div>
+                        <div class="solution-metric"><span>咨询建议</span><b>建议咨询</b></div>
                       </div>
-                      <div class="asset-status-panel just-purchased-note">
-                        <span>刚刚购买</span>
-                        <b>已选入今日</b>
-                      </div>
-                      <div class="solution-action" aria-label="已选"></div>
-                    </article>
-
-                    <article class="solution-row asset-row selected just-purchased">
-                      <div class="solution-main">
-                        <h3>博乐达 · 3次套餐</h3>
-                        <p>刚刚购买，已自动加入今日治疗；适合油脂分泌旺盛和反复闭口护理。</p>
-                        <div class="asset-order">订单 ID：SOYQ202607130419</div>
-                      </div>
-                      <div class="solution-metrics">
-                        <div class="solution-metric"><span>剩余次数</span><b>3 次</b></div>
-                        <div class="solution-metric"><span>规格</span><b>疗程套餐</b></div>
-                        <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
-                        <div class="solution-metric"><span>流程要求</span><b>无需面诊</b></div>
-                      </div>
-                      <div class="asset-status-panel just-purchased-note">
-                        <span>刚刚购买</span>
-                        <b>已选入今日</b>
+                      <div class="asset-status-panel">
+                        <span>本次治疗</span>
+                        <b>已选择</b>
                       </div>
                       <div class="solution-action" aria-label="已选"></div>
                     </article>
 
                     <article class="solution-row asset-row">
                       <div class="solution-main">
-                        <h3>光子嫩肤年卡 · 第 2 次</h3>
-                        <p>历史可用资产，适合肤色暗沉、毛孔粗大与轻度泛红，本次尚未选择。</p>
-                        <div class="asset-order">订单 ID：SOYQ202607090238</div>
+                        <h3>舒敏修护护理</h3>
+                        <p>历史可用资产，适合干痒、泛红与屏障不稳定时的舒缓护理。</p>
                       </div>
                       <div class="solution-metrics">
-                        <div class="solution-metric"><span>剩余次数</span><b>4 次</b></div>
-                        <div class="solution-metric"><span>适用门店</span><b>北京保利店</b></div>
-                        <div class="solution-metric"><span>治疗时长</span><b>60分钟左右</b></div>
-                        <div class="solution-metric"><span>流程要求</span><b>建议面诊</b></div>
+                        <div class="solution-metric"><span>剩余次数</span><b>2 次</b></div>
+                        <div class="solution-metric"><span>规格</span><b>单次治疗</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>40分钟左右</b></div>
+                        <div class="solution-metric"><span>咨询建议</span><b>无需咨询</b></div>
                       </div>
                       <div class="asset-status-panel">
-                        <span>今日安排</span>
+                        <span>本次治疗</span>
+                        <b>可加入</b>
+                      </div>
+                      <div class="solution-action" aria-label="未选择"></div>
+                    </article>
+
+                    <article class="solution-row asset-row">
+                      <div class="solution-main">
+                        <h3>博乐达水杨酸治疗</h3>
+                        <p>历史可用资产，适合油脂分泌旺盛与闭口管理。</p>
+                      </div>
+                      <div class="solution-metrics">
+                        <div class="solution-metric"><span>剩余次数</span><b>1 次</b></div>
+                        <div class="solution-metric"><span>规格</span><b>单次治疗</b></div>
+                        <div class="solution-metric"><span>治疗时长</span><b>15分钟左右</b></div>
+                        <div class="solution-metric"><span>咨询建议</span><b>无需咨询</b></div>
+                      </div>
+                      <div class="asset-status-panel">
+                        <span>本次治疗</span>
                         <b>可加入</b>
                       </div>
                       <div class="solution-action" aria-label="未选择"></div>
@@ -3410,11 +5031,11 @@
                   <div class="bottom-with-summary">
                     <div class="bottom-summary">
                       <div>
-                        <b>已选 2 个资产项目</b>
-                        <span>预计耗时 30 分钟 · 实际治疗时间以院内实际情况为准</span>
+                        <b>已选 1 个资产项目</b>
+                        <span>光子嫩肤年卡 · 第 2 次</span>
                       </div>
                     </div>
-                    <div class="primary">添加至今日治疗</div>
+                    <div class="primary">确认并加入本次治疗</div>
                   </div>
                 </footer>
               </article>
@@ -3423,21 +5044,21 @@
         </div>
 
         <div>
-          <p class="variant-label">治疗项目确认 A：有项目</p>
+          <p class="variant-label">06 本次治疗确认页</p>
           <div class="pad-shell" aria-label="有本次治疗项目 Pad 原型">
             <div class="pad-screen">
               <article class="task-page confirm-page">
                 <header class="topbar">
                   <div class="back">‹</div>
                   <div class="title-wrap">
-                    <h1>治疗项目确认</h1>
-                    <p>老客可直达；项目菜单完成后也流入这里</p>
+                    <h1>本次治疗确认</h1>
                   </div>
+                  <span class="user-identity">沙先生（7321）</span>
                   <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
                 </header>
                 <section class="context-strip">
                   <div>
-                    <b>已预约2个项目</b>
+                    <b>今日治疗项目</b>
                     <span>预计治疗时长约 1 小时 40 分钟</span>
                   </div>
                   <div class="status-pill add-service">增加服务项目</div>
@@ -3507,22 +5128,11 @@
                       </section>
                     </section>
 
-                    <aside class="ai-panel">
-                      <p class="ai-panel-title">AI羊点评<span>根据今日已选项目实时生成</span></p>
-                      <div class="ai-summary-copy">
-                        <p><b>预计时间：</b>今日已选项目预计治疗约 100 分钟；如同时增加屏障修护精华导入，预计额外增加 20 分钟。实际治疗时间以院内当日安排为准。</p>
-                        <p><b>改善点汇总：</b>本次方案主要针对肤色暗沉、毛孔粗糙与皮肤屏障不稳定，组合治疗可兼顾提亮、细腻肤质和术后舒缓。</p>
-                        <p><b>术前注意：</b>治疗前一周避免暴晒、刷酸及其他刺激性护理；如治疗区域存在破损、过敏，或处于孕期、哺乳期，请在治疗前主动告知医护人员。</p>
-                      </div>
-                    </aside>
                   </div>
                 </section>
 
                 <footer class="bottom-bar">
-                  <div class="bottom-two">
-                    <div class="secondary">安排面诊</div>
-                    <div class="primary">无需面诊，直接治疗</div>
-                  </div>
+                  <div class="primary">确认，按照以上项目安排</div>
                 </footer>
               </article>
             </div>
@@ -3530,22 +5140,23 @@
         </div>
 
         <div>
-          <p class="variant-label">治疗项目确认 B：无项目</p>
+          <p class="variant-label">历史保留 07：本次治疗确认 · 无项目（已移出流程）</p>
           <div class="pad-shell" aria-label="无本次治疗项目 Pad 原型">
             <div class="pad-screen">
               <article class="task-page confirm-page empty-confirm-page">
                 <header class="topbar">
                   <div class="back">‹</div>
                   <div class="title-wrap">
-                    <h1>治疗项目确认</h1>
+                    <h1>本次治疗确认</h1>
                     <p>尚未预约或尚未选择服务项目</p>
                   </div>
+                  <span class="user-identity">沙先生（7321）</span>
                   <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
                 </header>
                 <section class="context-strip">
                   <div>
                     <b>今天还没有治疗项目</b>
-                    <span>可先面诊，也可从资产或项目菜单添加本次治疗</span>
+                    <span>可先咨询，也可从资产或方案选择页添加本次治疗</span>
                   </div>
                   <div class="status-pill add-service">选择服务项目</div>
                 </section>
@@ -3555,7 +5166,7 @@
                     <section class="confirm-list">
                       <div class="empty-confirm-note">
                         <b>暂无本次治疗项目</b>
-                        <span>当前还没有已预约或已选择的治疗项目，因此暂不生成项目推荐和 AI 点评。请先选择服务项目，或安排面诊后由服务人员协助确认方案。</span>
+                        <span>当前还没有已预约或已选择的治疗项目，因此暂不生成项目推荐和 AI 点评。请先选择服务项目，或安排面诊后由系统自动分配面诊人员协助确认方案。</span>
                       </div>
                     </section>
                   </div>
@@ -3563,7 +5174,7 @@
 
                 <footer class="bottom-bar">
                   <div class="bottom-two">
-                    <div class="secondary">安排面诊</div>
+                    <div class="secondary">安排面诊（系统分配）</div>
                     <div class="primary">选择服务项目</div>
                   </div>
                 </footer>
@@ -3573,35 +5184,19 @@
         </div>
 
         <div>
-          <p class="variant-label">流程确认页：附加服务与耗时确认</p>
-          <div class="pad-shell" aria-label="流程确认页 Pad 原型">
+          <p class="variant-label">服务要求确认页：附加服务确认</p>
+          <div class="pad-shell" aria-label="服务要求确认页 Pad 原型">
             <div class="pad-screen">
-              <article class="task-page">
+              <article class="task-page service-requirements-page">
                 <header class="topbar">
                   <div class="back">‹</div>
                   <div class="title-wrap">
-                    <h1>治疗流程确认</h1>
+                    <h1>服务要求确认</h1>
                     <p>请确认以下服务安排</p>
                   </div>
+                  <span class="user-identity">沙先生（7321）</span>
                   <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
                 </header>
-                <section class="context-strip flow-summary-strip">
-                  <div class="flow-summary-heading">
-                    <b>已选择 3 项附加服务</b>
-                    <span>根据当前选择实时计算</span>
-                  </div>
-                  <div class="flow-summary-time">
-                    <div class="flow-time-formula">
-                      <span>基础治疗 <b>100 分钟</b></span>
-                      <i>+</i>
-                      <span>附加服务 <b>15 分钟</b></span>
-                    </div>
-                    <div class="flow-time-total">
-                      <span>本次预计共</span>
-                      <strong>115 分钟</strong>
-                    </div>
-                  </div>
-                </section>
 
                 <section class="task-content">
                   <div class="flow-grid">
@@ -3646,7 +5241,217 @@
                 </section>
 
                 <footer class="bottom-bar">
-                  <div class="primary">确认流程安排</div>
+                  <div class="primary">确认服务要求</div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">05-A 项目菜单：自助选购</p>
+          <div class="pad-shell" aria-label="无咨询无预约场景自助项目菜单 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page menu-page self-shop-page">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="top-switch" aria-label="自助项目与资产切换">
+                    <span class="top-link active">项目菜单</span>
+                    <span class="top-link">我的资产</span>
+                  </div>
+                  <span class="user-identity">沙先生（7321）</span>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+
+                <section class="task-content">
+                  <div class="split-menu">
+                    <aside class="side-filter" aria-label="项目分类">
+                      <p class="filter-title">项目分类</p>
+                      <div class="filter-list">
+                        <div class="filter-item active">今日主推<span class="hot-badge">热卖</span></div>
+                        <div class="filter-item">光电美肤</div>
+                        <div class="filter-item">注射微整</div>
+                        <div class="filter-item">皮肤管理</div>
+                        <div class="filter-item">抗衰管理</div>
+                        <div class="filter-item">套餐年卡</div>
+                      </div>
+                    </aside>
+
+                    <section class="list-zone" aria-label="可购买项目">
+                      <div class="shop-toolbar">
+                        <b>项目菜单</b>
+                        <div class="shop-filter-switch" role="switch" aria-checked="false"><span>仅看无需咨询项目</span><span class="shop-switch-track"></span></div>
+                      </div>
+
+                      <h2 class="shop-section-title">今日主推</h2>
+                      <div class="shop-product-list">
+                        <article class="shop-product-row">
+                          <img class="shop-product-image" src="../assets/product-covers/default-treatment-project.jpg" alt="医疗美容项目默认设备头图">
+                          <div class="shop-product-copy"><h3>BBL HERO 超光子</h3><p>改善肤色不均、毛孔显粗与轻度泛红。</p><div class="shop-product-meta"><span>已售 227 份</span><span>建议咨询</span></div></div>
+                          <div class="shop-product-price"><span>券后实付</span><strong>¥1,100</strong><div class="shop-discount">已优惠 ¥180</div></div>
+                          <div class="row-action">选择</div>
+                        </article>
+
+                        <article class="shop-product-row selected">
+                          <img class="shop-product-image" src="../assets/product-covers/default-treatment-project.jpg" alt="医疗美容项目默认设备头图">
+                          <div class="shop-product-copy"><h3>博乐达水杨酸治疗</h3><p>针对油脂分泌旺盛、闭口与角质堆积。</p><div class="shop-product-meta"><span>已售 496 份</span><span class="consult-free">无需咨询</span></div></div>
+                          <div class="shop-product-price"><span>券后实付</span><strong>¥580</strong><div class="shop-discount">已优惠 ¥100</div></div>
+                          <div class="row-action">已选择</div>
+                        </article>
+
+                        <article class="shop-product-row">
+                          <img class="shop-product-image" src="../assets/product-covers/default-treatment-project.jpg" alt="医疗美容项目默认设备头图">
+                          <div class="shop-product-copy"><h3>舒敏修护护理</h3><p>舒缓干痒泛红，帮助改善皮肤屏障状态。</p><div class="shop-product-meta"><span>新品上架</span><span class="consult-free">无需咨询</span></div></div>
+                          <div class="shop-product-price"><span>券后实付</span><strong>¥299</strong><div class="shop-discount">已优惠 ¥100</div></div>
+                          <div class="row-action">选择</div>
+                        </article>
+
+                        <article class="shop-product-row">
+                          <img class="shop-product-image" src="../assets/product-covers/default-treatment-project.jpg" alt="医疗美容项目默认设备头图">
+                          <div class="shop-product-copy"><h3>CC 光治疗</h3><p>针对痘印、肤色暗沉与轻度泛红进行综合改善。</p><div class="shop-product-meta"><span>已售 186 份</span><span>建议咨询</span></div></div>
+                          <div class="shop-product-price"><span>券后实付</span><strong>¥880</strong><div class="shop-discount">已优惠 ¥120</div></div>
+                          <div class="row-action">选择</div>
+                        </article>
+
+                        <article class="shop-product-row">
+                          <img class="shop-product-image" src="../assets/product-covers/default-treatment-project.jpg" alt="医疗美容项目默认设备头图">
+                          <div class="shop-product-copy"><h3>果酸焕肤</h3><p>改善角质堆积与肌肤粗糙，帮助恢复细腻肤感。</p><div class="shop-product-meta"><span>已售 318 份</span><span class="consult-free">无需咨询</span></div></div>
+                          <div class="shop-product-price"><span>券后实付</span><strong>¥399</strong><div class="shop-discount">已优惠 ¥81</div></div>
+                          <div class="row-action">选择</div>
+                        </article>
+
+                        <article class="shop-product-row">
+                          <img class="shop-product-image" src="../assets/product-covers/default-treatment-project.jpg" alt="医疗美容项目默认设备头图">
+                          <div class="shop-product-copy"><h3>红蓝光修护</h3><p>帮助舒缓痘肌泛红，适合作为治疗后的修护安排。</p><div class="shop-product-meta"><span>已售 264 份</span><span class="consult-free">无需咨询</span></div></div>
+                          <div class="shop-product-price"><span>券后实付</span><strong>¥199</strong><div class="shop-discount">已优惠 ¥60</div></div>
+                          <div class="row-action">选择</div>
+                        </article>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="bottom-with-summary">
+                    <div class="bottom-summary summary-pricing">
+                      <div><b>已选 1 个待购买项目</b><span>博乐达水杨酸治疗 · 支付成功后自动加入本次治疗</span></div>
+                      <div class="summary-price"><span>预计实付</span><strong>¥580</strong><del>优惠前 ¥680</del></div>
+                    </div>
+                    <div class="primary">支付购买</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">04 方案设计</p>
+          <div class="pad-shell" aria-label="用户方案设计结果 Pad 原型">
+            <div class="pad-screen">
+              <article class="task-page scheme-design-page">
+                <header class="topbar">
+                  <div class="back">‹</div>
+                  <div class="title-wrap">
+                    <h1>方案设计</h1>
+                  </div>
+                  <span class="user-identity">沙先生（7321）</span>
+                  <span class="logout" aria-label="登出"><span class="logout-icon"></span></span>
+                </header>
+
+                <section class="task-content">
+                  <section class="design-section" aria-label="用户问题表现">
+                    <h2 class="design-section-title">用户问题表现</h2>
+                    <div class="indication-tags">
+                      <span class="indication-tag">单纯性出油</span>
+                      <span class="indication-tag">晨起油光明显</span>
+                      <span class="indication-tag">T 区更重</span>
+                      <span class="indication-tag">容易脱妆</span>
+                      <span class="indication-tag">毛孔显粗</span>
+                      <span class="indication-tag">无明显红斑鳞屑</span>
+                    </div>
+                  </section>
+
+                  <section class="design-section" aria-label="问题描述">
+                    <h2 class="design-section-title">问题描述</h2>
+                    <div class="problem-result has-examples">
+                      <div>
+                        <h2>单纯性出油</h2>
+                        <p class="problem-type">皮脂分泌活跃型肤况</p>
+                      </div>
+                      <div class="problem-copy">
+                        <p>皮脂腺分泌较活跃，油光多集中在额头、鼻部和下巴。通常没有明显红斑、鳞屑或持续瘙痒，但可能伴随毛孔显粗、妆面不持久等表现。</p>
+                        <p><b>常见成因：</b>温度变化、作息与压力、过度清洁及护肤习惯，都可能影响油脂分泌与水油平衡。</p>
+                        <div class="cause-list"><span>皮脂腺活跃</span><span>作息与压力</span><span>温度影响</span><span>过度清洁</span></div>
+                      </div>
+                      <div class="indication-examples" aria-label="适应症表现示意图">
+                        <figure class="indication-example abstract"><img src="../assets/skin-indications/indication-abstract-oily-skin.png" alt="单纯性出油常见状态与案例效果抽象示意"></figure>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="plan-result-section" aria-label="方案选择">
+                    <div class="plan-section-head">
+                      <h2 class="design-section-title">选择本次改善方案</h2>
+                      <span>当前已选：轻度方案</span>
+                    </div>
+                    <div class="severity-selector" role="radiogroup" aria-label="方案档位">
+                      <div class="severity-choice selected" role="radio" aria-checked="true">
+                        <span class="severity-radio"></span>
+                        <div><b>轻度方案</b><span>基础控油与肤质维护</span></div>
+                      </div>
+                      <div class="severity-choice" role="radio" aria-checked="false">
+                        <span class="severity-radio"></span>
+                        <div><b>中度方案</b><span>加强控油与毛孔管理</span></div>
+                      </div>
+                      <div class="severity-choice" role="radio" aria-checked="false">
+                        <span class="severity-radio"></span>
+                        <div><b>重度方案</b><span>联合治疗与持续管理</span></div>
+                      </div>
+                    </div>
+
+                    <div class="direction-panel">
+                      <div class="direction-head"><b>轻度方案 · 推荐治疗方向</b><span>已选 2 项</span></div>
+                      <div class="treatment-direction-list">
+                        <article class="treatment-direction-card selected">
+                          <div class="direction-check" aria-label="水杨酸治疗已选择">✓</div>
+                          <div class="direction-copy">
+                            <h3>水杨酸治疗</h3>
+                            <p>适合 T 区出油、闭口倾向与角质堆积，以控油和疏通毛孔为主要目标。</p>
+                            <div class="direction-tags"><span class="direction-tag">舒适度 · 轻微刺痒</span><span class="direction-tag">治疗时长参考 · 15–20 分钟</span></div>
+                          </div>
+                          <div class="direction-commerce">
+                            <div class="direction-commerce-item"><span>单次价格区间</span><strong>¥380–880</strong></div>
+                            <div class="direction-commerce-item"><span>疗程建议</span><strong>3–5 次</strong></div>
+                          </div>
+                          <figure class="effect-comparison"><img src="../assets/skin-indications/effect-abstract-salicylic.png" alt="水杨酸治疗前后效果抽象示意"></figure>
+                        </article>
+
+                        <article class="treatment-direction-card selected">
+                          <div class="direction-check" aria-label="光子嫩肤已选择">✓</div>
+                          <div class="direction-copy">
+                            <h3>光子嫩肤</h3>
+                            <p>适合出油同时伴随毛孔显粗、肤色不均，希望综合改善肤质的人群。</p>
+                            <div class="direction-tags"><span class="direction-tag">舒适度 · 轻微灼热</span><span class="direction-tag">治疗时长参考 · 30–40 分钟</span></div>
+                          </div>
+                          <div class="direction-commerce">
+                            <div class="direction-commerce-item"><span>单次价格区间</span><strong>¥880–1,880</strong></div>
+                            <div class="direction-commerce-item"><span>疗程建议</span><strong>3–5 次</strong></div>
+                          </div>
+                          <figure class="effect-comparison"><img src="../assets/skin-indications/effect-abstract-photofacial.png" alt="光子嫩肤治疗前后效果抽象示意"></figure>
+                        </article>
+                      </div>
+                    </div>
+                  </section>
+                </section>
+
+                <footer class="bottom-bar">
+                  <div class="bottom-with-summary">
+                    <div class="bottom-summary">
+                      <div><b>轻度方案 · 已选 2 个治疗方向</b><span>水杨酸治疗、光子嫩肤</span></div>
+                    </div>
+                    <div class="primary">确认方案，选择具体项目</div>
+                  </div>
                 </footer>
               </article>
             </div>
@@ -3662,20 +5467,23 @@
           <b>设计假设</b>
           <ul>
             <li>源画布为 `900 x 1440`，浏览器缩略展示统一为 `559 x 872` 外框。</li>
-            <li>新客建档后进入项目菜单；老客识别后直接进入治疗项目确认页。</li>
-            <li>项目菜单完成购买后先回到我的资产，新购项目默认选入今日治疗，再流向治疗项目确认页。</li>
+            <li>老客选择无需咨询且没有预约项目时，进入 05 自助项目入口：可购买新项目，也可从已有资产中选择项目加入本次治疗。</li>
+            <li>用户端方案设计页只展示 CRM 已同步的适应症结果、问题说明和轻中重方案；原方案选择/确认页仅保留为咨询师或医生的 CRM 操作参考。</li>
             <li>这些页面都是扫码后的业务页，因此每个 Pad 画布顶部都有“登出”。</li>
-            <li>支付确认使用覆盖项目菜单的半弹窗；扫码、成功和未完成使用完整任务页。</li>
+            <li>04-B 支付确认半弹窗暂时移出当前流程，仅保留作为历史参考；04-A 完成后直接进入 04-C 扫码支付。</li>
           </ul>
         </div>
 
         <div class="spec-section">
           <b>Pad 布局调整</b>
           <ul>
-            <li>项目菜单改为顶栏轻切换、左侧分类 / 筛选、右侧项目 / 资产列表；已选摘要下沉到底部操作区。</li>
-            <li>支付二维码有效期为 60 秒；成功后进入我的资产，未完成状态 3 秒后返回项目菜单。</li>
-            <li>治疗项目确认页使用通栏项目卡片；AI羊点评放在内容末尾、固定按钮上方，以可变长度的自然段归纳预计时间、改善点和术前注意，不使用等宽指标表格。</li>
-            <li>流程确认页平铺展示附加服务，重点标明每项预计额外耗时。</li>
+            <li>04 咨询后的方案设计与 05 无咨询自助选项目是两套独立场景；05 内部使用“项目菜单 / 我的资产”切换，两侧选中结果都加入本次治疗。</li>
+            <li>方案设计采用两层选择：轻度、中度、重度方案档位单选；当前档位内的治疗方向独立复选，至少选择一项。问题描述与治疗效果均使用原 04 同风格的抽象示意；项目卡效果图直接铺满最右区域，不增加内层边框或留白。</li>
+            <li>项目选择/确认页按治疗组列出具体品相，每组最多选择一项且允许整组跳过；全页至少选择一个品相后，才可直接进入扫码支付。</li>
+            <li>两个主治疗组之后附加“建议搭配购买”模块，展示 1-3 个可选项目；采用复选规则，全部默认不选，不影响主流程继续。</li>
+            <li>支付二维码有效期为 60 秒；成功后进入我的资产，未完成状态 3 秒后返回方案选择页。</li>
+            <li>本次治疗确认页使用通栏项目卡片，只保留今日治疗项目、可增减项目与确认安排，不再展示 AI 点评；无项目状态已移出当前流程。</li>
+            <li>服务要求确认页平铺展示附加服务，不再在顶部汇总计算本次预计总耗时。</li>
             <li>底部主操作区固定，避免客户找不到下一步。</li>
           </ul>
         </div>
@@ -3694,8 +5502,7 @@
         <div class="spec-section">
           <b>需要确认的问题</b>
           <ul>
-            <li>项目菜单底部已选摘要是否常驻，还是只在已有选择时出现？</li>
-            <li>无项目时“安排面诊”是否直接进入服务人员确认页，还是需要先选择咨询师 / 医生类型？</li>
+            <li>方案选择/确认页底部已选摘要是否常驻，还是只在已有选择时出现？</li>
             <li>皮肤检测和拍照是否允许客户关闭，或由项目规则强制开启？</li>
             <li>饮品零食是否按“饮品一项 + 小食一项”分别选择？</li>
           </ul>
