@@ -94,11 +94,11 @@
 <div class="note-grid">
   <div class="note"><b>视觉载体</b>Pad 竖屏固定放置；新氧青春海报风格，杂志感，荧光绿、灰、黑。</div>
   <div class="note"><b>操作角色</b>客户自助操作；前台仅在需要时辅助讲解，不代操作。</div>
-  <div class="note"><b>核心结构</b>项目选择模块右侧接共同节点；流程确认后进入服务人员确认页。</div>
+  <div class="note"><b>当前核心结构</b>先确认本次项目，再确认流程细节。服务人员确认原型已从当前流程删除，暂不考虑。</div>
 </div>
 
 <div class="canvas">
-  <div class="rule"><b>当前主线</b>扫码签到 → 客户识别 → 新客建档 / 老客直达项目确认 → 项目选择或项目带入 → 本次治疗项目确认 → 流程确认 → 服务人员确认 → 面诊结束或治疗签署 → 结束闭环。</div>
+  <div class="rule"><b>当前主线</b>扫码签到 → 客户识别 → 新客建档 / 老客直达项目确认 → 项目选择或项目带入 → 本次治疗项目确认 → 流程确认 → 面诊结束或治疗签署 → 结束闭环。</div>
 
   <div class="node">
     <div class="title">默认签到页</div>
@@ -131,7 +131,7 @@
       <span class="logout">登出</span>
       <h3>项目菜单</h3>
       <p>新客建档后必进；老客在无项目点击“选择服务项目”，或已有项目主动增加服务项目时进入。</p>
-      <div class="chips"><span class="chip green">新购项目：下单支付</span><span class="chip">我的资产：已购未消耗</span><span class="chip">完成后流入右侧共同节点</span></div>
+      <div class="chips"><span class="chip green">新购项目：治疗方案 → 具体品相 → 支付</span><span class="chip">我的资产：已购未消耗</span><span class="chip">完成后流入右侧共同节点</span></div>
     </div>
 
     <div class="right-arrow"><div class="line"></div></div>
@@ -143,13 +143,13 @@
       <div class="state-grid">
         <div class="state-card">
           <b>有本次治疗项目</b>
-          <p>展示项目列表、来源（预约 / 资产 / 新购）和预计治疗时长。</p>
-          <div class="buttons"><span class="btn">安排面诊</span><span class="btn green">无需面诊，直接治疗</span></div>
+          <p>展示项目列表、来源（预约 / 资产 / 新购）和预计治疗时长；选择安排面诊后立即后台发起系统分配与排队。</p>
+          <div class="buttons"><span class="btn">安排面诊（系统分配）</span><span class="btn green">无需面诊，直接治疗</span></div>
         </div>
         <div class="state-card">
           <b>无本次治疗项目</b>
           <p>提示尚未预约或尚未选择服务项目。</p>
-          <div class="buttons"><span class="btn">安排面诊</span><span class="btn green">选择服务项目</span></div>
+          <div class="buttons"><span class="btn">安排面诊（系统分配）</span><span class="btn green">选择服务项目</span></div>
         </div>
       </div>
     </div>
@@ -157,29 +157,18 @@
   <div class="confirm-flow-row">
     <div class="spacer"></div>
     <div class="spacer"></div>
-    <div class="flow-arrow"><div class="pill">确认本次治疗项目后</div><div class="shaft"></div></div>
+    <div class="flow-arrow"><div class="pill">确认本次治疗项目后，直接进入流程确认</div><div class="shaft"></div></div>
   </div>
 
   <div class="node">
     <span class="logout">登出</span>
     <div class="title">流程确认页</div>
-    <div class="copy">确认是否皮肤检测、是否拍摄术前术后对比照、饮品零食选择。按门店配置展示可选项。</div>
-  </div>
-  <div class="flow-arrow"><div class="pill">确认流程安排后</div><div class="shaft"></div></div>
-
-  <div class="node green">
-    <span class="logout">登出</span>
-    <div class="title">服务人员确认页</div>
-    <div class="copy">根据业务流程确认服务人员。左侧确认面诊咨询师 / 医生，右侧确认治疗师；纯生美场景可跳过治疗师选择。展示简介、等待状态、预计等待时间，支持系统分配或指定人员。</div>
-    <div class="service-grid">
-      <div class="service-card"><b>面诊咨询师 / 医生</b>需要面诊时确认咨询师或面诊医生，完成后进入结束闭环。</div>
-      <div class="service-card"><b>治疗师</b>不需要面诊直接治疗时确认治疗师；如果是纯生美，可跳过治疗师选择。</div>
-    </div>
+    <div class="copy">最后确认是否进行皮肤检测、是否拍摄术前术后对比照，以及饮品零食等流程细节；可选内容按门店配置展示。</div>
   </div>
 
   <div class="branch-flow">
     <div class="branch-path direct-to-common">
-      <div class="flow-arrow"><div class="pill">需要面诊的</div><div class="shaft"></div></div>
+      <div class="flow-arrow"><div class="pill">需要面诊：使用项目确认后已并行发起的系统分配结果</div><div class="shaft"></div></div>
     </div>
 
     <div class="branch-path">
@@ -188,7 +177,7 @@
         <span class="logout">登出</span>
         <div class="label">治疗流程</div>
         <div class="title">治疗签署文书流程</div>
-        <div class="copy">确认治疗服务人员后进入签署文书。签署可终止；终止后的回退点待确认。</div>
+        <div class="copy">完成流程细节确认后进入签署文书。签署可终止；终止后的回退点待确认。</div>
         <div class="sign-steps">
           <div><b>会话确认</b>问答确认项目、风险与特殊情况。</div>
           <div><b>文件阅读</b>阅读知情同意、项目说明、注意事项。</div>
@@ -202,7 +191,7 @@
   <div class="node white">
     <div class="label">结束闭环</div>
     <div class="title">服务流程指引 + 倒计时登出</div>
-    <div class="copy">提示用户按照 App 或小程序里的服务流程指引继续；倒计时结束后自动登出并返回默认扫码首页。</div>
+    <div class="copy">需要面诊时展示系统分配的医生与房间；尚未完成分配时显示安排中，并在 App 同步更新。倒计时结束后自动登出并返回默认扫码首页。</div>
   </div>
   <div class="arrow">↺ 返回起始默认签到页</div>
 </div>

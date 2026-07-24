@@ -115,6 +115,16 @@
       color: #fff;
     }
 
+    .nav-list a.retired {
+      border-style: dashed;
+      color: #8f969f;
+    }
+
+    .nav-list a.auxiliary {
+      border-style: dashed;
+      color: #b8bec7;
+    }
+
     .main {
       display: grid;
       gap: 34px;
@@ -196,7 +206,7 @@
     }
 
     .unit-no {
-      min-width: 30px;
+      min-width: 34px;
       height: 22px;
       display: inline-flex;
       align-items: center;
@@ -211,6 +221,40 @@
 
     .frame-wrap {
       background: transparent;
+    }
+
+    .prototype-unit.retired .frame-wrap {
+      opacity: .58;
+      filter: grayscale(.2);
+    }
+
+    .prototype-unit.retired .unit-title {
+      color: #8f969f;
+    }
+
+    .prototype-unit.retired .unit-no {
+      background: #69707c;
+      color: #fff;
+    }
+
+    .prototype-unit.auxiliary .unit-title {
+      color: #69707c;
+    }
+
+    .prototype-unit.auxiliary .unit-no {
+      background: #69707c;
+      color: #fff;
+    }
+
+    .unit-status-note {
+      margin: 0 0 8px;
+      padding: 9px 12px;
+      border-left: 4px solid #69707c;
+      background: #f7f8fa;
+      color: #4f5661;
+      font-size: var(--review-small);
+      line-height: 1.45;
+      font-weight: 600;
     }
 
     iframe {
@@ -243,27 +287,41 @@
 
       <p class="nav-title">页面索引</p>
       <nav class="nav-list" aria-label="整合画布导航">
-        <a href="#home-checkin">01 起始页 · 扫码态</a>
-        <a href="#home-signed">02 起始页 · 已签到态</a>
-        <a href="#profile-auto-phone">03 建档 · 手机号已获取</a>
-        <a href="#profile-missing-phone">04 建档 · 补填手机号</a>
-        <a href="#profile-coupon">05 建档 · 完整领券</a>
-        <a href="#project-new">06 项目菜单 · 新购项目</a>
-        <a href="#project-assets">07 项目菜单 · 我的资产</a>
-        <a href="#confirm-has-project">08 治疗项目确认 · 有项目</a>
-        <a href="#confirm-empty">09 治疗项目确认 · 无项目</a>
-        <a href="#flow-confirm">10 流程确认页</a>
-        <a href="#service-staff">11 服务人员确认</a>
-        <a href="#sign-read">12 签署 · 阅读确认</a>
-        <a href="#sign-submit">13 签署 · 用户签名</a>
-        <a href="#finish-page">14 结束 · 倒计时登出</a>
+        <a href="#home-checkin">01 首页/扫码签到页</a>
+        <a href="#profile-identity-verify">01-A 建档页/身份信息核验</a>
+        <a href="#profile-details">01-B 建档页/完善个人信息</a>
+        <a href="#arrival-intent-booked">02-A 签到成功-确认咨询意向 · 有预约</a>
+        <a href="#arrival-intent-empty">02-B 签到成功-确认咨询意向 · 无预约</a>
+        <a href="#consult-triage-ready">03-A 咨询分诊结果 · 已分配咨询室</a>
+        <a href="#consult-triage-waiting">03-B 咨询分诊结果 · 排队中</a>
+        <a href="#scheme-design">04 方案设计</a>
+        <a href="#product-variant-confirm">04-A 项目选择/确认页</a>
+        <a href="#payment-scan">04-B 项目购买-扫码支付</a>
+        <a href="#payment-success">04-C 项目购买-支付成功</a>
+        <a href="#payment-incomplete">04-D 项目购买-支付未完成</a>
+        <a href="#self-service-project-menu">05-A 项目菜单 · 自助选购</a>
+        <a href="#project-assets">05-B 我的资产</a>
+        <a href="#confirm-has-project">06 本次治疗确认页</a>
+        <a href="#flow-confirm">07 服务要求确认页</a>
+        <a href="#treatment-plan-review">08 治疗方案待确认</a>
+        <a href="#sign-read">09 治疗文书签署-文书列表</a>
+        <a href="#sign-submit-blank">10-A 治疗文书-用户签署 · 空白</a>
+        <a href="#sign-submit-signed">10-B 治疗文书-用户签署 · 已签名</a>
+        <a href="#sign-submit-terminate">10-C 治疗文书-用户签署 · 终止确认</a>
+        <a href="#treatment-triage-ready">11-A 治疗分诊结果 · 已分配治疗室</a>
+        <a href="#treatment-triage-waiting">11-B 治疗分诊结果 · 排队中</a>
+        <a class="auxiliary" href="#home-signed">辅助-01 主页/已登录返回状态</a>
+        <a class="retired" href="#project-new">历史-01 原04 方案选择/确认页</a>
+        <a class="retired" href="#payment-confirm">历史-02 原04-B 项目购买-支付确认</a>
+        <a class="retired" href="#confirm-empty">历史-03 本次治疗确认页 · 无项目</a>
+        <a class="retired" href="#service-staff">历史-04 服务人员-面诊医生确认页</a>
       </nav>
     </aside>
 
     <section class="main">
       <section class="overview">
         <h1>自助签到台原型整合评审画布</h1>
-        <p>本页用于把当前首页、A/B/C 会话草案放在同一评审画布中，方便统一检查设计语言、字号、按钮、Pad 画布和业务页面密度。所有页面平铺展开，左侧导航只作为索引。</p>
+        <p>本页用于把当前首页、核心业务页面和关键状态变体放在同一评审画布中，方便统一检查设计语言、字号、按钮、Pad 画布和业务页面密度。所有页面平铺展开，左侧导航只作为索引。</p>
         <div class="rules">
           <div class="rule"><b>统一画布</b><span>源设计按 900 x 1440，小米 Pad 竖屏逻辑尺寸。</span></div>
           <div class="rule"><b>缩略展示</b><span>浏览器中整体缩放预览，不用 520 宽直接排版。</span></div>
@@ -275,100 +333,207 @@
       <section class="prototype-grid" aria-label="页面原型单元列表">
         <!-- 新增页面时，复制一个 prototype-unit，并在左侧 nav-list 增加同 id 的链接。每个单元只放一张 Pad 原型图。 -->
         <article id="home-checkin" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">01</span>起始默认签到页 · 未签到扫码态</h2>
+          <h2 class="unit-title"><span class="unit-no">01</span>首页/扫码签到页</h2>
           <div class="frame-wrap">
-            <iframe title="起始默认签到页 - 未签到扫码态" src="kiosk-pages-current.html?embed=1&unit=0&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="首页/扫码签到页" src="kiosk-pages-current.html?embed=1&unit=0&v=home-qr-entry-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="home-signed" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">02</span>起始默认签到页 · 已签到返回态</h2>
+        <article id="profile-identity-verify" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">01-A</span>建档页/身份信息核验</h2>
           <div class="frame-wrap">
-            <iframe title="起始默认签到页 - 已签到返回态" src="kiosk-pages-current.html?embed=1&unit=1&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="建档页/身份信息核验" src="drafts/profile-page-draft.html?embed=1&unit=0&v=profile-gender-options-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="profile-auto-phone" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">03</span>首次到院建档页 · 手机号已获取</h2>
+        <article id="profile-details" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">01-B</span>建档页/完善个人信息</h2>
           <div class="frame-wrap">
-            <iframe title="首次到院建档页 - 手机号已获取" src="drafts/profile-page-draft.html?embed=1&unit=0&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="建档页/完善个人信息" src="drafts/profile-page-draft.html?embed=1&unit=1&v=profile-gender-options-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="profile-missing-phone" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">04</span>首次到院建档页 · 手机号未获取</h2>
+        <article id="arrival-intent-booked" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">02-A</span>签到成功-确认咨询意向页 · 有预约</h2>
           <div class="frame-wrap">
-            <iframe title="首次到院建档页 - 手机号未获取" src="drafts/profile-page-draft.html?embed=1&unit=1&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="签到成功-确认咨询意向页-有预约" src="drafts/arrival-intent-draft.html?embed=1&unit=0&v=arrival-intent-decision-actions-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="profile-coupon" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">05</span>首次到院建档页 · 更多信息完整领券</h2>
+        <article id="arrival-intent-empty" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">02-B</span>签到成功-确认咨询意向页 · 无预约</h2>
           <div class="frame-wrap">
-            <iframe title="首次到院建档页 - 更多信息完整领券" src="drafts/profile-page-draft.html?embed=1&unit=2&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="签到成功-确认咨询意向页-无预约" src="drafts/arrival-intent-draft.html?embed=1&unit=1&v=arrival-intent-decision-actions-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="project-new" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">06</span>项目菜单 · 新购项目</h2>
+        <article id="consult-triage-ready" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">03-A</span>咨询分诊结果页 · 已分配咨询室</h2>
           <div class="frame-wrap">
-            <iframe title="项目菜单 - 新购项目" src="drafts/project-confirm-flow-draft.html?embed=1&unit=0&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="咨询分诊结果页-已分配咨询室" src="drafts/service-signing-finish-draft.html?embed=1&unit=3&v=consult-ready-copy-trimmed-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="consult-triage-waiting" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">03-B</span>咨询分诊结果页 · 排队中</h2>
+          <p class="unit-status-note">保留排队人数与预计等待，并与已分配咨询室状态共用咨询前准备。</p>
+          <div class="frame-wrap">
+            <iframe title="咨询分诊结果页-排队中" src="drafts/service-signing-finish-draft.html?embed=1&unit=4&v=consult-project-button-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="scheme-design" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">04</span>方案设计</h2>
+          <div class="frame-wrap">
+            <iframe title="方案设计" src="drafts/project-confirm-flow-draft.html?embed=1&unit=11&v=scheme-design-unified-abstract-visuals-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="product-variant-confirm" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">04-A</span>项目选择/确认页</h2>
+          <div class="frame-wrap">
+            <iframe title="项目选择/确认页" src="drafts/project-confirm-flow-draft.html?embed=1&unit=1&v=course-count-linkage-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="payment-scan" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">04-B</span>项目购买-扫码支付</h2>
+          <div class="frame-wrap">
+            <iframe title="项目购买-扫码支付" src="drafts/project-confirm-flow-draft.html?embed=1&unit=3&v=sku-payment-20260717" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="payment-success" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">04-C</span>项目购买-支付成功</h2>
+          <div class="frame-wrap">
+            <iframe title="项目购买-支付成功" src="drafts/project-confirm-flow-draft.html?embed=1&unit=4&v=payment-success-no-action-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="payment-incomplete" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">04-D</span>项目购买-支付未完成</h2>
+          <div class="frame-wrap">
+            <iframe title="项目购买-支付未完成" src="drafts/project-confirm-flow-draft.html?embed=1&unit=5&v=sku-payment-20260717" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="self-service-project-menu" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">05-A</span>项目菜单 · 自助选购</h2>
+          <div class="frame-wrap">
+            <iframe title="项目菜单-自助选购" src="drafts/project-confirm-flow-draft.html?embed=1&unit=10&v=shop-product-cover-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
         <article id="project-assets" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">07</span>项目菜单 · 我的资产</h2>
+          <h2 class="unit-title"><span class="unit-no">05-B</span>我的资产</h2>
           <div class="frame-wrap">
-            <iframe title="项目菜单 - 我的资产" src="drafts/project-confirm-flow-draft.html?embed=1&unit=1&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="我的资产" src="drafts/project-confirm-flow-draft.html?embed=1&unit=6&v=self-service-menu-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
         <article id="confirm-has-project" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">08</span>治疗项目确认页 · 有项目</h2>
+          <h2 class="unit-title"><span class="unit-no">06</span>本次治疗确认页</h2>
           <div class="frame-wrap">
-            <iframe title="治疗项目确认页 - 有项目" src="drafts/project-confirm-flow-draft.html?embed=1&unit=2&v=person-sand-20260709" scrolling="no"></iframe>
-          </div>
-        </article>
-
-        <article id="confirm-empty" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">09</span>治疗项目确认页 · 无项目</h2>
-          <div class="frame-wrap">
-            <iframe title="治疗项目确认页 - 无项目" src="drafts/project-confirm-flow-draft.html?embed=1&unit=3&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="本次治疗确认页" src="drafts/project-confirm-flow-draft.html?embed=1&unit=7&v=current-treatment-name-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
         <article id="flow-confirm" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">10</span>流程确认页</h2>
+          <h2 class="unit-title"><span class="unit-no">07</span>服务要求确认页</h2>
           <div class="frame-wrap">
-            <iframe title="流程确认页" src="drafts/project-confirm-flow-draft.html?embed=1&unit=4&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="服务要求确认页" src="drafts/project-confirm-flow-draft.html?embed=1&unit=9&v=service-requirements-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="service-staff" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">11</span>服务人员确认页</h2>
+        <article id="treatment-plan-review" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">08</span>治疗方案待确认页</h2>
+          <p class="unit-status-note">无需咨询分支：用户自助完成项目与服务要求确认后，在指定区域等待值班医生复核。</p>
           <div class="frame-wrap">
-            <iframe title="服务人员确认页" src="drafts/service-signing-finish-draft.html?embed=1&unit=0&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="治疗方案待确认页" src="drafts/service-signing-finish-draft.html?embed=1&unit=7&v=treatment-plan-review-refined-20260723" scrolling="no"></iframe>
           </div>
         </article>
 
         <article id="sign-read" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">12</span>治疗签署文书 · 会话确认 + 文件阅读</h2>
+          <h2 class="unit-title"><span class="unit-no">09</span>治疗文书签署-文书列表</h2>
           <div class="frame-wrap">
-            <iframe title="治疗签署文书 - 会话确认和文件阅读" src="drafts/service-signing-finish-draft.html?embed=1&unit=1&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="治疗文书签署-文书列表" src="drafts/service-signing-finish-draft.html?embed=1&unit=1&v=document-read-status-20260713" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="sign-submit" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">13</span>治疗签署文书 · 用户签署 + 完成校验</h2>
+        <article id="sign-submit-blank" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">10-A</span>治疗文书-用户签署 · 空白签名</h2>
           <div class="frame-wrap">
-            <iframe title="治疗签署文书 - 用户签署和完成校验" src="drafts/service-signing-finish-draft.html?embed=1&unit=2&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="治疗文书-用户签署空白状态" src="drafts/service-signing-finish-draft.html?embed=1&unit=2&signState=blank&v=sign-states-20260713" scrolling="no"></iframe>
           </div>
         </article>
 
-        <article id="finish-page" class="prototype-unit">
-          <h2 class="unit-title"><span class="unit-no">14</span>服务流程指引 + 倒计时登出</h2>
+        <article id="sign-submit-signed" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">10-B</span>治疗文书-用户签署 · 已签名</h2>
           <div class="frame-wrap">
-            <iframe title="服务流程指引和倒计时登出" src="drafts/service-signing-finish-draft.html?embed=1&unit=3&v=person-sand-20260709" scrolling="no"></iframe>
+            <iframe title="治疗文书-用户签署已签名状态" src="drafts/service-signing-finish-draft.html?embed=1&unit=2&signState=signed&v=sign-states-20260713" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="sign-submit-terminate" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">10-C</span>治疗文书-用户签署 · 终止确认</h2>
+          <div class="frame-wrap">
+            <iframe title="治疗文书-用户签署终止确认状态" src="drafts/service-signing-finish-draft.html?embed=1&unit=2&signState=terminate&v=sign-states-20260713" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="treatment-triage-ready" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">11-A</span>治疗分诊结果页 · 已分配治疗室</h2>
+          <p class="unit-status-note">原12完成页改造状态，展示本次项目、治疗室与执行医生。</p>
+          <div class="frame-wrap">
+            <iframe title="治疗分诊结果页-已分配治疗室" src="drafts/service-signing-finish-draft.html?embed=1&unit=5&v=treatment-room-doctor-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="treatment-triage-waiting" class="prototype-unit">
+          <h2 class="unit-title"><span class="unit-no">11-B</span>治疗分诊结果页 · 排队中</h2>
+          <p class="unit-status-note">原12完成页改造状态，展示排队人数、预计等待与医生匹配状态。</p>
+          <div class="frame-wrap">
+            <iframe title="治疗分诊结果页-排队中" src="drafts/service-signing-finish-draft.html?embed=1&unit=6&v=treatment-waiting-actions-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="home-signed" class="prototype-unit auxiliary">
+          <h2 class="unit-title"><span class="unit-no">辅助-01</span>主页/已登录返回状态</h2>
+          <p class="unit-status-note">辅助状态 · 非主流程节点：仅在已登录用户连续返回到主页时出现。</p>
+          <div class="frame-wrap">
+            <iframe title="主页/已登录返回状态" src="kiosk-pages-current.html?embed=1&unit=1&v=home-return-single-action-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="project-new" class="prototype-unit retired">
+          <h2 class="unit-title"><span class="unit-no">历史-01</span>原04 方案选择/确认页</h2>
+          <p class="unit-status-note">已移出用户 Pad 主流程，仅保留为咨询师或医生在 CRM 中选择适应症、组织方案时的操作参考。</p>
+          <div class="frame-wrap">
+            <iframe title="方案选择/确认页-CRM操作参考" src="drafts/project-confirm-flow-draft.html?embed=1&unit=0&v=crm-reference-retired-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="payment-confirm" class="prototype-unit retired">
+          <h2 class="unit-title"><span class="unit-no">历史-02</span>原04-B 项目购买-支付确认</h2>
+          <p class="unit-status-note">暂时移出当前流程，仅保留作为历史评审参考；当前 04-A 完成后直接进入 04-B 扫码支付。</p>
+          <div class="frame-wrap">
+            <iframe title="项目购买-支付确认" src="drafts/project-confirm-flow-draft.html?embed=1&unit=2&v=skip-payment-confirm-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="confirm-empty" class="prototype-unit retired">
+          <h2 class="unit-title"><span class="unit-no">历史-03</span>本次治疗确认页 · 无项目</h2>
+          <p class="unit-status-note">暂时移出当前流程，仅保留作为异常状态参考；按当前业务流程，进入本次治疗确认前应已经形成至少一个今日治疗项目。</p>
+          <div class="frame-wrap">
+            <iframe title="本次治疗确认页 - 无项目" src="drafts/project-confirm-flow-draft.html?embed=1&unit=8&v=current-treatment-name-20260723" scrolling="no"></iframe>
+          </div>
+        </article>
+
+        <article id="service-staff" class="prototype-unit retired">
+          <h2 class="unit-title"><span class="unit-no">历史-04</span>服务人员-面诊医生确认页</h2>
+          <p class="unit-status-note">本原型已从当前业务流程中删除，暂不考虑；页面仅保留作历史评审参考。</p>
+          <div class="frame-wrap">
+            <iframe title="服务人员-面诊医生确认页" src="drafts/service-signing-finish-draft.html?embed=1&unit=0&v=doctor-compact-20260710" scrolling="no"></iframe>
           </div>
         </article>
       </section>

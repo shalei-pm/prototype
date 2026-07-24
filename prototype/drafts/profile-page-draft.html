@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>自助签到台页面原型：首次到院建档页草案</title>
+  <title>自助签到台页面原型：建档页状态草案</title>
   <style>
     :root {
       --green: #9cff00;
@@ -181,6 +181,7 @@
 
     .title-block {
       min-width: 0;
+      flex: 1;
     }
 
     .title-block h1 {
@@ -197,6 +198,21 @@
       font-size: 14px;
       line-height: 1.35;
       font-weight: 400;
+    }
+
+    .header-user-actions {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-identity {
+      color: #111;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .logout {
@@ -263,6 +279,10 @@
       border-radius: 8px;
       background: #fff;
       box-shadow: 0 1px 0 rgba(17,17,17,.04);
+    }
+
+    .extra-pane.expanded {
+      box-shadow: inset 0 3px 0 var(--green), 0 1px 0 rgba(17,17,17,.04);
     }
 
     .pane-head {
@@ -356,6 +376,154 @@
       font-weight: 500;
       letter-spacing: 0;
       overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .identity-pane {
+      gap: 22px;
+      padding: 28px 32px 32px;
+    }
+
+    .identity-intro {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 24px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid #edf0f2;
+    }
+
+    .identity-intro h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .identity-intro p {
+      max-width: 560px;
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .input-list {
+      display: grid;
+      gap: 22px;
+    }
+
+    .input-item {
+      display: grid;
+      gap: 10px;
+    }
+
+    .input-label {
+      color: #30343a;
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .input-label b {
+      margin-left: 4px;
+      color: #e53935;
+      font-weight: 700;
+    }
+
+    .text-input {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      border: 1px solid #cfd4da;
+      border-radius: 4px;
+      background: #fff;
+      color: #9aa1aa;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 400;
+    }
+
+    .text-input.filled {
+      color: #111;
+      font-weight: 500;
+    }
+
+    .text-input.readonly {
+      border-color: #e1e4e8;
+      background: #f1f3f5;
+      color: #69707c;
+    }
+
+    .text-input.select-value {
+      justify-content: space-between;
+    }
+
+    .text-input.select-value::after {
+      content: "▾";
+      color: #69707c;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .gender-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .gender-option {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #cfd4da;
+      border-radius: 0;
+      background: #fff;
+      color: #30343a;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .gender-option.selected {
+      border-color: #111;
+      background: #111;
+      color: var(--green);
+    }
+
+    .verified-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .summary-item {
+      min-width: 0;
+      padding: 14px 16px;
+      background: #f7f8fa;
+    }
+
+    .summary-item span,
+    .summary-item strong {
+      display: block;
+    }
+
+    .summary-item span {
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .summary-item strong {
+      overflow: hidden;
+      color: #111;
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 600;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
@@ -614,6 +782,12 @@
       display: block;
     }
 
+    .footer-actions.two {
+      display: grid;
+      grid-template-columns: .72fr 1.28fr;
+      gap: 12px;
+    }
+
     .btn {
       min-height: 56px;
       border-radius: 0;
@@ -761,11 +935,11 @@
       <p class="nav-title">页面导航</p>
       <ul class="nav-list">
         <li class="nav-item">起始默认签到页</li>
-        <li class="nav-item active">首次到院建档页</li>
+        <li class="nav-item active">建档页：身份核验与资料完善</li>
         <li class="nav-item">项目菜单</li>
         <li class="nav-item">本次治疗项目确认页</li>
         <li class="nav-item">流程确认页</li>
-        <li class="nav-item">服务人员确认页</li>
+        <li class="nav-item">服务人员系统自动分配（无确认页）</li>
         <li class="nav-item">治疗签署文书流程</li>
         <li class="nav-item">服务流程指引 + 倒计时登出</li>
       </ul>
@@ -774,8 +948,8 @@
     <section class="stage">
       <div class="pad-stack">
         <div>
-          <p class="variant-label">状态 A：手机号已获取，更多信息可跳过</p>
-          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：手机号已获取">
+          <p class="variant-label">03-A：身份信息核验</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：身份信息核验">
             <div class="pad-screen">
               <article class="profile-page">
                 <header class="app-header">
@@ -784,58 +958,130 @@
                       <div class="title-line">
                         <h1>您好，欢迎您首次来到新氧青春诊所</h1>
                       </div>
-                      <p>请填写个人信息</p>
+                      <p>完成身份核验后，我们将为您建立就诊档案。</p>
                     </div>
-                    <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
+                    <div class="header-user-actions">
+                      <span class="user-identity">沙先生（7321）</span>
+                      <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
+                    </div>
                   </div>
                 </header>
 
                 <div class="task-layout">
-                  <section class="pane" aria-label="基础必填信息">
-                    <div class="pane-head">
+                  <section class="pane identity-pane" aria-label="身份信息核验">
+                    <div class="identity-intro">
                       <div>
-                        <h2>请填写个人信息</h2>
-                        <p>用于身份核验、建档和服务联系。</p>
+                        <h2>请填写本人身份信息</h2>
+                        <p>以下信息用于医疗建档及身份核验，请与本人身份证保持一致。</p>
+                      </div>
+                      <span class="status-tag need">待核验</span>
+                    </div>
+
+                    <div class="input-list">
+                      <div class="input-item">
+                        <div class="input-label">姓名<b>*</b></div>
+                        <div class="text-input filled">沙磊</div>
+                      </div>
+                      <div class="input-item">
+                        <div class="input-label">身份证号<b>*</b></div>
+                        <div class="text-input filled">110101 1996 0826 0826</div>
+                      </div>
+                      <div class="input-item">
+                        <div class="input-label">登录手机号</div>
+                        <div class="text-input readonly">138 **** 7321</div>
+                      </div>
+                      <div class="input-item">
+                        <div class="input-label">性别</div>
+                        <div class="gender-options" role="radiogroup" aria-label="性别">
+                          <div class="gender-option selected" role="radio" aria-checked="true">男</div>
+                          <div class="gender-option" role="radio" aria-checked="false">女</div>
+                        </div>
+                      </div>
+                      <div class="input-item">
+                        <div class="input-label">您希望我们如何称呼您</div>
+                        <div class="text-input filled select-value">沙先生</div>
                       </div>
                     </div>
-                    <div class="field-list">
-                      <div class="field-row">
-                        <div class="field-label">姓名</div>
-                        <div class="field-value">沙磊</div>
+                  </section>
+                </div>
+
+                <footer class="footer">
+                  <div class="consent">
+                    <span class="checkbox">✓</span>
+                    <span>我已阅读并同意 <b>个人信息处理规则</b>，授权新氧青春用于建档、身份核验及本次到店服务。</span>
+                  </div>
+                  <div class="footer-actions">
+                    <div class="btn primary">下一步</div>
+                  </div>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="variant-label">03-B：完善个人信息</p>
+          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：完善个人信息">
+            <div class="pad-screen">
+              <article class="profile-page">
+                <header class="app-header">
+                  <div class="topbar">
+                    <div class="title-block">
+                      <div class="title-line">
+                        <h1>身份核验已完成</h1>
                       </div>
-                      <div class="field-row">
-                        <div class="field-label">身份证号</div>
-                        <div class="field-value">110101 1996 **** 0826</div>
+                      <p>继续完善资料，帮助我们更好地了解您的服务需求。</p>
+                    </div>
+                    <div class="header-user-actions">
+                      <span class="user-identity">沙先生（7321）</span>
+                      <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
+                    </div>
+                  </div>
+                </header>
+
+                <div class="task-layout">
+                  <section class="pane" aria-label="已核验身份信息">
+                    <div class="pane-head">
+                      <div>
+                        <h2>已核验身份信息</h2>
+                        <p>以下信息已通过校验，无需重复填写。</p>
                       </div>
-                      <div class="field-row">
-                        <div class="field-label">您希望我们如何称呼您</div>
-                        <div class="field-value">沙大爷</div>
+                      <span class="status-tag ok">已核验</span>
+                    </div>
+                    <div class="verified-summary">
+                      <div class="summary-item">
+                        <span>姓名</span>
+                        <strong>沙磊</strong>
                       </div>
-                      <div class="field-row">
-                        <div class="field-label">您的手机号</div>
-                        <div class="field-value">138 **** 0826</div>
+                      <div class="summary-item">
+                        <span>身份证号</span>
+                        <strong>110101 1996 **** 0826</strong>
+                      </div>
+                      <div class="summary-item">
+                        <span>登录手机号</span>
+                        <strong>138 **** 7321</strong>
                       </div>
                     </div>
                   </section>
 
-                  <section class="pane" aria-label="更多信息领券">
+                  <section class="pane extra-pane expanded" aria-label="完善更多信息">
                     <div class="pane-head">
                       <div>
                         <h2>完善更多信息</h2>
-                        <p>可获得 <span class="coupon-highlight">50元无门槛代金券</span></p>
+                        <p>以下内容为选填，完整填写可获得 <span class="coupon-highlight">50元无门槛代金券</span></p>
                       </div>
-                      <span class="status-tag">可跳过</span>
+                      <span class="status-tag">选填</span>
                     </div>
                     <div>
                       <div class="coupon-strip">
                         <div>
                           <h3>完善资料得代金券</h3>
-                          <p>7 项完整填写，提交后发放。</p>
+                          <p>资料完整填写，提交后自动发放。</p>
                         </div>
                         <div class="coupon-amount"><small>¥</small>50</div>
                       </div>
                       <div class="choice-grid">
-                        <div class="choice open">是否方便透露您的年龄范围</div>
+                        <div class="choice open">您的年龄范围</div>
                         <div class="dropdown-options" aria-label="年龄范围选项">
                           <div class="dropdown-option">18-24岁</div>
                           <div class="dropdown-option active">25-30岁</div>
@@ -843,13 +1089,13 @@
                           <div class="dropdown-option">36岁以上</div>
                         </div>
                         <div class="choice">您的医美经验有几年</div>
-                        <div class="choice">做过/能接受哪些医美项目</div>
+                        <div class="choice">做过或能接受哪些医美项目</div>
                         <div class="choice">您通过哪个渠道了解到我们</div>
                         <div class="choice">您希望通过医美解决哪些问题</div>
                         <div class="choice">您的职业类型</div>
                         <div class="choice">您居住的城市</div>
                       </div>
-                      <p class="skip-note">跳过后仍可提交信息，本次不发放 50元无门槛代金券。</p>
+                      <p class="skip-note">跳过后仍可继续，本次不发放 50元无门槛代金券。</p>
                     </div>
                   </section>
                 </div>
@@ -859,8 +1105,9 @@
                     <span class="checkbox">✓</span>
                     <span>我已阅读并同意 <b>个人信息处理规则</b>，授权新氧青春用于建档、身份核验及本次到店服务。</span>
                   </div>
-                  <div class="footer-actions">
-                    <div class="btn primary">提交</div>
+                  <div class="footer-actions two">
+                    <div class="btn secondary">暂不完善</div>
+                    <div class="btn primary">完成填写并领取代金券</div>
                   </div>
                 </footer>
               </article>
@@ -868,191 +1115,21 @@
           </div>
         </div>
 
-        <div>
-          <p class="variant-label">状态 B：手机号未获取，需要补填</p>
-          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：手机号需补填">
-            <div class="pad-screen">
-              <article class="profile-page">
-                <header class="app-header">
-                  <div class="topbar">
-                    <div class="title-block">
-                      <div class="title-line">
-                        <h1>您好，欢迎您首次来到新氧青春诊所</h1>
-                      </div>
-                      <p>请补充您的手机号后继续。</p>
-                    </div>
-                    <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
-                  </div>
-                </header>
-
-                <div class="task-layout">
-                  <section class="pane" aria-label="基础必填信息">
-                    <div class="pane-head">
-                      <div>
-                        <h2>请填写个人信息</h2>
-                        <p>还差 1 项即可完成建档。</p>
-                      </div>
-                    </div>
-                    <div class="field-list">
-                      <div class="field-row">
-                        <div class="field-label">姓名</div>
-                        <div class="field-value">沙磊</div>
-                      </div>
-                      <div class="field-row">
-                        <div class="field-label">身份证号</div>
-                        <div class="field-value">110101 1996 **** 0826</div>
-                      </div>
-                      <div class="field-row">
-                        <div class="field-label">您希望我们如何称呼您</div>
-                        <div class="field-value">沙大爷</div>
-                      </div>
-                      <div class="field-row need">
-                        <div class="field-label">您的手机号</div>
-                        <div class="field-value placeholder">请输入本人手机号</div>
-                      </div>
-                    </div>
-                  </section>
-
-                  <section class="pane" aria-label="更多信息领券">
-                    <div class="pane-head">
-                      <div>
-                        <h2>完善更多信息</h2>
-                        <p>可获得 <span class="coupon-highlight">50元无门槛代金券</span></p>
-                      </div>
-                      <span class="status-tag">暂未发券</span>
-                    </div>
-                    <div>
-                      <div class="coupon-strip">
-                        <div>
-                          <h3>50元无门槛代金券</h3>
-                          <p>基础信息完成后，完善 7 项资料领取。</p>
-                        </div>
-                        <div class="coupon-amount"><small>¥</small>50</div>
-                      </div>
-                      <div class="assist-list">
-                        <div class="assist-row"><span>发券条件</span><strong>更多信息完整填写</strong></div>
-                        <div class="assist-row"><span>当前状态</span><strong>先补填您的手机号</strong></div>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-
-                <footer class="footer">
-                  <div class="consent">
-                    <span class="checkbox">✓</span>
-                    <span>我已阅读并同意 <b>个人信息处理规则</b>，授权新氧青春用于建档、身份核验及本次到店服务。</span>
-                  </div>
-                  <div class="footer-actions">
-                    <div class="btn primary">提交</div>
-                  </div>
-                </footer>
-              </article>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <p class="variant-label">状态 C：更多信息完整填写，发放 50元无门槛代金券</p>
-          <div class="pad-shell" aria-label="小米 Pad 竖屏原型画布：更多信息完整填写">
-            <div class="pad-screen">
-              <article class="profile-page">
-                <header class="app-header">
-                  <div class="topbar">
-                    <div class="title-block">
-                      <div class="title-line">
-                        <h1>您好，欢迎您首次来到新氧青春诊所</h1>
-                      </div>
-                      <p>资料已完成，代金券已发放。</p>
-                    </div>
-                    <div class="logout" aria-label="登出"><span class="logout-icon"></span></div>
-                  </div>
-                </header>
-
-                <div class="task-layout">
-                  <section class="pane" aria-label="基础必填信息">
-                    <div class="pane-head">
-                      <div>
-                        <h2>请填写个人信息</h2>
-                        <p>身份核验已完成。</p>
-                      </div>
-                    </div>
-                    <div class="field-list">
-                      <div class="field-row">
-                        <div class="field-label">姓名</div>
-                        <div class="field-value">沙磊</div>
-                      </div>
-                      <div class="field-row">
-                        <div class="field-label">身份证号</div>
-                        <div class="field-value">110101 1996 **** 0826</div>
-                      </div>
-                      <div class="field-row">
-                        <div class="field-label">您希望我们如何称呼您</div>
-                        <div class="field-value">沙大爷</div>
-                      </div>
-                      <div class="field-row">
-                        <div class="field-label">您的手机号</div>
-                        <div class="field-value">138 **** 0826</div>
-                      </div>
-                    </div>
-                  </section>
-
-                  <section class="pane" aria-label="更多信息领券">
-                    <div class="pane-head">
-                      <div>
-                        <h2>完善更多信息</h2>
-                        <p>已获得 <span class="coupon-highlight">50元无门槛代金券</span></p>
-                      </div>
-                      <span class="status-tag ok">已发券</span>
-                    </div>
-                    <div>
-                      <div class="coupon-strip">
-                        <div>
-                          <h3>50元无门槛代金券已领取</h3>
-                          <p>将进入账户，可在项目菜单中查看。</p>
-                        </div>
-                        <div class="coupon-amount"><small>¥</small>50</div>
-                        <div class="check-watermark">✓</div>
-                      </div>
-                      <div class="choice-grid">
-                        <div class="choice selected">是否方便透露您的年龄范围：25-30岁</div>
-                        <div class="choice selected">您的医美经验有几年：无</div>
-                        <div class="choice selected">做过/能接受哪些医美项目：光电美肤</div>
-                        <div class="choice selected">您通过哪个渠道了解到我们：朋友推荐</div>
-                        <div class="choice selected">您希望通过医美解决哪些问题：肤色提亮</div>
-                        <div class="choice selected">您的职业类型：互联网</div>
-                        <div class="choice selected">您居住的城市：北京</div>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-
-                <footer class="footer">
-                  <div class="consent">
-                    <span class="checkbox">✓</span>
-                    <span>我已阅读并同意 <b>个人信息处理规则</b>，授权新氧青春用于建档、身份核验及本次到店服务。</span>
-                  </div>
-                  <div class="footer-actions">
-                    <div class="btn primary">提交</div>
-                  </div>
-                </footer>
-              </article>
-            </div>
-          </div>
-        </div>
       </div>
 
       <aside class="spec-panel">
-        <h1>首次到院建档页</h1>
+        <h1>建档页状态拆分</h1>
         <p class="meta">本版已切换为 `900 x 1440` 源画布，并在浏览器中整体 `scale(0.58)` 缩略展示；字号和字重均按真实 Pad 逻辑画布设计。</p>
 
         <div class="spec-section">
           <b>设计假设</b>
           <ul>
-            <li>首次到院建档仍是一个页面节点，不再展示分页步骤；“完善更多信息”只是页内补充区。</li>
-            <li>当前批注要求信息区竖向排布，因此不再使用左右双栏；通过弱分隔线和浅灰底提升扫读效率。</li>
+            <li>建档流程拆为两个明确状态：03-A完成身份核验，03-B再完善更多个人信息。</li>
+            <li>03-A显示姓名、身份证号、登录手机号、性别和称呼，不提前展示画像资料或代金券内容。</li>
             <li>源画布为 `900 x 1440`，浏览器缩略展示不再影响排版字号判断。</li>
-            <li>手机号优先自动获取；未获取时，手机号行成为唯一高优先级待补填项。</li>
-            <li>完整填写更多信息后，券条显示对钩水印并发放 50元无门槛代金券；跳过可继续但不发券。</li>
+            <li>手机号由扫码登录自动获取并置灰展示；性别通过左右并列的方形单选按钮确认。</li>
+            <li>称呼默认按姓氏与性别生成“先生/女士”，用户仍可修改。</li>
+            <li>03-B保留资料完善与代金券激励；跳过可继续但不发券。</li>
             <li>个人信息声明默认勾选；如果用户取消勾选，确定按钮应置灰且不可点击。</li>
           </ul>
         </div>
@@ -1060,10 +1137,10 @@
         <div class="spec-section">
           <b>页面信息层级</b>
           <ul>
-            <li>顶部：标题文案为“您好，欢迎您首次来到新氧青春诊所”，源画布字号 26px、字重 700；说明文字 14px、字重 400。</li>
-            <li>中部：模块标题 18px、字段值 16px、正文和标签 13-15px；去掉一堆输入框式线框，仅保留行分隔。</li>
-            <li>更多信息：7 项按竖向下拉选择展示，行尾用“请选择 ▾”提示可点选，行高 48px。</li>
-            <li>底部：固定个人信息声明 + 一个直角确定按钮，按钮文字 16px、字重 600。</li>
+            <li>03-A中部：姓名与身份证号可填写；手机号置灰只读；性别用双选按钮确认；称呼自动生成并可修改。</li>
+            <li>03-A底部：个人信息处理规则与唯一主按钮“下一步”。</li>
+            <li>03-B顶部：已核验姓名、脱敏身份证号和登录手机号摘要。</li>
+            <li>03-B中部：更多资料按竖向选择项展示，并保留50元无门槛代金券激励。</li>
           </ul>
         </div>
 
@@ -1071,10 +1148,10 @@
           <b>关键交互</b>
           <ul>
             <li>点击门形登出 icon 结束当前客户会话并返回默认签到页。</li>
-            <li>基础必填信息完成后，可直接完成建档并进入项目菜单。</li>
-            <li>未填写更多信息时点击提交仍可继续，但本次不发 50元无门槛代金券。</li>
-            <li>点击更多信息入口后，通过下拉选择完成补充，不画成独立页面。</li>
-            <li>取消勾选个人信息声明后，确定按钮不可点击。</li>
+            <li>03-A点击“下一步”后，同时校验姓名与身份证号的一致性。</li>
+            <li>核验失败停留03-A，并在对应字段行内提示；核验成功进入03-B。</li>
+            <li>03-B未填写更多信息时仍可继续，但本次不发50元无门槛代金券。</li>
+            <li>取消勾选个人信息声明后，03-A“下一步”不可点击。</li>
           </ul>
         </div>
 
@@ -1082,7 +1159,6 @@
           <b>需要用户确认的问题</b>
           <ul>
             <li>身份证失败时是否在左栏行内重试，还是弹出“请找前台”。</li>
-            <li>更多信息入口点击后，是右栏原地展开，还是弹出底部选择面板。</li>
             <li>50元无门槛代金券是否在项目菜单中立即抵扣，还是仅进入券包。</li>
           </ul>
         </div>
